@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { Icon, Button, Eyebrow, Section, Field, Input, Textarea, Select, RadioGroup, Checkbox } from '../ui'
 import PageHeader from '../PageHeader'
 import { PACKAGES, ROOMS } from '@/lib/data'
@@ -84,7 +85,7 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
     return Object.keys(e).length === 0
   }
 
-  async function handleSubmit(ev: React.FormEvent) {
+  async function handleSubmit(ev: FormEvent) {
     ev.preventDefault()
     setSubmitError(null)
     if (!validate()) {

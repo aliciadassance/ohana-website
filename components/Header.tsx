@@ -41,7 +41,7 @@ export default function Header() {
   }, [open])
 
   const isActive = (path: string) =>
-    path === '/' ? pathname === '/' : pathname.startsWith(path)
+    path === '/' ? pathname === '/' : pathname?.startsWith(path) ?? false
 
   return (
     <>

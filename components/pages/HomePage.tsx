@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import type { ComponentType } from 'react'
 import { useRouter } from 'next/navigation'
 import { Icon, Button, Eyebrow, Section, Badge, Stars } from '../ui'
 import CTABanner from '../CTABanner'
@@ -171,7 +172,7 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
 // ---- Packages carousel (shared with packages page) ----
 export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
   useSurfOnlyCard?: boolean
-  SurfOnlyCard?: React.ComponentType<{ pkg: Package; onClick: () => void }>
+  SurfOnlyCard?: ComponentType<{ pkg: Package; onClick: () => void }>
 }) {
   const router = useRouter()
   const [active, setActive] = useState(0)

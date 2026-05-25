@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import { Icon, Button, Eyebrow, Section, Badge } from '../ui'
 import PageHeader from '../PageHeader'
@@ -25,8 +26,8 @@ function ComparisonTable() {
     { label: 'Coaching level',         values: ['All levels','All levels',   'All levels',  'All levels'] },
   ]
 
-  const cellStyle: React.CSSProperties = { padding: '0.85rem 0.9rem', borderBottom: '1px solid var(--color-border)', fontSize: '0.92rem' }
-  const head: React.CSSProperties = { ...cellStyle, fontFamily: 'var(--font-display)', fontSize: '1.25rem', background: 'var(--brand-sand-100)', textAlign: 'center', padding: '1.1rem 0.9rem' }
+  const cellStyle: CSSProperties = { padding: '0.85rem 0.9rem', borderBottom: '1px solid var(--color-border)', fontSize: '0.92rem' }
+  const head: CSSProperties = { ...cellStyle, fontFamily: 'var(--font-display)', fontSize: '1.25rem', background: 'var(--brand-sand-100)', textAlign: 'center', padding: '1.1rem 0.9rem' }
 
   function Cell({ v }: { v: string | boolean }) {
     if (v === true) return <Icon name="check" style={{ color: 'var(--color-primary)', fontSize: '1.2rem' }} />

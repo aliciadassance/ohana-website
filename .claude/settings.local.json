@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npm install *)",
-      "Bash(command -v node)"
+      "Bash(command -v node)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
     ]
   }
 }
