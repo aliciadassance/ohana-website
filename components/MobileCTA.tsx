@@ -11,7 +11,7 @@ export default function MobileCTA() {
 
   return (
     <div className="mobile-cta">
-      <Button variant="ink" fullWidth iconLeft="brand-whatsapp" href="https://wa.me/212600000000" ariaLabel="Chat on WhatsApp">
+      <Button variant="ink" fullWidth iconLeft="brand-whatsapp" href="https://wa.me/212650613372" ariaLabel="Chat on WhatsApp">
         WhatsApp
       </Button>
       <Button variant="primary" fullWidth iconRight="arrow-right" onClick={() => router.push('/booking')}>

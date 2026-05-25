@@ -7,7 +7,7 @@ import { Icon, Button, Eyebrow, Section, Badge } from '../ui'
 import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
 import { PackagesCarousel, PackageCard } from './HomePage'
-import { PACKAGES, ROOMS, FAQS } from '@/lib/data'
+import { PACKAGES, ROOMS, FAQS, MEAL_PRICE_PER_MEAL, ACTIVITY_PRICES, PACKAGE_ACTIVITIES, RETURNING_GUEST_DISCOUNT, ACTIVITY_BLACKOUTS, ADDON_PRICES } from '@/lib/data'
 import type { Package } from '@/lib/types'
 
 // ---- Comparison table ----
@@ -127,15 +127,17 @@ export function SurfOnlyCard({ pkg, onClick }: { pkg: Package; onClick: () => vo
 }
 
 // ---- Price simulator ----
+// Stay packages only — Surf Only has its own dedicated card with per-session toggles
+const STAY_PACKAGES = PACKAGES.filter(p => p.id in PACKAGE_ACTIVITIES)
+
 function PriceSimulator() {
   const router = useRouter()
-  const [packageId, setPackageId] = useState(PACKAGES[0].id)
+  const [packageId, setPackageId] = useState(STAY_PACKAGES[0].id)
   const [arrival, setArrival] = useState('')
   const [departure, setDeparture] = useState('')
-  const [room, setRoom] = useState(ROOMS[3]?.id || ROOMS[0].id)
+  const [roomId, setRoomId] = useState(ROOMS[0].id)
   const [people, setPeople] = useState(2)
-
-  const pkg = PACKAGES.find((p) => p.id === packageId) || PACKAGES[0]
+  const [returningGuest, setReturningGuest] = useState(false)
 
   const nights = useMemo(() => {
     if (!arrival || !departure) return 0
@@ -145,80 +147,121 @@ function PriceSimulator() {
     return Math.round((d - a) / 86400000)
   }, [arrival, departure])
 
-  const roomUplift: Record<string, number> = {
-    'shared-4': 0,
-    'small-inside': 10,
-    'twin': 15,
-    'double-standard': 25,
-    'double-balcony': 35,
-  }
+  const selectedRoom = ROOMS.find(r => r.id === roomId) ?? ROOMS[0]
+  const selectedPkg = STAY_PACKAGES.find(p => p.id === packageId) ?? STAY_PACKAGES[0]
 
   const total = useMemo(() => {
-    if (pkg.id === 'surf-only') {
-      const days = Math.max(1, nights || 1)
-      return Math.round(pkg.priceFrom * days * people)
-    }
     if (!nights) return 0
-    const perNight = pkg.priceFrom / 7
-    const baseTotal = perNight * nights * people
-    const roomTotal = (roomUplift[room] || 0) * nights * people
-    return Math.round(baseTotal + roomTotal)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pkg, nights, room, people])
+    const roomCost = selectedRoom.pricingType === 'flat'
+      ? selectedRoom.nightlyRate * nights
+      : selectedRoom.nightlyRate * people * nights
+    const mealCost = MEAL_PRICE_PER_MEAL * 3 * nights * people
+    const sessions = PACKAGE_ACTIVITIES[packageId] ?? {}
+    const activityCost = Math.round(
+      Object.entries(sessions).reduce((sum, [act, count]) =>
+        sum + (ACTIVITY_PRICES[act as keyof typeof ACTIVITY_PRICES] ?? 0) * (count ?? 0), 0
+      ) * (nights / 7) * people
+    )
+    const subtotal = roomCost + mealCost + activityCost
+    const discount = returningGuest ? Math.round(subtotal * RETURNING_GUEST_DISCOUNT) : 0
+    return subtotal - discount
+  }, [nights, selectedRoom, people, packageId, returningGuest])
+
+  const capacityWarning = people > selectedRoom.maxPax
+
+  const blackoutWarnings = useMemo(() => {
+    if (!arrival || !departure) return []
+    const pkgSessions = PACKAGE_ACTIVITIES[packageId] ?? {}
+    const arrDate = new Date(arrival)
+    const depDate = new Date(departure)
+    return ACTIVITY_BLACKOUTS.filter(b =>
+      b.activity in pkgSessions &&
+      arrDate < new Date(b.to) && depDate > new Date(b.from)
+    )
+  }, [arrival, departure, packageId])
 
   return (
     <div className="simulator">
       <div className="simulator__head">
         <Eyebrow>Price simulator</Eyebrow>
         <h2>Get an instant estimate</h2>
-        <p>Pick a package, your dates and your room — we&apos;ll show you a ballpark figure. Final quote is sent within 24h.</p>
+        <p>Pick your package, dates and room — we&apos;ll give you a ballpark total. Final quote arrives within 24h.</p>
       </div>
 
       <div className="simulator__form">
         <div className="simulator__field">
           <label>Package</label>
-          <select value={packageId} onChange={(e) => setPackageId(e.target.value)} className="select">
-            {PACKAGES.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+          <select value={packageId} onChange={e => setPackageId(e.target.value)} className="select">
+            {STAY_PACKAGES.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
         <div className="simulator__field">
-          <label>{pkg.id === 'surf-only' ? 'Start day' : 'Arrival'}</label>
-          <input type="date" className="input" value={arrival} onChange={(e) => setArrival(e.target.value)} />
+          <label>Arrival</label>
+          <input type="date" className="input" value={arrival} onChange={e => setArrival(e.target.value)} />
         </div>
         <div className="simulator__field">
-          <label>{pkg.id === 'surf-only' ? 'End day' : 'Departure'}</label>
-          <input type="date" className="input" value={departure} onChange={(e) => setDeparture(e.target.value)} />
+          <label>Departure</label>
+          <input type="date" className="input" value={departure} onChange={e => setDeparture(e.target.value)} />
         </div>
         <div className="simulator__field">
           <label>Room</label>
-          <select value={room} onChange={(e) => setRoom(e.target.value)} className="select" disabled={pkg.id === 'surf-only'}>
-            {ROOMS.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+          <select value={roomId} onChange={e => setRoomId(e.target.value)} className="select">
+            {ROOMS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
           </select>
         </div>
         <div className="simulator__field">
-          <label>People</label>
+          <label>Guests</label>
           <div className="stepper">
-            <button type="button" onClick={() => setPeople(Math.max(1, people - 1))} aria-label="Fewer people"><Icon name="minus" /></button>
+            <button type="button" onClick={() => setPeople(Math.max(1, people - 1))} aria-label="Fewer guests"><Icon name="minus" /></button>
             <span>{people}</span>
-            <button type="button" onClick={() => setPeople(Math.min(8, people + 1))} aria-label="More people"><Icon name="plus" /></button>
+            <button type="button" onClick={() => setPeople(Math.min(8, people + 1))} aria-label="More guests"><Icon name="plus" /></button>
           </div>
         </div>
       </div>
+
+      <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', fontSize: '0.92rem' }}>
+        <input
+          type="checkbox"
+          checked={returningGuest}
+          onChange={() => setReturningGuest(v => !v)}
+          style={{ width: '1rem', height: '1rem', cursor: 'pointer' }}
+        />
+        <span>Returning guest — {Math.round(RETURNING_GUEST_DISCOUNT * 100)}% off</span>
+      </label>
+
+      {capacityWarning && (
+        <div style={{ padding: '0.7rem 1rem', background: 'var(--brand-sand-100)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '0.88rem', color: 'var(--color-fg)' }}>
+          <strong>{selectedRoom.name}</strong> fits up to {selectedRoom.maxPax} guest{selectedRoom.maxPax !== 1 ? 's' : ''}. You may need to book multiple rooms — we&apos;ll sort it out together.
+        </div>
+      )}
+      {blackoutWarnings.map((b, i) => (
+        <div key={i} style={{ padding: '0.7rem 1rem', background: 'var(--brand-sand-100)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '0.88rem', color: 'var(--color-fg)' }}>
+          <strong>Heads up:</strong> {b.activity.charAt(0).toUpperCase() + b.activity.slice(1)} sessions may not be available during this period{b.note ? ` (${b.note})` : ''} — we&apos;ll confirm after you book.
+        </div>
+      ))}
 
       <div className="simulator__total">
         <div>
           <div className="simulator__total__label">Estimated total</div>
           <div className="simulator__total__num">€{total ? total.toLocaleString() : '—'}</div>
           <div className="simulator__total__hint">
-            {pkg.id === 'surf-only'
-              ? `${people} surfer${people > 1 ? 's' : ''} · ${Math.max(1, nights || 1)} day${Math.max(1, nights || 1) > 1 ? 's' : ''} · half-day`
-              : nights
-                ? `${people} guest${people > 1 ? 's' : ''} · ${nights} night${nights > 1 ? 's' : ''}`
-                : 'Pick your dates'
+            {nights
+              ? `${people} guest${people !== 1 ? 's' : ''} · ${nights} night${nights !== 1 ? 's' : ''} · ${selectedPkg.name}`
+              : 'Pick your dates to see an estimate'
             }
           </div>
         </div>
-        <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => router.push('/booking')}>
+        <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => {
+          const params = new URLSearchParams({
+            package: selectedPkg.name,
+            arrival,
+            departure,
+            guests: String(people),
+            accommodation: roomId,
+            returning: String(returningGuest),
+          })
+          router.push(`/booking?${params}`)
+        }}>
           Request booking
         </Button>
       </div>
@@ -283,8 +326,8 @@ function AddOns() {
   const [yogaType, setYogaType] = useState<'private' | 'group'>('group')
   const [trip, setTrip] = useState<'imsouane' | 'tifnit'>('imsouane')
 
-  const pickupPrice = pickup === 'bus' ? '€15 / way' : '€30 / way'
-  const yogaPrice = yogaType === 'private' ? '€20 / session' : '€15 / person'
+  const pickupPrice = pickup === 'bus' ? `€${ADDON_PRICES.pickup_bus} / way` : `€${ADDON_PRICES.pickup_airport} / way`
+  const yogaPrice = yogaType === 'private' ? `€${ADDON_PRICES.yoga_private} / session` : `€${ADDON_PRICES.yoga_group} / person`
   const yogaSub = yogaType === 'private'
     ? 'One-on-one yoga or pilates session'
     : 'Join a sunrise or sunset class on the rooftop'
@@ -293,10 +336,10 @@ function AddOns() {
     : 'Wide-open beach breaks south of Agadir — uncrowded all day'
 
   const items = [
-    { icon: 'shopping-bag', title: 'Agadir Souk',          sub: 'Half-day trip to the spice souk',       price: '€30 / taxi' },
-    { icon: 'tree',         title: 'Paradise Valley',       sub: 'Day trip — palms, pools, picnic',       price: '€30 / person' },
-    { icon: 'mountain',     title: 'Sand Dunes Excursion',  sub: 'Sunset over the dunes south of Agadir', price: '€30 / person' },
-    { icon: 'bath',         title: 'Hammam & massage',      sub: '90 min traditional treatment',          price: '€45 / session' },
+    { icon: 'shopping-bag', title: 'Agadir Souk',          sub: 'Half-day trip to the spice souk',       price: `€${ADDON_PRICES.souk} / taxi` },
+    { icon: 'tree',         title: 'Paradise Valley',       sub: 'Day trip — palms, pools, picnic',       price: `€${ADDON_PRICES.paradise_valley} / person` },
+    { icon: 'mountain',     title: 'Sand Dunes Excursion',  sub: 'Sunset over the dunes south of Agadir', price: `€${ADDON_PRICES.sand_dunes} / person` },
+    { icon: 'bath',         title: 'Hammam & massage',      sub: '90 min traditional treatment',          price: `€${ADDON_PRICES.hammam} / session` },
     { icon: 'users-group',  title: 'Group booking',         sub: 'Bring 4+ friends, get 5% off',          price: 'Save €110+' },
   ]
 
@@ -338,7 +381,7 @@ function AddOns() {
             <button type="button" role="tab" aria-selected={trip === 'imsouane'} className={`seg__btn ${trip === 'imsouane' ? 'is-active' : ''}`} onClick={() => setTrip('imsouane')}>Imsouane</button>
             <button type="button" role="tab" aria-selected={trip === 'tifnit'} className={`seg__btn ${trip === 'tifnit' ? 'is-active' : ''}`} onClick={() => setTrip('tifnit')}>Tifnit</button>
           </div>
-          <div className="feature__price">€50 / person</div>
+          <div className="feature__price">€{ADDON_PRICES.surf_trip} / person</div>
         </div>
 
         {items.map((it) => (

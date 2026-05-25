@@ -1,4 +1,4 @@
-import type { Package, Review, TeamMember, DayItem, Room, FAQ } from './types'
+import type { Package, Review, TeamMember, DayItem, Room, FAQ, ActivityBlackout } from './types'
 
 export const PACKAGES: Package[] = [
   {
@@ -155,6 +155,13 @@ export const DAY_AT_OHANA: DayItem[] = [
   { time: '20:00', title: 'Family dinner', desc: 'Tagine, salads, stories from the day, and a sunset you\'ll keep talking about for years.' },
 ]
 
+// ── ROOM PRICING ───────────────────────────────────────────────────────────────
+// pricingType 'flat'    → nightlyRate is the price for the whole room per night
+//                         (1 to maxPax guests share it — room cost stays the same)
+// pricingType 'per-bed' → nightlyRate is charged per person per night
+//
+// Update nightlyRate here when room prices change. maxPax is the hard cap shown
+// as a warning in the price simulator if guests exceed it.
 export const ROOMS: Room[] = [
   {
     id: 'shared-4',
@@ -162,6 +169,9 @@ export const ROOMS: Room[] = [
     sub: 'Cozy dorm with four beds — the most social option.',
     capacity: 'Up to 4 guests',
     image: '/assets/images/room-shared-4.jpg',
+    maxPax: 4,
+    pricingType: 'per-bed',
+    nightlyRate: 15,
   },
   {
     id: 'small-inside',
@@ -169,6 +179,9 @@ export const ROOMS: Room[] = [
     sub: 'Snug single nestled inside the house — quiet and cool.',
     capacity: '1 guest',
     image: '/assets/images/room-small-inside.jpg',
+    maxPax: 1,
+    pricingType: 'flat',
+    nightlyRate: 25,
   },
   {
     id: 'twin',
@@ -176,6 +189,9 @@ export const ROOMS: Room[] = [
     sub: 'Two single beds — perfect for friends travelling together.',
     capacity: '2 guests',
     image: '/assets/images/room-twin.jpg',
+    maxPax: 2,
+    pricingType: 'flat',
+    nightlyRate: 35,
   },
   {
     id: 'double-standard',
@@ -183,6 +199,9 @@ export const ROOMS: Room[] = [
     sub: 'King bed, en-suite essentials, garden view.',
     capacity: '2 guests',
     image: '/assets/images/room-double-standard.jpg',
+    maxPax: 2,
+    pricingType: 'flat',
+    nightlyRate: 35,
   },
   {
     id: 'double-balcony',
@@ -190,8 +209,64 @@ export const ROOMS: Room[] = [
     sub: 'Our brightest room — private balcony with ocean breeze.',
     capacity: '2 guests',
     image: '/assets/images/room-double-balcony.jpg',
+    maxPax: 2,
+    pricingType: 'flat',
+    nightlyRate: 40,
   },
 ]
+
+// ── MEAL PRICE ─────────────────────────────────────────────────────────────────
+// Price per meal per person. The simulator counts 3 meals/day (breakfast, lunch,
+// dinner) for every night of the stay. Change this one number to update all meals.
+export const MEAL_PRICE_PER_MEAL = 7
+
+// ── ACTIVITY PRICES ────────────────────────────────────────────────────────────
+// Cost per activity session per person. Used together with PACKAGE_ACTIVITIES below.
+// Update individual values here when session pricing changes.
+export const ACTIVITY_PRICES = {
+  surf: 40,  // € per session per person
+  yoga: 15,
+  pilates: 20,
+}
+
+// ── PACKAGE ACTIVITY SESSIONS ──────────────────────────────────────────────────
+// Number of activity sessions included per 7-night stay for each package.
+// The simulator pro-rates these for stays of any length (e.g. 3 nights = 3/7 of a week).
+// Keys must match package IDs in PACKAGES. Surf Only is handled separately.
+// Update these when the package schedule changes.
+export const PACKAGE_ACTIVITIES: Record<string, Partial<Record<keyof typeof ACTIVITY_PRICES, number>>> = {
+  'surf-stay':    { surf: 6 },          
+  'surf-yoga':    { surf: 6, yoga: 6 },
+  'surf-pilates': { surf: 6, pilates: 6 },
+}
+
+// ── RETURNING GUEST DISCOUNT ───────────────────────────────────────────────────
+// Fraction deducted from the total when the guest checks "returning guest".
+// 0.10 = 10% off. Change the number here — the simulator picks it up automatically.
+export const RETURNING_GUEST_DISCOUNT = 0.10
+
+// ── ACTIVITY BLACKOUTS ─────────────────────────────────────────────────────────
+// Add an entry when a vendor (Pilates, Yoga) is unavailable for a date range.
+// The simulator shows a polite warning — it does NOT block the booking.
+// Format: { activity: 'pilates' | 'yoga', from: 'YYYY-MM-DD', to: 'YYYY-MM-DD', note?: string }
+// Example: { activity: 'pilates', from: '2026-08-04', to: '2026-08-11', note: 'Instructor away' }
+export const ACTIVITY_BLACKOUTS: ActivityBlackout[] = []
+
+// ── ADD-ON PRICES ──────────────────────────────────────────────────────────────
+// Prices displayed in the Add-Ons section. All values in euros.
+// Units are informational only — update the corresponding label in AddOns if you
+// change the pricing structure (e.g. switching from per-way to per-person).
+export const ADDON_PRICES = {
+  pickup_bus:      15,  // € per way
+  pickup_airport:  30,  // € per way
+  yoga_group:      15,  // € per person per session
+  yoga_private:    20,  // € per session (private)
+  surf_trip:       50,  // € per person
+  souk:            30,  // € per taxi
+  paradise_valley: 30,  // € per person
+  sand_dunes:      30,  // € per person
+  hammam:          45,  // € per session
+}
 
 export const FAQS: FAQ[] = [
   {

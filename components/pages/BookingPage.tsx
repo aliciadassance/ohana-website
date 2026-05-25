@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import type { FormEvent } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Icon, Button, Eyebrow, Section, Field, Input, Textarea, Select, RadioGroup, Checkbox } from '../ui'
 import PageHeader from '../PageHeader'
 import { PACKAGES, ROOMS } from '@/lib/data'
@@ -47,17 +48,23 @@ const COUNTRIES = [
   'Canada','Australia','Morocco','Other',
 ]
 
-const initial: FormState = {
-  fullName: '', email: '', phone: '', country: '',
-  package: '', arrival: '', departure: '', guests: '1',
-  level: '', accommodation: '', pickup: PICKUPS[0],
-  diet: '', referral: '', message: '',
-  marketing: false, returning: false,
-}
-
 // ---- Booking form ----
-function BookingForm({ initialPackage }: { initialPackage?: string }) {
-  const [state, setState] = useState<FormState>({ ...initial, package: initialPackage || '' })
+function BookingForm() {
+  const searchParams = useSearchParams()
+  const fromEstimate = !!searchParams.get('package')
+  const [state, setState] = useState<FormState>({
+    fullName: '', email: '', phone: '', country: '',
+    package: searchParams.get('package') ?? '',
+    arrival: searchParams.get('arrival') ?? '',
+    departure: searchParams.get('departure') ?? '',
+    guests: searchParams.get('guests') ?? '1',
+    level: '',
+    accommodation: searchParams.get('accommodation') ?? '',
+    pickup: PICKUPS[0],
+    diet: '', referral: '', message: '',
+    marketing: false,
+    returning: searchParams.get('returning') === 'true',
+  })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -72,6 +79,7 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
     const e: Record<string, string> = {}
     if (!state.fullName.trim()) e.fullName = 'Please tell us your name'
     if (!state.email.trim() || !/.+@.+\..+/.test(state.email)) e.email = 'We need a valid email'
+    if (!state.phone.trim()) e.phone = 'Add your WhatsApp number so we can reach you'
     if (!state.country) e.country = 'Pick your country'
     if (!state.package) e.package = 'Choose a package'
     if (!state.arrival) e.arrival = 'Pick an arrival date'
@@ -125,7 +133,7 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
           directly on WhatsApp or by email — we usually answer faster there.
         </p>
         <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '1rem' }}>
-          <Button variant="primary" iconLeft="brand-whatsapp" href="https://wa.me/212600000000">
+          <Button variant="primary" iconLeft="brand-whatsapp" href="https://wa.me/212650613372">
             Chat on WhatsApp
           </Button>
           <Button variant="outline" iconLeft="mail" href={`mailto:${OHANA_EMAIL}`}>
@@ -142,6 +150,11 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
+      {fromEstimate && (
+        <p className="prefill-notice">
+          <Icon name="sparkles" /> Pre-filled from your estimate — feel free to adjust.
+        </p>
+      )}
       {/* SECTION 1 — Trip */}
       <div className="form-section">
         <div className="form-section__head">
@@ -213,8 +226,8 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
         </div>
 
         <div className="form-grid form-grid--2">
-          <Field label="Phone / WhatsApp" htmlFor="phone" hint="Optional — we'll confirm on WhatsApp if possible">
-            <Input id="phone" name="phone" type="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+33 6 12 34 56 78" />
+          <Field label="Phone / WhatsApp" required htmlFor="phone" error={errors.phone}>
+            <Input id="phone" name="phone" type="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+33 6 12 34 56 78" required />
           </Field>
           <Field label="Country" required htmlFor="country" error={errors.country}>
             <Select
@@ -344,7 +357,7 @@ function BookingAside() {
           <Icon name="brand-whatsapp" />
           <div>
             <strong>WhatsApp</strong>
-            <a href="https://wa.me/212600000000">+212 6 00 00 00 00</a>
+            <a href="https://wa.me/212650613372">+212 650-613372</a>
           </div>
         </div>
         <div className="aside-row">
@@ -359,13 +372,6 @@ function BookingAside() {
           <div>
             <strong>Instagram DM</strong>
             <a href="https://www.instagram.com/ohana_surfmorocco/">@ohana_surfmorocco</a>
-          </div>
-        </div>
-        <div className="aside-row">
-          <Icon name="map-pin" />
-          <div>
-            <strong>Location</strong>
-            <span>Aourir · Agadir · Morocco</span>
           </div>
         </div>
       </div>
@@ -401,7 +407,9 @@ export default function BookingPage() {
       <Section id="book">
         <div className="booking-layout">
           <div>
-            <BookingForm />
+            <Suspense>
+              <BookingForm />
+            </Suspense>
           </div>
           <BookingAside />
         </div>

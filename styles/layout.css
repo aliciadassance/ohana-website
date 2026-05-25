@@ -857,6 +857,19 @@
   font-family: var(--font-display);
   font-size: 1.4rem;
 }
+.prefill-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.75rem;
+  background: var(--brand-teal-50);
+  border: 1px solid var(--brand-teal-200, var(--color-border));
+  border-left: 3px solid var(--brand-teal-600, var(--color-primary));
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--brand-teal-700, var(--color-fg-muted));
+}
 
 /* success state */
 .booking-success {

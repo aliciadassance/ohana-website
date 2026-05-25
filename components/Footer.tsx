@@ -44,7 +44,7 @@ export default function Footer() {
               </li>
               <li className="footer__contact-row">
                 <Icon name="brand-whatsapp" />
-                <a href="https://wa.me/212600000000">+212 6 00 00 00 00</a>
+                <a href="https://wa.me/212650613372">+212 650-613372</a>
               </li>
               <li className="footer__contact-row">
                 <Icon name="clock" /> <span>Open year-round</span>
@@ -61,7 +61,7 @@ export default function Footer() {
               <a href="https://web.facebook.com/Ohana-surf-morocco-104723238577665" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                 <Icon name="brand-facebook" />
               </a>
-              <a href="https://wa.me/212600000000" aria-label="WhatsApp">
+              <a href="https://wa.me/212650613372" aria-label="WhatsApp">
                 <Icon name="brand-whatsapp" />
               </a>
               <a href="https://maps.google.com/?q=Aourir+Agadir+Morocco" aria-label="Google Maps" target="_blank" rel="noopener noreferrer">

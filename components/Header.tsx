@@ -20,7 +20,7 @@ function TopBar() {
           <span>Returning guest? Enjoy <strong>10% off</strong> your stay</span>
         </div>
         <div className="topbar__links">
-          <a href="tel:+212600000000"><Icon name="phone" /> +212 6 00 00 00 00</a>
+          <a href="tel:+212650613372"><Icon name="phone" /> +212 650-613372</a>
           <a href="mailto:ohanasurfguiding@gmail.com"><Icon name="mail" /> ohanasurfguiding@gmail.com</a>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function Header() {
           <div className="mobile-drawer__contact">
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.4rem' }}>
               <Icon name="brand-whatsapp" />
-              <a href="https://wa.me/212600000000">+212 6 00 00 00 00</a>
+              <a href="https://wa.me/212650613372">+212 650-613372</a>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <Icon name="mail" />

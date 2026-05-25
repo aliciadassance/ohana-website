@@ -131,7 +131,7 @@ function buildConfirmationHtml(s: Record<string, string | boolean>): string {
         <!-- CTA -->
         <tr>
           <td style="padding:0 32px 32px;text-align:center">
-            <a href="https://wa.me/212600000000" style="display:inline-block;background:#e48424;color:white;font-family:sans-serif;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:14px 28px;border-radius:999px;text-decoration:none">
+            <a href="https://wa.me/212650613372" style="display:inline-block;background:#e48424;color:white;font-family:sans-serif;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:14px 28px;border-radius:999px;text-decoration:none">
               Chat on WhatsApp
             </a>
             <p style="font-family:sans-serif;font-size:12px;color:#aaa;margin:16px 0 0">or reply to this email anytime</p>

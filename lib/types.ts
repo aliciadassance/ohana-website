@@ -40,6 +40,16 @@ export interface Room {
   sub: string
   capacity: string
   image: string
+  maxPax: number
+  pricingType: 'flat' | 'per-bed'
+  nightlyRate: number
+}
+
+export interface ActivityBlackout {
+  activity: 'pilates' | 'yoga'
+  from: string
+  to: string
+  note?: string
 }
 
 export interface FAQ {
