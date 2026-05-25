@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: fromEmail,
       to: OHANA_EMAIL,
-      replyTo: email,
+      reply_to: email,
       subject: `New booking request from ${fullName} (${arrival} → ${departure})`,
       html: buildNotificationHtml(body),
     })
