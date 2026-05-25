@@ -176,27 +176,29 @@ export async function POST(request: NextRequest) {
 
   const resend = new Resend(resendKey)
 
-  try {
-    // Notify Yassin/the team
-    await resend.emails.send({
-      from: fromEmail,
-      to: OHANA_EMAIL,
-      reply_to: email,
-      subject: `New booking request from ${fullName} (${arrival} → ${departure})`,
-      html: buildNotificationHtml(body),
-    })
-
-    // Confirm to the guest
-    await resend.emails.send({
-      from: fromConfirm,
-      to: email,
-      subject: `We received your booking request, ${fullName.split(' ')[0]}!`,
-      html: buildConfirmationHtml(body),
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (err) {
-    console.error('Resend error:', err)
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+  // Notify Yassin/the team
+  const notif = await resend.emails.send({
+    from: fromEmail,
+    to: OHANA_EMAIL,
+    reply_to: email,
+    subject: `New booking request from ${fullName} (${arrival} → ${departure})`,
+    html: buildNotificationHtml(body),
+  })
+  if (notif.error) {
+    console.error('Notification email error:', JSON.stringify(notif.error))
+    return NextResponse.json({ error: 'notification_failed', detail: notif.error }, { status: 500 })
   }
+
+  // Confirm to the guest
+  const confirm = await resend.emails.send({
+    from: fromConfirm,
+    to: email,
+    subject: `We received your booking request, ${fullName.split(' ')[0]}!`,
+    html: buildConfirmationHtml(body),
+  })
+  if (confirm.error) {
+    console.error('Confirmation email error:', JSON.stringify(confirm.error))
+  }
+
+  return NextResponse.json({ success: true })
 }

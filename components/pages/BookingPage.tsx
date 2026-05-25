@@ -72,7 +72,6 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
     const e: Record<string, string> = {}
     if (!state.fullName.trim()) e.fullName = 'Please tell us your name'
     if (!state.email.trim() || !/.+@.+\..+/.test(state.email)) e.email = 'We need a valid email'
-    if (!state.phone.trim()) e.phone = 'We use phone/WhatsApp to confirm'
     if (!state.country) e.country = 'Pick your country'
     if (!state.package) e.package = 'Choose a package'
     if (!state.arrival) e.arrival = 'Pick an arrival date'
@@ -214,8 +213,8 @@ function BookingForm({ initialPackage }: { initialPackage?: string }) {
         </div>
 
         <div className="form-grid form-grid--2">
-          <Field label="Phone / WhatsApp" required htmlFor="phone" hint="We'll confirm on WhatsApp if possible" error={errors.phone}>
-            <Input id="phone" name="phone" type="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+33 6 12 34 56 78" required />
+          <Field label="Phone / WhatsApp" htmlFor="phone" hint="Optional — we'll confirm on WhatsApp if possible">
+            <Input id="phone" name="phone" type="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+33 6 12 34 56 78" />
           </Field>
           <Field label="Country" required htmlFor="country" error={errors.country}>
             <Select
