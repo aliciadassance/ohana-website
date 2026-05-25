@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const OHANA_EMAIL = 'ohanasurfguiding@gmail.com'
+const OHANA_EMAIL = process.env.RESEND_TO_EMAIL || 'ohanasurfguiding@gmail.com'
 
 function buildNotificationHtml(s: Record<string, string | boolean>): string {
   const row = (label: string, value: string | boolean) =>
