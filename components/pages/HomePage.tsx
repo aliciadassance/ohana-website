@@ -25,14 +25,19 @@ type NetworkInformation = {
   downlink?: number
 }
 
+// Mobile gets a ~2MB 540p encode; desktop gets the full-quality file. Phones
+// only ever load the light version, so showing it on cellular is acceptable.
+const HERO_VIDEO_DESKTOP = '/assets/hero.mp4'
+const HERO_VIDEO_MOBILE = '/assets/hero-mobile.mp4'
+
 function shouldLoadHeroVideo(): boolean {
   if (typeof window === 'undefined') return false
-  if (window.matchMedia('(max-width: 768px)').matches) return false
   const conn = (navigator as Navigator & { connection?: NetworkInformation }).connection
   if (conn) {
     if (conn.saveData) return false
-    if (conn.effectiveType && ['slow-2g', '2g', '3g'].includes(conn.effectiveType)) return false
-    if (typeof conn.downlink === 'number' && conn.downlink < 1.5) return false
+    // effectiveType is heavily RTT-weighted and routinely misreports fast but
+    // high-latency WiFi as '3g', so only gate on the genuinely slow tiers.
+    if (conn.effectiveType && ['slow-2g', '2g'].includes(conn.effectiveType)) return false
   }
   return true
 }
@@ -42,16 +47,20 @@ function Hero() {
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoOk, setVideoOk] = useState(false)
-  const [loadVideo, setLoadVideo] = useState(false)
+  const [videoSrc, setVideoSrc] = useState<string | null>(null)
 
   useEffect(() => {
     if (!shouldLoadHeroVideo()) return
-    setLoadVideo(true)
-    const t = setTimeout(() => {
-      if (videoRef.current && videoRef.current.readyState < 3) setVideoOk(false)
-    }, 4000)
-    return () => clearTimeout(t)
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+    setVideoSrc(isMobile ? HERO_VIDEO_MOBILE : HERO_VIDEO_DESKTOP)
   }, [])
+
+  // Once we've decided the connection can handle it, make sure playback
+  // actually starts: the autoPlay attribute isn't always honoured on a node
+  // that mounts after hydration, but a programmatic muted play() is allowed.
+  useEffect(() => {
+    if (videoSrc) videoRef.current?.play().catch(() => {})
+  }, [videoSrc])
 
   return (
     <section className="hero">
@@ -68,7 +77,7 @@ function Hero() {
           aria-hidden="true"
         />
       </div>
-      {loadVideo && (
+      {videoSrc && (
         <video
           ref={videoRef}
           className="hero__video"
@@ -76,12 +85,12 @@ function Hero() {
           muted
           loop
           playsInline
-          preload="none"
+          preload="auto"
           onPlaying={() => setVideoOk(true)}
           onError={() => setVideoOk(false)}
           poster="/assets/images/hero-poster.jpg"
         >
-          <source src="/assets/hero.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </video>
       )}
       <div className="hero__overlay" />
