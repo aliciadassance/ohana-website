@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <div className="app has-mobile-cta">
+        <div className="app">
           <Header />
           <ScrollRevealInit />
           {children}

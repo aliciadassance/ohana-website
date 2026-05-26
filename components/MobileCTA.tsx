@@ -1,22 +1,33 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
-import { Button } from './ui'
+import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { Icon } from './ui'
 
 export default function MobileCTA() {
   const pathname = usePathname()
-  const router = useRouter()
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => {
+      setVisible(window.scrollY > 200)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   if (pathname === '/booking') return null
 
   return (
-    <div className="mobile-cta">
-      <Button variant="ink" fullWidth iconLeft="brand-whatsapp" href="https://wa.me/212650613372" ariaLabel="Chat on WhatsApp">
-        WhatsApp
-      </Button>
-      <Button variant="primary" fullWidth iconRight="arrow-right" onClick={() => router.push('/booking')}>
-        Book Now
-      </Button>
-    </div>
+    <a
+      href="https://wa.me/212650613372"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+      className={`whatsapp-fab${visible ? ' is-visible' : ''}`}
+    >
+      <Icon name="brand-whatsapp" />
+    </a>
   )
 }

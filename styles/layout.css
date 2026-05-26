@@ -1397,18 +1397,31 @@
   border-color: var(--brand-ink);
 }
 
-/* ---------- Sticky mobile CTA ---------- */
-.mobile-cta {
+/* ---------- Floating WhatsApp FAB (mobile) ---------- */
+.whatsapp-fab {
   position: fixed;
   bottom: 1rem;
-  left: 1rem; right: 1rem;
+  right: 1rem;
   z-index: 40;
-  display: flex;
-  gap: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background: var(--brand-ink);
+  color: #fff;
+  font-size: 1.75rem;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.9);
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
-.mobile-cta .btn { flex: 1; box-shadow: var(--shadow-lg); }
-@media (min-width: 720px) { .mobile-cta { display: none; } }
-
-/* keep content from going under sticky CTA on mobile */
-.has-mobile-cta { padding-bottom: 5rem; }
-@media (min-width: 720px) { .has-mobile-cta { padding-bottom: 0; } }
+.whatsapp-fab.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.whatsapp-fab:hover { background: var(--brand-ink-soft); }
+@media (min-width: 720px) { .whatsapp-fab { display: none; } }
