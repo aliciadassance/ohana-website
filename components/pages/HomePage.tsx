@@ -108,7 +108,7 @@ function Hero() {
           <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => router.push('/booking')}>
             Book Your Stay
           </Button>
-          <Button variant="outline-light" size="lg" iconLeft="eye" onClick={() => router.push('/packages')}>
+          <Button variant="outline-light" size="lg" onClick={() => router.push('/packages')}>
             See Packages
           </Button>
         </div>

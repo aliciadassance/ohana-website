@@ -36,7 +36,7 @@ export default function Footer() {
             <h4>Get in Touch</h4>
             <ul>
               <li className="footer__contact-row">
-                <Icon name="map-pin" /> <span>Aourir, Agadir<br />Morocco</span>
+                <Icon name="map-pin" /> <span>Aourir, Agadir - Morocco</span>
               </li>
               <li className="footer__contact-row">
                 <Icon name="mail" />

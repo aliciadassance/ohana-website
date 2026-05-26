@@ -89,11 +89,11 @@ p { margin: 0; text-wrap: pretty; }
 }
 
 .section {
-  padding-block: clamp(3.5rem, 8vw, 7rem);
+  padding-block: clamp(1.75rem, 4vw, 3.5rem);
 }
 
 .section-tight {
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  padding-block: clamp(1.25rem, 2.5vw, 2.25rem);
 }
 
 .section-head {
