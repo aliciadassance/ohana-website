@@ -225,6 +225,9 @@ function BookingForm() {
         throw new Error('Network error')
       }
       setSubmitted(true)
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
     } catch {
       setSubmitError('Something went wrong sending your request. Please email us directly at ohanasurfguiding@gmail.com or reach out on WhatsApp.')
     } finally {
