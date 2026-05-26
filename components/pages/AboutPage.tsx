@@ -21,7 +21,7 @@ function StoryBlock() {
             <SkeletonImg src="/assets/images/about-story-2.jpg" alt="A family that surfs together" />
           </div>
           <div className="photo-sticker" style={{ right: '-10px', bottom: '30px' }}>
-            <span className="num">2018</span>
+            <span className="num">2021</span>
             <span>The year<br />Ohana opened</span>
           </div>
         </div>
@@ -30,18 +30,13 @@ function StoryBlock() {
           <Eyebrow>Our story</Eyebrow>
           <h2>A family that surfs together</h2>
           <p>
-            Ohana started simply: Yassin came home from a decade on the international surf
-            circuit, looked at his family&apos;s house on the coast, and thought —
-            <em> what if we opened the door?</em>
+          Yassin spent years teaching surf lessons in Morocco, making friends in the water and dreading the moment people packed their bags. So he built a place they wouldn't want to leave — Ohana Surf Morocco.
           </p>
           <p>
-            What began as a few friends crashing for a swell has grown into a small,
-            beloved camp welcoming surfers from all over the world. The mission has never
-            changed: share the waves we grew up on, the food we grew up eating, and the
-            family we grew up in.
+          Ohana means family in Hawaiian. Turns out, that's not just a name. Guests arrive not knowing anyone and leave with the kind of memories that make home feel a little quieter. Expert coaching, uncrowded lineups, tagine dinners that run long. The part Yassin never gets tired of? Watching someone ride their first wave and break into a smile they can't hide.
           </p>
           <p>
-            We stay small on purpose. Six guests at a time, max. That&apos;s how we keep things
+            We stay small on purpose. Twelve guests at a time, max. That&apos;s how we keep things
             personal — and how we keep the lineups uncrowded.
           </p>
         </div>
@@ -57,10 +52,13 @@ function HouseBlock() {
         <Eyebrow>The house</Eyebrow>
         <h2>Your home on the Moroccan coast</h2>
         <p>
-          Five minutes from the beach, on a quiet street in Aourir. A traditional
-          Moroccan house with a rooftop terrace, a sun-drenched courtyard, and just
-          enough rooms to feel like a real home — not a hotel.
+        The Ohana house sits in Banana Village, a quiet neighbourhood 15km north of Agadir, with the Atlantic right on the doorstep.
         </p>
+        <p>Banana Beach is a 10-minute walk. Local shops are closer. The house runs across 4 floors — 6 rooms, 3 bathrooms, and a living room that fits everyone comfortably around the table. Dinners here tend to run long, and game nights even longer.
+        </p>
+        <p>Head up to the rooftop when the light starts to change. Sea view to the left, mountains to the right. Pick your side.
+        </p>
+        
       </div>
 
       <div className="gallery" style={{ marginBottom: '3rem' }}>
@@ -75,22 +73,22 @@ function HouseBlock() {
         <div className="feature">
           <span className="feature__icon"><Icon name="bed" /></span>
           <h3>5 unique rooms</h3>
-          <p>Shared, twin, double or balcony — all with crisp linens, fans and ocean-cooled air.</p>
+          <p>Shared, twin, double or balcony room — light, airy, and close enough to the ocean to hear it at night.</p>
         </div>
         <div className="feature">
           <span className="feature__icon"><Icon name="sun" /></span>
           <h3>Rooftop terrace</h3>
-          <p>Where breakfast happens, yoga unrolls, and every sunset is the best one yet.</p>
+          <p>Where breakfast happens, yoga unrolls, and no two sunsets look the same.</p>
         </div>
         <div className="feature">
           <span className="feature__icon"><Icon name="tools-kitchen-2" /></span>
           <h3>Family kitchen</h3>
-          <p>Three meals a day prepared by Fatima — tagines, harira, msemen, fresh fish.</p>
+          <p>Three meals a day from Fatma's kitchen — homemade tagines, fresh couscous, and msemen made from scratch.</p>
         </div>
         <div className="feature">
           <span className="feature__icon"><Icon name="wifi" /></span>
           <h3>Modern comforts</h3>
-          <p>Fast Wi-Fi, hot showers, board room and a quiet nook for digital nomads.</p>
+          <p>Fast Wi-Fi, hot showers, and quiet corners to recharge between sessions.</p>
         </div>
       </div>
     </Section>
@@ -107,9 +105,7 @@ function DayBlock() {
             <Eyebrow>A day at Ohana</Eyebrow>
             <h2>Surf, eat, rest, repeat</h2>
             <p>
-              There&apos;s a rhythm to life here. We move with the swell — early sessions before the
-              wind picks up, slow afternoons under the sun, and a sunset session that doubles
-              as therapy. In between: incredible food, hammocks, and good company.
+            Welcome to a typical day at Ohana Surf Morocco. Surf sessions in uncrowded Taghazout lineups, Fatma's homemade cooking three times a day, new faces that quickly feel like old friends. <br /><strong>Simple things, done properly — and it never gets old.</strong>
             </p>
           </div>
 
@@ -161,8 +157,7 @@ function TeamBlock() {
         <Eyebrow>Meet the team</Eyebrow>
         <h2>The family behind Ohana</h2>
         <p>
-          Three people, one house, and a deep love for the Moroccan coast.
-          You&apos;ll know them all by name on day one.
+        Ohana didn't grow out of a business plan — it grew out of friendship, family and a love for these waves. Meet the team.
         </p>
       </div>
       <div className="team-grid">
@@ -185,14 +180,14 @@ function TeamBlock() {
 
 function MoroccoBlock() {
   const items = [
-    { icon: 'map-2', title: 'Aourir & Tamraght', desc: 'Two sleepy fishing villages just north of Agadir, surrounded by some of Morocco\'s best surf.' },
-    { icon: 'wave-sine', title: 'Anchor Point', desc: 'The legendary right-hander 10 minutes north — one of the world\'s most iconic point breaks.' },
-    { icon: 'building-mosque', title: 'Souk days', desc: 'Wednesday market in Aourir, Sunday market in Agadir — spices, leather, argan oil, all of it.' },
-    { icon: 'mountain', title: 'Paradise Valley', desc: 'An hour inland — palm-shaded river pools, jumping rocks, and the best argan oil from local cooperatives.' },
-    { icon: 'sun', title: 'Taghazout', desc: 'The legendary surf village 15 minutes up the coast — cafes, board shapers, sundown beach bonfires.' },
-    { icon: 'bath', title: 'Hammam & massage', desc: 'A traditional steam, scrub, and rosewater rinse. The cure for sore shoulders after a long surf day.' },
-    { icon: 'horse', title: 'Camel & horse rides', desc: 'Sunset rides along the empty beach south of Tamraght — quietly one of the best evenings of the trip.' },
-    { icon: 'sailboat', title: 'Sand dunes excursion', desc: 'South to the Sahara fringe — dune walks, mint tea, and skies wide enough to forget what time it is.' },
+    { icon: 'map-2', title: 'Aourir & Tamraght', desc: 'The two fishing villages on either side of us. Sleepy, colourful, and surrounded by some of the best surf spots in Morocco.' },
+    { icon: 'wave-sine', title: 'Anchor Point', desc: '10 minutes up the coast and one of the most iconic surf breaks in the world. If the swell is right, you\'ll want to be there.' },
+    { icon: 'building-mosque', title: 'Souk days', desc: 'Wednesday in Aourir, Sunday in Agadir. Come hungry, come curious — spices, argan oil, fresh produce and things you didn\'t know you needed.' },
+    { icon: 'mountain', title: 'Paradise Valley', desc: 'An hour\'s drive inland and a world away. River pools, palm trees, jumping rocks and argan oil bought straight from the women who make it.' },
+    { icon: 'sun', title: 'Taghazout', desc: 'The surf village just up the coast that put Morocco on the map. Board shapers, good coffee, and beach bonfires that nobody wants to leave early.' },
+    { icon: 'bath', title: 'Hammam & massage', desc: 'Steam, scrub, rosewater. Book one after a big surf day — your shoulders will thank you.' },
+    { icon: 'horse', title: 'Camel & horse rides', desc: 'Along the empty beach south of Tamraght as the sun goes down. One of those evenings that sneaks up on you.' },
+    { icon: 'sailboat', title: 'Sand dunes excursion', desc: 'Head north past Tamri where the dunes meet the Atlantic. Try your hand at sandboarding, pour a mint tea, and watch the sun drop into the ocean. Hard to beat.' },
   ]
 
   return (
@@ -201,8 +196,7 @@ function MoroccoBlock() {
         <Eyebrow>Life in Morocco</Eyebrow>
         <h2>Beyond the waves</h2>
         <p>
-          Morocco is half the magic. On rest days we&apos;ll point you to the spice
-          souk, hidden beaches, mountain hikes, and the world&apos;s best mint tea.
+        Morocco is half the magic. On rest days, we'll point you in the right direction — and trust us, there's plenty to find.
         </p>
       </div>
       <div className="morocco-grid">
@@ -225,7 +219,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About us"
         title={<>The Ohana <em style={{ color: 'var(--brand-orange-300)' }}>family</em></>}
-        intro="Yassin, his mother Fatima, his cousin Hassan — and you. We're a small, family-run surf camp on the Moroccan coast, sharing the waves and the way of life we grew up with."
+        intro="Six years ago, Yassin made a bet on himself — leave the surf instructor life behind and build something of his own around Taghazout. The idea was simple: create a place where people come for the waves and stay for everything else. It worked."
         bgImage="/assets/images/about-story.jpg"
       />
       <StoryBlock />

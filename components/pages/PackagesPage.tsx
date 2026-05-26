@@ -16,14 +16,12 @@ function ComparisonTable() {
     { label: 'Accommodation',          values: [true,        true,           true,           false] },
     { label: 'All meals included',     values: [true,        true,           true,           false] },
     { label: 'Surf sessions / day',    values: ['2',         '2',            '2',            '1 or 2'] },
-    { label: 'Equipment included',     values: [true,        true,           true,           'Rental available'] },
+    { label: 'Equipment included',     values: [true,        true,           true,           true] },
     { label: 'Photo & video analysis', values: [true,        true,           true,           'Optional'] },
     { label: 'Surfskate session',      values: ['Weekly',    'Weekly',       'Weekly',       false] },
-    { label: 'Yoga sessions',          values: [false,       '2/day',        false,          false] },
-    { label: 'Pilates sessions',       values: [false,       false,          'Daily',        false] },
+    { label: 'Yoga sessions',          values: [false,       'Daily',        false,          false] },
+    { label: 'Pilates sessions',       values: [false,       false,          '4 per week',        false] },
     { label: 'Local souk excursion',   values: [true,        true,           true,           false] },
-    { label: 'Airport pickup',         values: [true,        true,           true,           false] },
-    { label: 'Coaching level',         values: ['All levels','All levels',   'All levels',  'All levels'] },
   ]
 
   const cellStyle: CSSProperties = { padding: '0.85rem 0.9rem', borderBottom: '1px solid var(--color-border)', fontSize: '0.92rem' }
@@ -276,7 +274,8 @@ function RoomsSection() {
       <div className="section-head">
         <Eyebrow>Where you&apos;ll sleep</Eyebrow>
         <h2>Rooms at the house</h2>
-        <p>Five rooms, five vibes. From a sociable shared dorm to a private double with a balcony — pick the one that fits your trip.</p>
+        <p>Six rooms, one house.
+        From a shared room where friendships start on day one, to a private double with a balcony and a view worth waking up for — pick the one that fits your trip.</p>
       </div>
       <div className="rooms-grid">
         {ROOMS.map((r) => (
@@ -348,13 +347,13 @@ function AddOns() {
       <div className="section-head">
         <Eyebrow>Add to your stay</Eyebrow>
         <h2>Make it exactly yours</h2>
-        <p>Optional extras to upgrade your stay. Pick what you want during booking — no pressure, no upsells when you arrive.</p>
+        <p>Optional extras to upgrade your stay. Pick what you want upon booking or during your stay.</p>
       </div>
       <div className="feature-grid">
         <div className="feature feature--toggle">
           <span className="feature__icon"><Icon name="bus" /></span>
           <h3>Agadir Pick-up</h3>
-          <p>Get to the camp without the hassle — pick how.</p>
+          <p>Get to the camp without the hassle — pick how you want to get here.</p>
           <div className="seg" role="tablist" aria-label="Pickup type">
             <button type="button" role="tab" aria-selected={pickup === 'bus'} className={`seg__btn ${pickup === 'bus' ? 'is-active' : ''}`} onClick={() => setPickup('bus')}>Bus</button>
             <button type="button" role="tab" aria-selected={pickup === 'airport'} className={`seg__btn ${pickup === 'airport' ? 'is-active' : ''}`} onClick={() => setPickup('airport')}>Airport</button>
@@ -404,8 +403,8 @@ export default function PackagesPage() {
     <main>
       <PageHeader
         eyebrow="Surf packages"
-        title={<>Three ways to <em style={{ color: 'var(--brand-orange-300)' }}>ride with us</em></>}
-        intro="Whether you're chasing your first wave or your hundredth swell, there's a package for you. All prices are per person and include tax — no hidden fees."
+        title={<>Four ways to <em style={{ color: 'var(--brand-orange-300)' }}>ride with us</em></>}
+        intro="Whether you're chasing your first wave or your hundredth swell, there's a package built for your trip. And if none of them fit perfectly, just ask — we'll make it work."
         bgImage="/assets/images/packages-hero.jpg"
         titleNoWrap
       />

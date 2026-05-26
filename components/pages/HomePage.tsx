@@ -101,8 +101,7 @@ function Hero() {
           Come as a stranger, <em>leave as family.</em>
         </h1>
         <p className="hero__sub">
-          A small, family-run surf camp on the Moroccan coast. Pro coaching with Yassin,
-          home-cooked tagines, sunrise sessions, and waves you&apos;ll be talking about for years.
+          Expert coaching, home-cooked meals, waves for every level and people you won't want to leave behind.
         </p>
         <div className="hero__cta">
           <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => router.push('/booking')}>
@@ -137,16 +136,10 @@ function Welcome() {
           <Eyebrow>Welcome</Eyebrow>
           <h2>The best Moroccan surf experience</h2>
           <p>
-            Ohana Surf Morocco is your home for an unforgettable surf experience on the
-            beautiful Moroccan coast. Led by pro surfer <strong>Yassin</strong>, our camp offers
-            expert coaching and personalized guidance for every level — whether you&apos;re standing
-            on a board for the first time or chasing bigger, cleaner waves.
+          At Ohana Surf Morocco, surfing is more than a sport — it's a way of life. Our family-run surf camp close to Taghazout opens its doors and heart to every guest, whatever their level. Days run to the rhythm of the ocean: early surf sessions under the rising sun, laughter around shared meals, and evenings that remind you what switching off actually feels like.
           </p>
           <p>
-            We believe surfing is more than a sport: it&apos;s a way of life. As a family-run camp,
-            we open our doors and hearts to every guest. Days flow with the rhythm of the ocean —
-            early sessions under the rising sun, laughter around shared meals, and sunsets that
-            remind you what it means to truly disconnect.
+          Stay a few nights or a full week. Book your surf camp in Morocco today — you'll arrive as a guest and leave as part of something you didn't expect.
           </p>
           <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
             <Button variant="teal" iconRight="arrow-right" onClick={() => router.push('/about')}>About the camp</Button>
@@ -164,7 +157,7 @@ function Welcome() {
           </div>
           <div className="photo-sticker" style={{ right: '-10px', top: '30px' }}>
             <Icon name="award" style={{ color: 'var(--color-accent)', fontSize: '1.4rem' }} />
-            <span>Pro coach<br />since 2009</span>
+            <span>Pro coach<br />since 2016</span>
           </div>
         </div>
       </div>
@@ -179,9 +172,9 @@ function StatStrip() {
       <div className="stats">
         <div className="stat"><span className="stat__num">12+</span><span className="stat__label">Surf spots nearby</span></div>
         <div className="stat"><span className="stat__num">4</span><span className="stat__label">People max per instructor</span></div>
-        <div className="stat"><span className="stat__num">4.9</span><span className="stat__label">Average rating</span></div>
+        <div className="stat"><span className="stat__num">5.0</span><span className="stat__label">Average rating</span></div>
         <div className="stat"><span className="stat__num">25+</span><span className="stat__label">Countries hosted</span></div>
-        <div className="stat"><span className="stat__num">7</span><span className="stat__label">Years welcoming you</span></div>
+        <div className="stat"><span className="stat__num">5</span><span className="stat__label">Years welcoming you</span></div>
       </div>
     </div>
   )
@@ -283,8 +276,7 @@ function PackagesPreview() {
         <Eyebrow>Surf packages</Eyebrow>
         <h2>Choose your stay, ride with the Ohana family</h2>
         <p>
-          Four ways to surf with us — pick the one that fits your trip. Every package includes
-          coaching, equipment and the warmest welcome on the Moroccan coast.
+        Four ways to surf with us — pick what fits your trip. Every package includes coaching, equipment, and the kind of welcome that's made our surf camp in Morocco one to come back to.
         </p>
       </div>
       <PackagesCarousel />
@@ -307,13 +299,10 @@ function DailyLife() {
           <Eyebrow>Daily life</Eyebrow>
           <h2>A day at Ohana feels longer in the best way</h2>
           <p>
-            Wake up with the swell, breakfast on the rooftop, two surf sessions in
-            untouched lineups, an afternoon nap to a soundtrack of waves, then a
-            tagine dinner that turns into stories until the stars come out.
+          The alarm goes off early but nobody minds. Breakfast together on the rooftop, two surf sessions in uncrowded Taghazout lineups, an afternoon nap to a soundtrack of waves, then a tagine dinner that nobody wants to end.
           </p>
           <p>
-            No rush. No crowds. Just you, the ocean, and a family that&apos;s already
-            saving you a seat at the table.
+          No rush. No crowds. Just you, the ocean, and a family that's already saving you a seat.
           </p>
           <Button variant="teal" iconRight="arrow-right" onClick={() => router.push('/about')}>
             See a day at Ohana
@@ -345,8 +334,7 @@ function Reviews() {
           <Eyebrow>Guest stories</Eyebrow>
           <h2>What our family says about us</h2>
           <p>
-            More than 200 guests visited Ohana this year alone. Here&apos;s what a few of them
-            have to say about a week on the Moroccan coast with Yassin and the team.
+          200+ guests a year. They all showed up for the waves — most stayed for everything else. Here's what a few of them had to say about their surf camp experience in Morocco.
           </p>
         </div>
 
