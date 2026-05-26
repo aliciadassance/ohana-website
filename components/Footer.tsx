@@ -73,11 +73,6 @@ export default function Footer() {
 
         <div className="footer__legal">
           <div>© {new Date().getFullYear()} Ohana Surf Morocco · All rights reserved</div>
-          <div style={{ display: 'flex', gap: '1.25rem' }}>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Cookies</a>
-          </div>
         </div>
       </div>
     </footer>
