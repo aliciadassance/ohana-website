@@ -4,7 +4,10 @@
       "Bash(npm install *)",
       "Bash(command -v node)",
       "Bash(npx tsc *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npm audit *)",
+      "Bash(npm outdated *)",
+      "Bash(xargs ls -la)"
     ]
   }
 }

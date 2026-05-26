@@ -26,7 +26,19 @@ type FormState = {
   message: string
   marketing: boolean
   returning: boolean
+  /** Honeypot — must remain empty. Real users never see this field. */
+  website: string
 }
+
+const MAX_LENGTHS = {
+  fullName: 200,
+  email: 254,
+  phone: 40,
+  country: 100,
+  diet: 500,
+  referral: 80,
+  message: 5000,
+} as const
 
 const PICKUPS = [
   'No pickup needed',
@@ -64,6 +76,7 @@ function BookingForm() {
     diet: '', referral: '', message: '',
     marketing: false,
     returning: searchParams.get('returning') === 'true',
+    website: '',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
@@ -77,9 +90,15 @@ function BookingForm() {
 
   function validate(): boolean {
     const e: Record<string, string> = {}
+    const hasControlChars = (s: string) => /[\r\n\0]/.test(s)
     if (!state.fullName.trim()) e.fullName = 'Please tell us your name'
-    if (!state.email.trim() || !/.+@.+\..+/.test(state.email)) e.email = 'We need a valid email'
+    else if (state.fullName.length > MAX_LENGTHS.fullName) e.fullName = 'Name is too long'
+    else if (hasControlChars(state.fullName)) e.fullName = 'Name contains forbidden characters'
+    if (!state.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email) || hasControlChars(state.email)) {
+      e.email = 'We need a valid email'
+    }
     if (!state.phone.trim()) e.phone = 'Add your WhatsApp number so we can reach you'
+    else if (state.phone.length > MAX_LENGTHS.phone) e.phone = 'Phone number is too long'
     if (!state.country) e.country = 'Pick your country'
     if (!state.package) e.package = 'Choose a package'
     if (!state.arrival) e.arrival = 'Pick an arrival date'
@@ -88,6 +107,7 @@ function BookingForm() {
       e.departure = 'Departure must be after arrival'
     }
     if (!state.level) e.level = 'Pick your surf level'
+    if (state.message.length > MAX_LENGTHS.message) e.message = `Message must be ${MAX_LENGTHS.message} characters or fewer`
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -112,7 +132,22 @@ function BookingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(state),
       })
-      if (!res.ok) throw new Error('Network error')
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (res.status === 400 && data?.fields) {
+          setErrors(data.fields as Record<string, string>)
+          requestAnimationFrame(() => {
+            const el = document.querySelector('.field--error') as HTMLElement | null
+            if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 120, behavior: 'smooth' })
+          })
+          return
+        }
+        if (res.status === 429) {
+          setSubmitError("You've submitted a few requests recently — please give us a moment, or reach us directly on WhatsApp.")
+          return
+        }
+        throw new Error('Network error')
+      }
       setSubmitted(true)
     } catch {
       setSubmitError('Something went wrong sending your request. Please email us directly at ohanasurfguiding@gmail.com or reach out on WhatsApp.')
@@ -150,6 +185,19 @@ function BookingForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
+      {/* Honeypot — visually hidden, off-screen, autocomplete off. Bots fill this; humans don't. */}
+      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}>
+        <label htmlFor="website">Website (leave blank)</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={state.website}
+          onChange={(e) => set('website', e.target.value)}
+        />
+      </div>
       {fromEstimate && (
         <p className="prefill-notice">
           <Icon name="sparkles" /> Pre-filled from your estimate — feel free to adjust.
@@ -306,7 +354,7 @@ function BookingForm() {
             name="message"
             rows={6}
             value={state.message}
-            onChange={(e) => set('message', e.target.value)}
+            onChange={(e) => set('message', e.target.value.slice(0, MAX_LENGTHS.message))}
             placeholder="e.g. I'm coming with my partner who's never surfed. We'd love a quiet room and recommendations for a day trip to Paradise Valley…"
           />
         </Field>

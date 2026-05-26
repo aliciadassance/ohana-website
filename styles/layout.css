@@ -1291,7 +1291,7 @@
   justify-content: center;
   padding: 0.5rem 0.85rem;
   min-width: 90px;
-  font-family: "Caveat", "Marker Felt", "Bradley Hand", cursive;
+  font-family: var(--font-caveat), "Marker Felt", "Bradley Hand", cursive;
   font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: 0.01em;
