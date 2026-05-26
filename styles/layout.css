@@ -165,7 +165,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(12,39,46,0.25) 0%, rgba(12,39,46,0.0) 35%, rgba(12,39,46,0.6) 100%);
+    linear-gradient(180deg, rgba(12,39,46,0.25) 0%, rgba(12,39,46,0.0) 35%, rgba(12,39,46,0.6) 100%),
+    rgba(0, 0, 0, 0.35);
   z-index: -1;
 }
 .hero__content {
