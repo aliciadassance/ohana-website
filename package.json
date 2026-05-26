@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compress:images": "node scripts/compress-images.mjs",
+    "compress:images:check": "node scripts/compress-images.mjs --check"
   },
   "dependencies": {
     "next": "^14.2.0",
@@ -21,6 +23,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "^14",
+    "sharp": "^0.33.5",
     "typescript": "^5"
   }
 }
