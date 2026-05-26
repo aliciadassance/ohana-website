@@ -64,7 +64,7 @@ export default function Footer() {
               <a href="https://wa.me/212650613372" aria-label="WhatsApp">
                 <Icon name="brand-whatsapp" />
               </a>
-              <a href="https://maps.google.com/?q=Aourir+Agadir+Morocco" aria-label="Google Maps" target="_blank" rel="noopener noreferrer">
+              <a href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A" aria-label="Google Maps" target="_blank" rel="noopener noreferrer">
                 <Icon name="map-pin" />
               </a>
             </div>

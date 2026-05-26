@@ -371,7 +371,7 @@ function Reviews() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', gap: '0.6rem', flexWrap: 'wrap' }}>
-          <Button variant="outline-light" iconLeft="brand-google" href="https://www.google.com/maps">
+          <Button variant="outline-light" iconLeft="brand-google" href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A">
             Read on Google
           </Button>
           <Button variant="outline-light" iconLeft="brand-instagram" href="https://www.instagram.com/ohana_surfmorocco/">
