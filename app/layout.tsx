@@ -93,12 +93,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
         <link rel="icon" type="image/png" href="/assets/LOGO-color-block.png" />
-        <link
-          rel="preload"
-          as="image"
-          href="/assets/images/hero-poster.jpg"
-          fetchPriority="high"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}

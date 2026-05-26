@@ -6,6 +6,12 @@ import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
 import { TEAM, DAY_AT_OHANA } from '@/lib/data'
 
+// House gallery: 2-col on mobile (~50vw cells), 4-col on desktop within a
+// half-width split. Day photos: 3-col grid (~33vw mobile) inside a half-width
+// column on desktop. Both default to 100vw without this — heavy over-fetch.
+const GALLERY_SIZES = '(max-width: 720px) 50vw, (max-width: 1024px) 25vw, 33vw'
+const DAY_PHOTO_SIZES = '(max-width: 980px) 50vw, 20vw'
+
 function StoryBlock() {
   return (
     <Section id="story">
@@ -58,11 +64,11 @@ function HouseBlock() {
       </div>
 
       <div className="gallery" style={{ marginBottom: '3rem' }}>
-        <div><SkeletonImg src="/assets/images/about-house-1.jpg" alt="The house" /></div>
-        <div><SkeletonImg src="/assets/images/about-house-2.jpg" alt="The house" /></div>
-        <div><SkeletonImg src="/assets/images/about-house-3.jpg" alt="The house" /></div>
-        <div><SkeletonImg src="/assets/images/about-house-4.jpg" alt="The house" /></div>
-        <div><SkeletonImg src="/assets/images/about-house-5.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-1.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
+        <div><SkeletonImg src="/assets/images/about-house-2.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
+        <div><SkeletonImg src="/assets/images/about-house-3.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
+        <div><SkeletonImg src="/assets/images/about-house-4.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
+        <div><SkeletonImg src="/assets/images/about-house-5.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
       </div>
 
       <div className="feature-grid">
@@ -109,16 +115,16 @@ function DayBlock() {
 
           <div className="day-layout__photos">
             <div className="photo-placeholder photo-placeholder--tall">
-              <SkeletonImg src="/assets/images/about-day-1.png" alt="Mint tea pour at the family table" />
+              <SkeletonImg src="/assets/images/about-day-1.png" alt="Mint tea pour at the family table" sizes={DAY_PHOTO_SIZES} />
             </div>
             <div className="photo-placeholder">
-              <SkeletonImg src="/assets/images/about-day-2.jpg" alt="Morning surf session" />
+              <SkeletonImg src="/assets/images/about-day-2.jpg" alt="Morning surf session" sizes={DAY_PHOTO_SIZES} />
             </div>
             <div className="photo-placeholder">
-              <SkeletonImg src="/assets/images/about-day-3.jpg" alt="Brunch at the house" />
+              <SkeletonImg src="/assets/images/about-day-3.jpg" alt="Brunch at the house" sizes={DAY_PHOTO_SIZES} />
             </div>
             <div className="photo-placeholder photo-placeholder--wide">
-              <SkeletonImg src="/assets/images/about-day-4.jpg" alt="Family dinner around the table" />
+              <SkeletonImg src="/assets/images/about-day-4.jpg" alt="Family dinner around the table" sizes={DAY_PHOTO_SIZES} />
             </div>
           </div>
 

@@ -1,6 +1,10 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
+import blurData from '@/lib/blur-data.json'
+
+const BLUR_MAP = blurData as Record<string, string>
 
 // ---- Icon ----
 type IconProps = {
@@ -288,12 +292,15 @@ export function Logo({ variant = 'horizontal', alt = 'Ohana Surf Morocco', heigh
   const asset = LOGO_ASSETS[key]
   const style: React.CSSProperties = {}
   if (height) style.height = `${height}px`
+  const renderedHeight = height ?? 64
+  const renderedWidth = Math.round((asset.w / asset.h) * renderedHeight)
   return (
-    <img
+    <Image
       src={asset.src}
       alt={alt}
-      width={asset.w}
-      height={asset.h}
+      width={renderedWidth}
+      height={renderedHeight}
+      priority
       style={style}
       className={`logo-img logo-img--${key}`}
     />
@@ -348,15 +355,20 @@ type SkeletonImgProps = {
   src: string
   alt: string
   loading?: 'lazy' | 'eager'
+  priority?: boolean
+  sizes?: string
   className?: string
   style?: React.CSSProperties
   onLoad?: () => void
   onError?: () => void
 }
+const DEFAULT_SIZES = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 export function SkeletonImg({
   src,
   alt,
   loading = 'lazy',
+  priority = false,
+  sizes = DEFAULT_SIZES,
   className = '',
   style,
   onLoad,
@@ -365,24 +377,31 @@ export function SkeletonImg({
   const imgRef = React.useRef<HTMLImageElement>(null)
   const [loaded, setLoaded] = React.useState(false)
   const [errored, setErrored] = React.useState(false)
+  const blurDataURL = BLUR_MAP[src]
 
+  // next/image can finish loading before React attaches onLoad (warm cache /
+  // fast hydration); without this the image stays pinned at opacity:0 forever.
   React.useEffect(() => {
     const img = imgRef.current
-    if (img && img.complete && img.naturalWidth > 0) {
-      setLoaded(true)
-    }
+    if (img && img.complete && img.naturalWidth > 0) setLoaded(true)
   }, [])
 
   return (
     <span className="skeleton-img__wrap" style={style}>
-      {!loaded && !errored && <span className="skeleton skeleton-img" aria-hidden="true" />}
-      <img
+      {!loaded && !errored && !blurDataURL && (
+        <span className="skeleton skeleton-img" aria-hidden="true" />
+      )}
+      <Image
         ref={imgRef}
         src={src}
         alt={alt}
-        loading={loading}
-        decoding="async"
-        className={`skeleton-img__img ${loaded ? 'is-loaded' : ''} ${className}`}
+        fill
+        sizes={sizes}
+        priority={priority}
+        loading={priority ? undefined : loading}
+        placeholder={blurDataURL ? 'blur' : 'empty'}
+        blurDataURL={blurDataURL}
+        className={`skeleton-img__img ${loaded || blurDataURL ? 'is-loaded' : ''} ${className}`}
         onLoad={() => { setLoaded(true); onLoad?.() }}
         onError={() => { setErrored(true); onError?.() }}
       />

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "compress:images": "node scripts/compress-images.mjs",
-    "compress:images:check": "node scripts/compress-images.mjs --check"
+    "compress:images:check": "node scripts/compress-images.mjs --check",
+    "generate:blur": "node scripts/generate-blur.mjs"
   },
   "dependencies": {
     "next": "^14.2.0",

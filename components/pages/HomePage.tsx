@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import type { ComponentType } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, A11y } from 'swiper/modules'
@@ -10,14 +11,42 @@ import { Icon, Button, Eyebrow, Section, Badge, Stars, SkeletonImg } from '../ui
 import CTABanner from '../CTABanner'
 import { PACKAGES, REVIEWS } from '@/lib/data'
 import type { Package } from '@/lib/types'
+import blurData from '@/lib/blur-data.json'
+
+const HERO_BLUR = (blurData as Record<string, string>)['/assets/images/hero-poster.jpg']
+
+// Gallery cells render at ~50vw (mobile 2-col) down to ~quarter-width on
+// desktop; the default 100vw sizes over-fetches ~2x on the small cells.
+const GALLERY_SIZES = '(max-width: 720px) 50vw, (max-width: 1024px) 25vw, 33vw'
+
+type NetworkInformation = {
+  saveData?: boolean
+  effectiveType?: 'slow-2g' | '2g' | '3g' | '4g'
+  downlink?: number
+}
+
+function shouldLoadHeroVideo(): boolean {
+  if (typeof window === 'undefined') return false
+  if (window.matchMedia('(max-width: 768px)').matches) return false
+  const conn = (navigator as Navigator & { connection?: NetworkInformation }).connection
+  if (conn) {
+    if (conn.saveData) return false
+    if (conn.effectiveType && ['slow-2g', '2g', '3g'].includes(conn.effectiveType)) return false
+    if (typeof conn.downlink === 'number' && conn.downlink < 1.5) return false
+  }
+  return true
+}
 
 // ---- Hero ----
 function Hero() {
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoOk, setVideoOk] = useState(false)
+  const [loadVideo, setLoadVideo] = useState(false)
 
   useEffect(() => {
+    if (!shouldLoadHeroVideo()) return
+    setLoadVideo(true)
     const t = setTimeout(() => {
       if (videoRef.current && videoRef.current.readyState < 3) setVideoOk(false)
     }, 4000)
@@ -26,24 +55,35 @@ function Hero() {
 
   return (
     <section className="hero">
-      <div
-        className={`hero__poster ${videoOk ? 'is-hidden' : ''}`}
-        style={{ backgroundImage: "url('/assets/images/hero-poster.jpg')" }}
-      />
-      <video
-        ref={videoRef}
-        className="hero__video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onPlaying={() => setVideoOk(true)}
-        onError={() => setVideoOk(false)}
-        poster="/assets/images/hero-poster.jpg"
-      >
-        <source src="/assets/hero.mp4" type="video/mp4" />
-      </video>
+      <div className={`hero__poster ${videoOk ? 'is-hidden' : ''}`}>
+        <Image
+          src="/assets/images/hero-poster.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          placeholder={HERO_BLUR ? 'blur' : 'empty'}
+          blurDataURL={HERO_BLUR}
+          style={{ objectFit: 'cover' }}
+          aria-hidden="true"
+        />
+      </div>
+      {loadVideo && (
+        <video
+          ref={videoRef}
+          className="hero__video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          onPlaying={() => setVideoOk(true)}
+          onError={() => setVideoOk(false)}
+          poster="/assets/images/hero-poster.jpg"
+        >
+          <source src="/assets/hero.mp4" type="video/mp4" />
+        </video>
+      )}
       <div className="hero__overlay" />
 
       <div className="container hero__content">
@@ -272,11 +312,11 @@ function DailyLife() {
         </div>
 
         <div className="gallery">
-          <div><SkeletonImg src="/assets/images/home-daily-1.jpg" alt="Daily life at Ohana" /></div>
-          <div><SkeletonImg src="/assets/images/home-daily-2.jpg" alt="Daily life at Ohana" /></div>
-          <div><SkeletonImg src="/assets/images/home-daily-3.jpg" alt="Daily life at Ohana" /></div>
-          <div><SkeletonImg src="/assets/images/home-daily-4.jpg" alt="Daily life at Ohana" /></div>
-          <div><SkeletonImg src="/assets/images/home-daily-5.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-1.jpg" alt="Daily life at Ohana" sizes={GALLERY_SIZES} /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-2.jpg" alt="Daily life at Ohana" sizes={GALLERY_SIZES} /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-3.jpg" alt="Daily life at Ohana" sizes={GALLERY_SIZES} /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-4.jpg" alt="Daily life at Ohana" sizes={GALLERY_SIZES} /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-5.jpg" alt="Daily life at Ohana" sizes={GALLERY_SIZES} /></div>
         </div>
       </div>
     </Section>

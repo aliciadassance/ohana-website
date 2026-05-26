@@ -8,10 +8,37 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const SCAN_DIR = join(ROOT, "public");
 
-const TARGET_BYTES = 1_000_000;
-const THRESHOLD_BYTES = Math.round(TARGET_BYTES * 1.1);
-const MAX_WIDTH = 2400;
-const QUALITY_STEPS = [80, 75, 70, 65];
+const DEFAULT_TARGET_BYTES = 350_000;
+const DEFAULT_THRESHOLD_BYTES = 400_000;
+const DEFAULT_MAX_WIDTH = 1920;
+const DEFAULT_QUALITY_STEPS = [78, 72, 66, 60];
+
+// Per-file overrides keyed by basename. Use for above-the-fold or
+// otherwise size-sensitive assets that need a tighter budget than the
+// default. Brand logos are downscaled hard since they render small.
+const FILE_OVERRIDES = {
+  "hero-poster.jpg": { target: 160_000, threshold: 180_000, maxWidth: 1600, qualities: [72, 66, 60, 55] },
+  "LOGO-color-block.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "LOGO-color-horizontal.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "LOGO-color-vertical.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "LOGO-white-block.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "LOGO-white-horizontal.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "LOGO-white-vertical.png": { target: 60_000, threshold: 80_000, maxWidth: 1200 },
+  "logo-compact.png": { target: 40_000, threshold: 60_000, maxWidth: 600 },
+  "logo-horizontal.png": { target: 40_000, threshold: 60_000, maxWidth: 800 },
+  "logo-stacked.png": { target: 40_000, threshold: 60_000, maxWidth: 600 },
+};
+
+function getBudget(filePath) {
+  const name = basename(filePath);
+  const override = FILE_OVERRIDES[name];
+  return {
+    target: override?.target ?? DEFAULT_TARGET_BYTES,
+    threshold: override?.threshold ?? DEFAULT_THRESHOLD_BYTES,
+    maxWidth: override?.maxWidth ?? DEFAULT_MAX_WIDTH,
+    qualities: override?.qualities ?? DEFAULT_QUALITY_STEPS,
+  };
+}
 
 const EXT_HANDLERS = {
   ".jpg": "jpeg",
@@ -43,12 +70,12 @@ function formatBytes(n) {
   return `${n}B`;
 }
 
-async function compressOnce(inputPath, format, quality) {
+async function compressOnce(inputPath, format, quality, maxWidth) {
   const meta = await sharp(inputPath).metadata();
   let pipeline = sharp(inputPath, { failOn: "none" });
 
-  if (meta.width && meta.width > MAX_WIDTH) {
-    pipeline = pipeline.resize({ width: MAX_WIDTH, withoutEnlargement: true });
+  if (meta.width && meta.width > maxWidth) {
+    pipeline = pipeline.resize({ width: maxWidth, withoutEnlargement: true });
   }
 
   if (format === "jpeg") {
@@ -66,15 +93,16 @@ async function compressFile(filePath) {
   const ext = extname(filePath).toLowerCase();
   const format = EXT_HANDLERS[ext];
   const originalSize = (await stat(filePath)).size;
+  const { threshold, maxWidth, qualities } = getBudget(filePath);
 
   let bestBuffer = null;
   let bestQuality = null;
 
-  for (const quality of QUALITY_STEPS) {
-    const buf = await compressOnce(filePath, format, quality);
+  for (const quality of qualities) {
+    const buf = await compressOnce(filePath, format, quality, maxWidth);
     bestBuffer = buf;
     bestQuality = quality;
-    if (buf.length <= THRESHOLD_BYTES) break;
+    if (buf.length <= threshold) break;
   }
 
   if (!bestBuffer) {
@@ -104,7 +132,8 @@ async function compressFile(filePath) {
     originalSize,
     newSize: bestBuffer.length,
     quality: bestQuality,
-    underTarget: bestBuffer.length <= THRESHOLD_BYTES,
+    underTarget: bestBuffer.length <= threshold,
+    threshold,
   };
 }
 
@@ -123,7 +152,8 @@ async function main() {
   const oversized = [];
   for (const file of allFiles) {
     const { size } = await stat(file);
-    if (size > THRESHOLD_BYTES) oversized.push({ file, size });
+    const { threshold } = getBudget(file);
+    if (size > threshold) oversized.push({ file, size, threshold });
   }
 
   if (oversized.length === 0) {
@@ -132,15 +162,15 @@ async function main() {
   }
 
   console.log(
-    `Found ${oversized.length} image(s) > ${formatBytes(THRESHOLD_BYTES)} (target ${formatBytes(TARGET_BYTES)}).`,
+    `Found ${oversized.length} image(s) over their size budget (default ${formatBytes(DEFAULT_THRESHOLD_BYTES)}).`,
   );
 
   if (CHECK_ONLY) {
-    for (const { file, size } of oversized) {
-      console.log(`  ${file.replace(ROOT + "/", "")} — ${formatBytes(size)}`);
+    for (const { file, size, threshold } of oversized) {
+      console.log(`  ${file.replace(ROOT + "/", "")} — ${formatBytes(size)} (budget ${formatBytes(threshold)})`);
     }
     console.error(
-      `\n--check failed: ${oversized.length} image(s) exceed the threshold. Run \`npm run compress:images\` to fix.`,
+      `\n--check failed: ${oversized.length} image(s) exceed their threshold. Run \`npm run compress:images\` to fix.`,
     );
     process.exitCode = 1;
     return;
@@ -160,7 +190,7 @@ async function main() {
       const saved = result.originalSize - result.newSize;
       totalSaved += saved;
       const pct = ((saved / result.originalSize) * 100).toFixed(1);
-      const flag = result.underTarget ? "" : " ⚠ still over target";
+      const flag = result.underTarget ? "" : ` ⚠ still over ${formatBytes(result.threshold)}`;
       console.log(
         `  ${rel}: ${formatBytes(result.originalSize)} → ${formatBytes(result.newSize)} (-${pct}%, q=${result.quality})${flag}`,
       );
@@ -173,7 +203,7 @@ async function main() {
 
   console.log(
     `\nDone. Saved ${formatBytes(totalSaved)} across ${oversized.length} file(s).` +
-      (warnings ? ` ${warnings} file(s) remain above ${formatBytes(THRESHOLD_BYTES)} — consider manual review.` : ""),
+      (warnings ? ` ${warnings} file(s) remain above their budget — consider manual review.` : ""),
   );
 }
 

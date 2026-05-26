@@ -1,4 +1,4 @@
-name: Compress images
+name: Optimize images
 
 on:
   push:
@@ -6,18 +6,20 @@ on:
     paths:
       - "public/**"
       - "scripts/compress-images.mjs"
+      - "scripts/generate-blur.mjs"
       - ".github/workflows/compress-images.yml"
   pull_request:
     paths:
       - "public/**"
       - "scripts/compress-images.mjs"
+      - "scripts/generate-blur.mjs"
       - ".github/workflows/compress-images.yml"
 
 permissions:
   contents: write
 
 jobs:
-  compress:
+  optimize:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -39,14 +41,17 @@ jobs:
       - name: Compress oversized images
         run: npm run compress:images
 
-      - name: Commit compressed images
+      - name: Generate blur placeholders
+        run: npm run generate:blur
+
+      - name: Commit optimized images
         run: |
-          if git diff --quiet -- public/; then
+          if git diff --quiet -- public/ lib/blur-data.json; then
             echo "No image changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/
-          git commit -m "chore: compress oversized images [skip ci]"
+          git add public/ lib/blur-data.json
+          git commit -m "chore: optimize images (compress + blur) [skip ci]"
           git push
