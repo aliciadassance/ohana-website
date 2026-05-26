@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import type { CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
-import { Icon, Button, Eyebrow, Section, Badge } from '../ui'
+import { Icon, Button, Eyebrow, Section, Badge, SkeletonImg } from '../ui'
 import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
 import { PackagesCarousel, PackageCard } from './HomePage'
@@ -71,7 +71,7 @@ export function SurfOnlyCard({ pkg, onClick }: { pkg: Package; onClick: () => vo
     <article className="card card--hover pkg">
       <div className="pkg__media">
         <Badge variant={pkg.tagVariant}>{pkg.tag}</Badge>
-        <img src={pkg.image} alt={pkg.name} loading="lazy" />
+        <SkeletonImg src={pkg.image} alt={pkg.name} loading="lazy" />
       </div>
       <div className="pkg__body">
         <div>
@@ -282,7 +282,7 @@ function RoomsSection() {
         {ROOMS.map((r) => (
           <article key={r.id} className="room-card card">
             <div className="room-card__media">
-              <img src={r.image} alt={r.name} loading="lazy" />
+              <SkeletonImg src={r.image} alt={r.name} loading="lazy" />
             </div>
             <div className="room-card__body">
               <span className="room-card__capacity"><Icon name="users" /> {r.capacity}</span>

@@ -9,6 +9,10 @@
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
+  size-adjust: 92%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
 }
 @font-face {
   font-family: "GlenJan";

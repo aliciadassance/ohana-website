@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Icon, Button, Eyebrow, Section } from '../ui'
+import { Icon, Button, Eyebrow, Section, SkeletonImg } from '../ui'
 import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
 import { TEAM, DAY_AT_OHANA } from '@/lib/data'
@@ -12,7 +12,7 @@ function StoryBlock() {
       <div className="split">
         <div style={{ position: 'relative' }}>
           <div className="split__media">
-            <img src="/assets/images/about-story-2.jpg" alt="A family that surfs together" />
+            <SkeletonImg src="/assets/images/about-story-2.jpg" alt="A family that surfs together" />
           </div>
           <div className="photo-sticker" style={{ right: '-10px', bottom: '30px' }}>
             <span className="num">2018</span>
@@ -58,11 +58,11 @@ function HouseBlock() {
       </div>
 
       <div className="gallery" style={{ marginBottom: '3rem' }}>
-        <div><img src="/assets/images/about-house-1.jpg" alt="The house" /></div>
-        <div><img src="/assets/images/about-house-2.jpg" alt="The house" /></div>
-        <div><img src="/assets/images/about-house-3.jpg" alt="The house" /></div>
-        <div><img src="/assets/images/about-house-4.jpg" alt="The house" /></div>
-        <div><img src="/assets/images/about-house-5.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-1.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-2.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-3.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-4.jpg" alt="The house" /></div>
+        <div><SkeletonImg src="/assets/images/about-house-5.jpg" alt="The house" /></div>
       </div>
 
       <div className="feature-grid">
@@ -109,16 +109,16 @@ function DayBlock() {
 
           <div className="day-layout__photos">
             <div className="photo-placeholder photo-placeholder--tall">
-              <img src="/assets/images/about-day-1.png" alt="Mint tea pour at the family table" />
+              <SkeletonImg src="/assets/images/about-day-1.png" alt="Mint tea pour at the family table" />
             </div>
             <div className="photo-placeholder">
-              <img src="/assets/images/about-day-2.jpg" alt="Morning surf session" />
+              <SkeletonImg src="/assets/images/about-day-2.jpg" alt="Morning surf session" />
             </div>
             <div className="photo-placeholder">
-              <img src="/assets/images/about-day-3.jpg" alt="Brunch at the house" />
+              <SkeletonImg src="/assets/images/about-day-3.jpg" alt="Brunch at the house" />
             </div>
             <div className="photo-placeholder photo-placeholder--wide">
-              <img src="/assets/images/about-day-4.jpg" alt="Family dinner around the table" />
+              <SkeletonImg src="/assets/images/about-day-4.jpg" alt="Family dinner around the table" />
             </div>
           </div>
 
@@ -163,7 +163,7 @@ function TeamBlock() {
         {TEAM.map((m) => (
           <article key={m.name} className="team-member">
             <div className="team-member__photo">
-              <img src={m.image} alt={m.name} />
+              <SkeletonImg src={m.image} alt={m.name} />
             </div>
             <div>
               <div className="team-member__role">{m.role}</div>

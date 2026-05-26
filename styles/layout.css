@@ -138,6 +138,7 @@
   display: flex;
   align-items: flex-end;
   color: white;
+  background-color: var(--brand-teal-800);
   isolation: isolate;
 }
 .hero__video {

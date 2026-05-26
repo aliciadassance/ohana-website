@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react'
 import type { FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Icon, Button, Eyebrow, Section, Field, Input, Textarea, Select, RadioGroup, Checkbox } from '../ui'
+import { Icon, Button, Eyebrow, Section, Field, Input, Textarea, Select, RadioGroup, Checkbox, Skeleton } from '../ui'
 import PageHeader from '../PageHeader'
 import { PACKAGES, ROOMS } from '@/lib/data'
 
@@ -59,6 +59,82 @@ const COUNTRIES = [
   'Denmark','Finland','Austria','Poland','Czech Republic','United States',
   'Canada','Australia','Morocco','Other',
 ]
+
+// ---- Booking form skeleton (Suspense fallback) ----
+function BookingFormSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="Loading booking form">
+      {[1, 2, 3, 4].map((n) => (
+        <div key={n} className="form-section">
+          <div className="form-section__head">
+            <span className="form-section__head__num">{n}</span>
+            <Skeleton width="35%" height="1.25rem" radius="6px" />
+          </div>
+
+          {n === 1 && (
+            <>
+              <Skeleton height="2.75rem" radius="999px" />
+              <div className="form-grid form-grid--2" style={{ marginTop: '1rem' }}>
+                <Skeleton height="2.75rem" />
+                <Skeleton height="2.75rem" />
+              </div>
+              <div className="form-grid form-grid--2" style={{ marginTop: '1rem' }}>
+                <Skeleton height="2.75rem" />
+                <Skeleton height="2.75rem" />
+              </div>
+              <div className="form-grid form-grid--2" style={{ marginTop: '1rem' }}>
+                <Skeleton height="3.5rem" radius="999px" />
+                <Skeleton height="3.5rem" radius="999px" />
+                <Skeleton height="3.5rem" radius="999px" />
+              </div>
+            </>
+          )}
+
+          {n === 2 && (
+            <>
+              <div className="form-grid form-grid--2">
+                <Skeleton height="2.75rem" />
+                <Skeleton height="2.75rem" />
+              </div>
+              <div className="form-grid form-grid--2" style={{ marginTop: '1rem' }}>
+                <Skeleton height="2.75rem" />
+                <Skeleton height="2.75rem" />
+              </div>
+              <Skeleton height="1.25rem" width="70%" style={{ marginTop: '1rem' }} />
+            </>
+          )}
+
+          {n === 3 && (
+            <>
+              <div style={{ display: 'grid', gap: '0.5rem' }}>
+                <Skeleton height="3rem" radius="999px" />
+                <Skeleton height="3rem" radius="999px" />
+                <Skeleton height="3rem" radius="999px" />
+                <Skeleton height="3rem" radius="999px" />
+              </div>
+              <div className="form-grid form-grid--2" style={{ marginTop: '1rem' }}>
+                <Skeleton height="2.75rem" />
+                <Skeleton height="2.75rem" />
+              </div>
+            </>
+          )}
+
+          {n === 4 && (
+            <>
+              <Skeleton height="8rem" />
+              <Skeleton height="1.25rem" width="80%" style={{ marginTop: '1rem' }} />
+            </>
+          )}
+        </div>
+      ))}
+
+      <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'stretch' }}>
+        <Skeleton height="3.5rem" radius="999px" />
+        <Skeleton height="0.85rem" width="65%" style={{ margin: '0 auto' }} />
+      </div>
+    </div>
+  )
+}
 
 // ---- Booking form ----
 function BookingForm() {
@@ -455,7 +531,7 @@ export default function BookingPage() {
       <Section id="book">
         <div className="booking-layout">
           <div>
-            <Suspense>
+            <Suspense fallback={<BookingFormSkeleton />}>
               <BookingForm />
             </Suspense>
           </div>

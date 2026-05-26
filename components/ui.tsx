@@ -273,13 +273,119 @@ type LogoProps = {
   height?: number
   invert?: boolean
 }
+const LOGO_ASSETS = {
+  'horizontal-color': { src: '/assets/LOGO-color-horizontal.png', w: 3337, h: 883 },
+  'horizontal-white': { src: '/assets/LOGO-white-horizontal.png', w: 3500, h: 1382 },
+  'stacked':          { src: '/assets/LOGO-color-vertical.png',   w: 2309, h: 3482 },
+  'compact':          { src: '/assets/LOGO-color-block.png',      w: 4095, h: 2380 },
+} as const
 export function Logo({ variant = 'horizontal', alt = 'Ohana Surf Morocco', height, invert }: LogoProps) {
-  const src =
-    invert ? '/assets/LOGO-white-horizontal.png'
-    : variant === 'stacked' ? '/assets/LOGO-color-vertical.png'
-    : variant === 'compact' ? '/assets/LOGO-color-block.png'
-    : '/assets/LOGO-color-horizontal.png'
+  const key: keyof typeof LOGO_ASSETS =
+    invert ? 'horizontal-white'
+    : variant === 'stacked' ? 'stacked'
+    : variant === 'compact' ? 'compact'
+    : 'horizontal-color'
+  const asset = LOGO_ASSETS[key]
   const style: React.CSSProperties = {}
   if (height) style.height = `${height}px`
-  return <img src={src} alt={alt} style={style} className="logo-img" />
+  return (
+    <img
+      src={asset.src}
+      alt={alt}
+      width={asset.w}
+      height={asset.h}
+      style={style}
+      className={`logo-img logo-img--${key}`}
+    />
+  )
+}
+
+// ---- Skeletons ----
+type SkeletonProps = {
+  width?: number | string
+  height?: number | string
+  radius?: number | string
+  className?: string
+  style?: React.CSSProperties
+}
+export function Skeleton({ width, height, radius, className = '', style }: SkeletonProps) {
+  const css: React.CSSProperties = { ...style }
+  if (width !== undefined) css.width = typeof width === 'number' ? `${width}px` : width
+  if (height !== undefined) css.height = typeof height === 'number' ? `${height}px` : height
+  if (radius !== undefined) css.borderRadius = typeof radius === 'number' ? `${radius}px` : radius
+  return <span className={`skeleton ${className}`} style={css} aria-hidden="true" />
+}
+
+type SkeletonTextProps = {
+  lines?: number
+  lastLineWidth?: string
+  gap?: string
+  lineHeight?: string
+  className?: string
+}
+export function SkeletonText({
+  lines = 3,
+  lastLineWidth = '60%',
+  gap = '0.5rem',
+  lineHeight = '1em',
+  className = '',
+}: SkeletonTextProps) {
+  return (
+    <span className={`skeleton-text ${className}`} style={{ gap }} aria-hidden="true">
+      {Array.from({ length: lines }).map((_, i) => (
+        <Skeleton
+          key={i}
+          height={lineHeight}
+          width={i === lines - 1 ? lastLineWidth : '100%'}
+          radius="4px"
+        />
+      ))}
+    </span>
+  )
+}
+
+type SkeletonImgProps = {
+  src: string
+  alt: string
+  loading?: 'lazy' | 'eager'
+  className?: string
+  style?: React.CSSProperties
+  onLoad?: () => void
+  onError?: () => void
+}
+export function SkeletonImg({
+  src,
+  alt,
+  loading = 'lazy',
+  className = '',
+  style,
+  onLoad,
+  onError,
+}: SkeletonImgProps) {
+  const imgRef = React.useRef<HTMLImageElement>(null)
+  const [loaded, setLoaded] = React.useState(false)
+  const [errored, setErrored] = React.useState(false)
+
+  React.useEffect(() => {
+    const img = imgRef.current
+    if (img && img.complete && img.naturalWidth > 0) {
+      setLoaded(true)
+    }
+  }, [])
+
+  return (
+    <span className="skeleton-img__wrap" style={style}>
+      {!loaded && !errored && <span className="skeleton skeleton-img" aria-hidden="true" />}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        className={`skeleton-img__img ${loaded ? 'is-loaded' : ''} ${className}`}
+        onLoad={() => { setLoaded(true); onLoad?.() }}
+        onError={() => { setErrored(true); onError?.() }}
+      />
+    </span>
+  )
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { ComponentType } from 'react'
 import { useRouter } from 'next/navigation'
-import { Icon, Button, Eyebrow, Section, Badge, Stars } from '../ui'
+import { Icon, Button, Eyebrow, Section, Badge, Stars, SkeletonImg } from '../ui'
 import CTABanner from '../CTABanner'
 import { PACKAGES, REVIEWS } from '@/lib/data'
 import type { Package } from '@/lib/types'
@@ -25,7 +25,7 @@ function Hero() {
     <section className="hero">
       <div
         className={`hero__poster ${videoOk ? 'is-hidden' : ''}`}
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1455729552865-3658a5d39692?auto=format&fit=crop&w=1920&q=80')" }}
+        style={{ backgroundImage: "url('/assets/images/hero-poster.jpg')" }}
       />
       <video
         ref={videoRef}
@@ -104,7 +104,7 @@ function Welcome() {
 
         <div style={{ position: 'relative' }}>
           <div className="split__media split__media--tall">
-            <img src="/assets/images/home-welcome.jpg" alt="A morning at Ohana" />
+            <SkeletonImg src="/assets/images/home-welcome.jpg" alt="A morning at Ohana" />
           </div>
           <div className="photo-sticker" style={{ left: '-20px', bottom: '30px' }}>
             <span className="num">200+</span>
@@ -141,7 +141,7 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
     <article className={`card card--hover pkg ${pkg.featured ? 'pkg--featured' : ''}`}>
       <div className="pkg__media">
         <Badge variant={pkg.tagVariant}>{pkg.tag}</Badge>
-        <img src={pkg.image} alt={pkg.name} loading="lazy" />
+        <SkeletonImg src={pkg.image} alt={pkg.name} loading="lazy" />
       </div>
       <div className="pkg__body">
         <div>
@@ -281,11 +281,11 @@ function DailyLife() {
         </div>
 
         <div className="gallery">
-          <div><img src="/assets/images/home-daily-1.jpg" alt="Daily life at Ohana" /></div>
-          <div><img src="/assets/images/home-daily-2.jpg" alt="Daily life at Ohana" /></div>
-          <div><img src="/assets/images/home-daily-3.jpg" alt="Daily life at Ohana" /></div>
-          <div><img src="/assets/images/home-daily-4.jpg" alt="Daily life at Ohana" /></div>
-          <div><img src="/assets/images/home-daily-5.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-1.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-2.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-3.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-4.jpg" alt="Daily life at Ohana" /></div>
+          <div><SkeletonImg src="/assets/images/home-daily-5.jpg" alt="Daily life at Ohana" /></div>
         </div>
       </div>
     </Section>
