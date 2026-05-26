@@ -11,17 +11,20 @@
   --btn-border: transparent;
   --btn-bg-hover: var(--color-primary-hover);
   --btn-shadow: var(--shadow-sm);
-  --btn-pad-y: 0.875rem;
-  --btn-pad-x: 1.5rem;
-  --btn-fs: 0.95rem;
+  --btn-min-h: 36px;
+  --btn-pad-y: 0;
+  --btn-pad-x: 1.25rem;
+  --btn-fs: 0.875rem;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
+  min-height: var(--btn-min-h);
   padding: var(--btn-pad-y) var(--btn-pad-x);
   font-family: var(--font-ui);
   font-size: var(--btn-fs);
+  line-height: 1;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -42,9 +45,9 @@
 .btn:hover { background: var(--btn-bg-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); color: var(--btn-fg); }
 .btn:active { transform: translateY(0); }
 
-/* sizes */
-.btn--sm { --btn-pad-y: 0.55rem; --btn-pad-x: 1.1rem; --btn-fs: 0.8rem; }
-.btn--lg { --btn-pad-y: 1.1rem; --btn-pad-x: 2rem; --btn-fs: 1rem; }
+/* sizes (capped at 36px tall / 14px font) */
+.btn--sm { --btn-min-h: 30px; --btn-pad-x: 0.875rem; --btn-fs: 0.75rem; }
+.btn--lg { --btn-min-h: 36px; --btn-pad-x: 1.75rem; --btn-fs: 0.875rem; }
 
 /* variants */
 .btn--primary  { --btn-bg: var(--color-accent); --btn-fg: white; --btn-bg-hover: var(--color-accent-hover); }
@@ -88,6 +91,7 @@
   --btn-fg: var(--color-primary);
   --btn-border: transparent;
   --btn-shadow: none;
+  --btn-min-h: 0;
   padding: 0;
   text-transform: none;
   letter-spacing: 0;

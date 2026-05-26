@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from 'react'
 import type { ComponentType } from 'react'
 import { useRouter } from 'next/navigation'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, A11y } from 'swiper/modules'
+import 'swiper/css'
 import { Icon, Button, Eyebrow, Section, Badge, Stars, SkeletonImg } from '../ui'
 import CTABanner from '../CTABanner'
 import { PACKAGES, REVIEWS } from '@/lib/data'
@@ -175,61 +178,49 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
   SurfOnlyCard?: ComponentType<{ pkg: Package; onClick: () => void }>
 }) {
   const router = useRouter()
-  const [active, setActive] = useState(0)
-  const [perPage, setPerPage] = useState(3)
-
-  useEffect(() => {
-    const onResize = () => {
-      const w = window.innerWidth
-      setPerPage(w < 720 ? 1 : w < 1080 ? 2 : 3)
-    }
-    onResize()
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  const pages = Math.max(1, PACKAGES.length - perPage + 1)
-  const safeActive = Math.min(active, pages - 1)
-  const next = () => setActive((a) => (a + 1) % pages)
-  const prev = () => setActive((a) => (a - 1 + pages) % pages)
+  const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null)
+  const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
+  const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null)
 
   return (
     <div>
       <div className="pkg-carousel">
-        <button className="carousel__arrow carousel__arrow--light carousel__arrow--prev" aria-label="Previous packages" onClick={prev}>
+        <button ref={setPrevEl} className="carousel__arrow carousel__arrow--light carousel__arrow--prev" aria-label="Previous packages">
           <Icon name="chevron-left" />
         </button>
-        <div className="pkg-carousel__viewport">
-          <div
-            className="pkg-carousel__track"
-            style={{
-              transform: `translateX(calc(${-safeActive} * (100% / ${perPage})))`,
-              gridTemplateColumns: `repeat(${PACKAGES.length}, calc((100% - ${(perPage - 1) * 1.25}rem) / ${perPage}))`,
-            }}
-          >
-            {PACKAGES.map((pkg) =>
-              useSurfOnlyCard && SurfOnlyCard && pkg.id === 'surf-only'
-                ? <SurfOnlyCard key={pkg.id} pkg={pkg} onClick={() => router.push('/booking')} />
-                : <PackageCard key={pkg.id} pkg={pkg} onClick={() => router.push('/booking')} />
-            )}
-          </div>
-        </div>
-        <button className="carousel__arrow carousel__arrow--light carousel__arrow--next" aria-label="Next packages" onClick={next}>
+        <Swiper
+          modules={[Navigation, Pagination, A11y]}
+          spaceBetween={20}
+          threshold={8}
+          slidesPerView={1.08}
+          centeredSlides
+          breakpoints={{
+            720: { slidesPerView: 2, spaceBetween: 20, centeredSlides: false },
+            1080: { slidesPerView: 3, spaceBetween: 20, centeredSlides: false },
+          }}
+          navigation={{ prevEl, nextEl }}
+          pagination={{
+            el: paginationEl,
+            clickable: true,
+            bulletClass: 'carousel__dot',
+            bulletActiveClass: 'is-active',
+          }}
+          a11y={{ prevSlideMessage: 'Previous package', nextSlideMessage: 'Next package' }}
+          className="pkg-carousel__swiper"
+        >
+          {PACKAGES.map((pkg) => (
+            <SwiperSlide key={pkg.id} className="pkg-carousel__slide">
+              {useSurfOnlyCard && SurfOnlyCard && pkg.id === 'surf-only'
+                ? <SurfOnlyCard pkg={pkg} onClick={() => router.push('/booking')} />
+                : <PackageCard pkg={pkg} onClick={() => router.push('/booking')} />}
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <button ref={setNextEl} className="carousel__arrow carousel__arrow--light carousel__arrow--next" aria-label="Next packages">
           <Icon name="chevron-right" />
         </button>
       </div>
-      <div className="carousel__dots carousel__dots--light" role="tablist" aria-label="Package pages">
-        {Array.from({ length: pages }).map((_, i) => (
-          <button
-            key={i}
-            role="tab"
-            aria-selected={i === safeActive}
-            aria-label={`Show packages ${i + 1}`}
-            className={`carousel__dot ${i === safeActive ? 'is-active' : ''}`}
-            onClick={() => setActive(i)}
-          />
-        ))}
-      </div>
+      <div ref={setPaginationEl} className="carousel__dots carousel__dots--light" role="tablist" aria-label="Package pages" />
     </div>
   )
 }
@@ -294,23 +285,9 @@ function DailyLife() {
 
 // ---- Reviews ----
 function Reviews() {
-  const [active, setActive] = useState(0)
-  const [perPage, setPerPage] = useState(3)
-
-  useEffect(() => {
-    const onResize = () => {
-      const w = window.innerWidth
-      setPerPage(w < 720 ? 1 : w < 1024 ? 2 : 3)
-    }
-    onResize()
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  const pages = Math.max(1, REVIEWS.length - perPage + 1)
-  const safeActive = Math.min(active, pages - 1)
-  const next = () => setActive((a) => (a + 1) % pages)
-  const prev = () => setActive((a) => (a - 1 + pages) % pages)
+  const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null)
+  const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
+  const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null)
 
   return (
     <section className="reviews section">
@@ -325,19 +302,32 @@ function Reviews() {
         </div>
 
         <div className="carousel">
-          <button className="carousel__arrow carousel__arrow--prev" aria-label="Previous reviews" onClick={prev}>
+          <button ref={setPrevEl} className="carousel__arrow carousel__arrow--prev" aria-label="Previous reviews">
             <Icon name="chevron-left" />
           </button>
-          <div className="carousel__viewport">
-            <div
-              className="carousel__track"
-              style={{
-                transform: `translateX(calc(${-safeActive} * (100% / ${perPage})))`,
-                gridTemplateColumns: `repeat(${REVIEWS.length}, calc((100% - ${(perPage - 1) * 1.25}rem) / ${perPage}))`,
-              }}
-            >
-              {REVIEWS.map((r) => (
-                <article key={r.name} className="review">
+          <Swiper
+            modules={[Navigation, Pagination, A11y]}
+            spaceBetween={20}
+            threshold={8}
+            slidesPerView={1.08}
+            centeredSlides
+            breakpoints={{
+              720: { slidesPerView: 2, spaceBetween: 20, centeredSlides: false },
+              1024: { slidesPerView: 3, spaceBetween: 20, centeredSlides: false },
+            }}
+            navigation={{ prevEl, nextEl }}
+            pagination={{
+              el: paginationEl,
+              clickable: true,
+              bulletClass: 'carousel__dot',
+              bulletActiveClass: 'is-active',
+            }}
+            a11y={{ prevSlideMessage: 'Previous review', nextSlideMessage: 'Next review' }}
+            className="reviews-carousel__swiper"
+          >
+            {REVIEWS.map((r) => (
+              <SwiperSlide key={r.name} className="reviews-carousel__slide">
+                <article className="review">
                   <div className="review__quote">&ldquo;</div>
                   <Stars count={r.stars} />
                   <p className="review__text">{r.text}</p>
@@ -349,26 +339,15 @@ function Reviews() {
                     </div>
                   </div>
                 </article>
-              ))}
-            </div>
-          </div>
-          <button className="carousel__arrow carousel__arrow--next" aria-label="Next reviews" onClick={next}>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <button ref={setNextEl} className="carousel__arrow carousel__arrow--next" aria-label="Next reviews">
             <Icon name="chevron-right" />
           </button>
         </div>
 
-        <div className="carousel__dots" role="tablist" aria-label="Review pages">
-          {Array.from({ length: pages }).map((_, i) => (
-            <button
-              key={i}
-              role="tab"
-              aria-selected={i === safeActive}
-              aria-label={`Show reviews ${i + 1}`}
-              className={`carousel__dot ${i === safeActive ? 'is-active' : ''}`}
-              onClick={() => setActive(i)}
-            />
-          ))}
-        </div>
+        <div ref={setPaginationEl} className="carousel__dots" role="tablist" aria-label="Review pages" />
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', gap: '0.6rem', flexWrap: 'wrap' }}>
           <Button variant="outline-light" iconLeft="brand-google" href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A">
