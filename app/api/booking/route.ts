@@ -204,8 +204,8 @@ export async function POST(request: NextRequest) {
   }
 
   const resendKey = process.env.RESEND_API_KEY
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'booking@yourdomain.com'
-  const fromConfirm = process.env.RESEND_FROM_CONFIRM || `Ohana Surf Morocco <hello@yourdomain.com>`
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'booking@ohana-surf-morocco.com'
+  const fromConfirm = process.env.RESEND_FROM_CONFIRM || 'Ohana Surf Morocco <hello@ohana-surf-morocco.com>'
 
   if (!resendKey) {
     log.error('missing_resend_key')
