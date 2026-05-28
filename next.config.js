@@ -2,12 +2,12 @@
 const isDev = process.env.NODE_ENV !== 'production'
 
 const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : "script-src 'self' 'unsafe-inline'"
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is"
+  : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cloud.umami.is"
 
 const connectSrc = isDev
-  ? "connect-src 'self' ws: wss:"
-  : "connect-src 'self'"
+  ? "connect-src 'self' ws: wss: https://cloud.umami.is"
+  : "connect-src 'self' https://cloud.umami.is"
 
 const securityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },

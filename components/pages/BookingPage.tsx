@@ -219,16 +219,19 @@ function BookingForm() {
           return
         }
         if (res.status === 429) {
+          window.umami?.track('booking_rate_limited')
           setSubmitError("You've submitted a few requests recently — please give us a moment, or reach us directly on WhatsApp.")
           return
         }
         throw new Error('Network error')
       }
+      window.umami?.track('booking_submitted', { package: state.package, guests: Number(state.guests) })
       setSubmitted(true)
       requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       })
     } catch {
+      window.umami?.track('booking_error')
       setSubmitError('Something went wrong sending your request. Please email us directly at ohanasurfguiding@gmail.com or reach out on WhatsApp.')
     } finally {
       setSubmitting(false)
@@ -247,10 +250,10 @@ function BookingForm() {
           directly on WhatsApp or by email — we usually answer faster there.
         </p>
         <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '1rem' }}>
-          <Button variant="primary" iconLeft="brand-whatsapp" href="https://wa.me/212650613372">
+          <Button variant="primary" iconLeft="brand-whatsapp" href="https://wa.me/212650613372" umamiEvent="contact_whatsapp">
             Chat on WhatsApp
           </Button>
-          <Button variant="outline" iconLeft="mail" href={`mailto:${OHANA_EMAIL}`}>
+          <Button variant="outline" iconLeft="mail" href={`mailto:${OHANA_EMAIL}`} umamiEvent="contact_email">
             Email us directly
           </Button>
         </div>
@@ -298,7 +301,7 @@ function BookingForm() {
                   name="package"
                   value={p.name}
                   checked={state.package === p.name}
-                  onChange={() => set('package', p.name)}
+                  onChange={() => { set('package', p.name); window.umami?.track('booking_package_selected', { package: p.name }) }}
                 />
                 <span>{p.name}</span>
               </label>
@@ -484,21 +487,21 @@ function BookingAside() {
           <Icon name="brand-whatsapp" />
           <div>
             <strong>WhatsApp</strong>
-            <a href="https://wa.me/212650613372">+212 650-613372</a>
+            <a href="https://wa.me/212650613372" data-umami-event="contact_whatsapp">+212 650-613372</a>
           </div>
         </div>
         <div className="aside-row">
           <Icon name="mail" />
           <div>
             <strong>Email</strong>
-            <a href={`mailto:${OHANA_EMAIL}`}>{OHANA_EMAIL}</a>
+            <a href={`mailto:${OHANA_EMAIL}`} data-umami-event="contact_email">{OHANA_EMAIL}</a>
           </div>
         </div>
         <div className="aside-row">
           <Icon name="brand-instagram" />
           <div>
             <strong>Instagram DM</strong>
-            <a href="https://www.instagram.com/ohana_surfmorocco/">@ohana_surfmorocco</a>
+            <a href="https://www.instagram.com/ohana_surfmorocco/" data-umami-event="social_instagram">@ohana_surfmorocco</a>
           </div>
         </div>
       </div>

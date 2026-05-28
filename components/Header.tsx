@@ -56,13 +56,14 @@ export default function Header() {
                 key={item.path}
                 href={item.path}
                 className={`nav__item ${isActive(item.path) ? 'is-active' : ''}`}
+                data-umami-event={`nav_${item.path === '/' ? 'home' : item.path.slice(1)}`}
               >
                 {item.label}
               </a>
             ))}
           </nav>
           <div className="header__cta">
-            <Button variant="primary" size="sm" iconRight="arrow-right" href="/booking">
+            <Button variant="primary" size="sm" iconRight="arrow-right" href="/booking" umamiEvent="cta_book_now">
               Book Now
             </Button>
             <button className="mobile-menu-btn" aria-label="Open menu" onClick={() => setOpen(true)}>
@@ -85,6 +86,7 @@ export default function Header() {
               href={item.path}
               className={isActive(item.path) ? 'is-active' : ''}
               onClick={() => setOpen(false)}
+              data-umami-event={`nav_mobile_${item.path === '/' ? 'home' : item.path.slice(1)}`}
             >
               {item.label}
             </a>
@@ -98,17 +100,18 @@ export default function Header() {
             iconRight="arrow-right"
             href="/booking"
             onClick={() => setOpen(false)}
+            umamiEvent="cta_mobile_book"
           >
             Book Your Stay
           </Button>
           <div className="mobile-drawer__contact">
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.4rem' }}>
               <Icon name="brand-whatsapp" />
-              <a href="https://wa.me/212650613372">+212 650-613372</a>
+              <a href="https://wa.me/212650613372" data-umami-event="contact_whatsapp">+212 650-613372</a>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <Icon name="mail" />
-              <a href="mailto:ohanasurfguiding@gmail.com">ohanasurfguiding@gmail.com</a>
+              <a href="mailto:ohanasurfguiding@gmail.com" data-umami-event="contact_email">ohanasurfguiding@gmail.com</a>
             </div>
           </div>
         </div>

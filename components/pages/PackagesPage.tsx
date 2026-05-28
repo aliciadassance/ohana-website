@@ -116,7 +116,7 @@ export function SurfOnlyCard({ pkg, onClick }: { pkg: Package; onClick: () => vo
           <span className="pkg__price__num">€{price}</span>
           <span className="pkg__price__unit">{unit}</span>
         </div>
-        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta">
+        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta" umamiEvent="cta_surfonly_book">
           Book this package
         </Button>
       </div>
@@ -251,6 +251,7 @@ function PriceSimulator() {
           </div>
         </div>
         <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => {
+          window.umami?.track('simulator_to_booking', { package: selectedPkg.name, nights })
           const params = new URLSearchParams({
             package: selectedPkg.name,
             arrival,
@@ -307,7 +308,11 @@ function FAQSection() {
       </div>
       <div className="faq" style={{ maxWidth: '900px' }}>
         {FAQS.map((faq, i) => (
-          <details key={i} className="faq__item">
+          <details key={i} className="faq__item" onToggle={(e) => {
+            if ((e.currentTarget as HTMLDetailsElement).open) {
+              window.umami?.track('faq_opened', { question: faq.q.slice(0, 60) })
+            }
+          }}>
             <summary>
               {faq.q}
               <Icon name="plus" />
@@ -444,6 +449,7 @@ export default function PackagesPage() {
           description="Tell us a bit about your trip and we'll recommend the right setup. No commitment — just a friendly conversation."
           ctaLabel="Get a recommendation"
           href="/booking"
+          umamiEvent="cta_packages_banner"
         />
       </Section>
     </main>

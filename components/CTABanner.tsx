@@ -6,10 +6,11 @@ type CTABannerProps = {
   description?: string
   ctaLabel?: string
   href?: string
+  umamiEvent?: string
   onCTA?: () => void
 }
 
-export default function CTABanner({ title, description, ctaLabel = 'Book Your Stay', href, onCTA }: CTABannerProps) {
+export default function CTABanner({ title, description, ctaLabel = 'Book Your Stay', href, umamiEvent, onCTA }: CTABannerProps) {
   return (
     <div className="cta-banner">
       <div>
@@ -17,7 +18,7 @@ export default function CTABanner({ title, description, ctaLabel = 'Book Your St
         {description && <p>{description}</p>}
       </div>
       <div>
-        <Button variant="ink" size="lg" iconRight="arrow-right" href={href} onClick={onCTA}>{ctaLabel}</Button>
+        <Button variant="ink" size="lg" iconRight="arrow-right" href={href} onClick={onCTA} umamiEvent={umamiEvent}>{ctaLabel}</Button>
       </div>
     </div>
   )

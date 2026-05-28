@@ -116,7 +116,7 @@
 .mobile-drawer.is-open { transform: translateX(0); }
 .mobile-drawer__top { display: flex; align-items: center; justify-content: flex-end; }
 .mobile-drawer__nav { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1.5rem; }
-.mobile-drawer__nav button {
+.mobile-drawer__nav a {
   text-align: left;
   background: transparent;
   border: 0;
@@ -126,8 +126,10 @@
   font-size: 2rem;
   color: var(--brand-ink);
   letter-spacing: -0.01em;
+  text-decoration: none;
+  display: block;
 }
-.mobile-drawer__nav button.is-active { color: var(--color-primary); }
+.mobile-drawer__nav a.is-active { color: var(--color-primary); }
 .mobile-drawer__cta { margin-top: auto; padding-top: 2rem; display: grid; gap: 0.6rem; }
 .mobile-drawer__cta .btn { --btn-min-h: 44px; }
 .mobile-drawer__contact { font-size: 0.85rem; color: var(--color-fg-muted); padding-top: 1.25rem; border-top: 1px solid var(--color-border); }

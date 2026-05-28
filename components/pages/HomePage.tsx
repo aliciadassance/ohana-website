@@ -102,10 +102,10 @@ function Hero() {
           Expert coaching, home-cooked meals, waves for every level and people you won't want to leave behind.
         </p>
         <div className="hero__cta">
-          <Button variant="primary" size="lg" iconRight="arrow-right" href="/booking">
+          <Button variant="primary" size="lg" iconRight="arrow-right" href="/booking" umamiEvent="cta_hero_book">
             Book Your Stay
           </Button>
-          <Button variant="outline-light" size="lg" href="/packages">
+          <Button variant="outline-light" size="lg" href="/packages" umamiEvent="cta_hero_packages">
             See Packages
           </Button>
         </div>
@@ -139,8 +139,8 @@ function Welcome() {
           Stay a few nights or a full week. Book your surf camp in Morocco today — you'll arrive as a guest and leave as part of something you didn't expect.
           </p>
           <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-            <Button variant="teal" iconRight="arrow-right" href="/about">About the camp</Button>
-            <Button variant="primary" iconRight="arrow-right" href="/booking">Book with us</Button>
+            <Button variant="teal" iconRight="arrow-right" href="/about" umamiEvent="cta_welcome_about">About the camp</Button>
+            <Button variant="primary" iconRight="arrow-right" href="/booking" umamiEvent="cta_welcome_book">Book with us</Button>
           </div>
         </div>
 
@@ -203,7 +203,7 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
           <span className="pkg__price__num">€{pkg.priceFrom}</span>
           <span className="pkg__price__unit">{pkg.priceUnit}</span>
         </div>
-        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta">
+        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta" umamiEvent="cta_package_book">
           Book this package
         </Button>
       </div>
@@ -276,7 +276,7 @@ function PackagesPreview() {
       </div>
       <PackagesCarousel />
       <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-        <Button variant="teal" size="lg" iconRight="arrow-right" href="/packages">
+        <Button variant="teal" size="lg" iconRight="arrow-right" href="/packages" umamiEvent="cta_compare_packages">
           Compare all packages
         </Button>
       </div>
@@ -298,7 +298,7 @@ function DailyLife() {
           <p>
           No rush. No crowds. Just you, the ocean, and a family that's already saving you a seat.
           </p>
-          <Button variant="teal" iconRight="arrow-right" href="/about">
+          <Button variant="teal" iconRight="arrow-right" href="/about" umamiEvent="cta_dailylife_about">
             See a day at Ohana
           </Button>
         </div>
@@ -381,10 +381,10 @@ function Reviews() {
         <div ref={setPaginationEl} className="carousel__dots" role="tablist" aria-label="Review pages" />
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem', gap: '0.6rem', flexWrap: 'wrap' }}>
-          <Button variant="outline-light" iconLeft="brand-google" href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A">
+          <Button variant="outline-light" iconLeft="brand-google" href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A" umamiEvent="social_google_reviews">
             Read on Google
           </Button>
-          <Button variant="outline-light" iconLeft="brand-instagram" href="https://www.instagram.com/ohana_surfmorocco/">
+          <Button variant="outline-light" iconLeft="brand-instagram" href="https://www.instagram.com/ohana_surfmorocco/" umamiEvent="social_instagram">
             Find us on Instagram
           </Button>
         </div>
@@ -402,6 +402,7 @@ function FinalCTA() {
         description="Tell us when you'd like to come, who's coming with you, and what kind of waves you're chasing. We'll be in touch within 24 hours with a tailored quote."
         ctaLabel="Start your booking"
         href="/booking"
+        umamiEvent="cta_home_banner"
       />
     </Section>
   )

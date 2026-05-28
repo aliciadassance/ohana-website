@@ -169,7 +169,7 @@ function DayBlock() {
           </div>
 
           <div>
-            <Button variant="teal" iconRight="arrow-right" href="/booking">
+            <Button variant="teal" iconRight="arrow-right" href="/booking" umamiEvent="cta_about_book">
               Check availability
             </Button>
           </div>
@@ -276,6 +276,7 @@ export default function AboutPage() {
           description="The best way to understand what we do is to spend a morning surfing and an evening eating with us. We're saving you a seat."
           ctaLabel="Plan your trip"
           href="/booking"
+          umamiEvent="cta_about_banner"
         />
       </Section>
     </main>

@@ -43,6 +43,7 @@ type ButtonProps = {
   disabled?: boolean
   fullWidth?: boolean
   ariaLabel?: string
+  umamiEvent?: string
 }
 export function Button({
   variant = 'primary',
@@ -57,6 +58,7 @@ export function Button({
   disabled,
   fullWidth,
   ariaLabel,
+  umamiEvent,
 }: ButtonProps) {
   const cls = [
     'btn',
@@ -75,13 +77,13 @@ export function Button({
   )
   if (href) {
     return (
-      <a href={href} className={cls} onClick={onClick} style={style} aria-label={ariaLabel}>
+      <a href={href} className={cls} onClick={onClick} style={style} aria-label={ariaLabel} data-umami-event={umamiEvent}>
         {inner}
       </a>
     )
   }
   return (
-    <button type={type} className={cls} onClick={onClick} disabled={disabled} style={style} aria-label={ariaLabel}>
+    <button type={type} className={cls} onClick={onClick} disabled={disabled} style={style} aria-label={ariaLabel} data-umami-event={umamiEvent}>
       {inner}
     </button>
   )
