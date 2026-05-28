@@ -197,7 +197,7 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
         </div>
         <p className="pkg__sub">{pkg.sub}</p>
         <ul className="pkg__features">
-          {pkg.features.slice(0, 4).map((f) => (
+          {pkg.features.map((f) => (
             <li key={f}><Icon name="check" /><span>{f}</span></li>
           ))}
         </ul>

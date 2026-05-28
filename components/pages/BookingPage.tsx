@@ -44,7 +44,7 @@ const PICKUPS = [
   'No pickup needed',
   'Agadir bus pickup (€15 / way)',
   'Agadir airport pickup (€30 / way)',
-  'Marrakech airport pickup (€90 / way)',
+  'Marrakech airport pickup (€120 / way)',
 ]
 
 const LEVELS = [

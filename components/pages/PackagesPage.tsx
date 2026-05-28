@@ -275,7 +275,7 @@ function RoomsSection() {
         <Eyebrow>Where you&apos;ll sleep</Eyebrow>
         <h2>Rooms at the house</h2>
         <p>Six rooms, one house.
-        From a shared room where friendships start on day one, to a private double with a balcony and a view worth waking up for — pick the one that fits your trip.</p>
+        From a shared room where friendships start on day one, to a private double with a balcony and a view worth waking up for — pick the one that fits your trip. All rooms come with a shared bathroom at every floor.</p>
       </div>
       <div className="rooms-grid">
         {ROOMS.map((r) => (
@@ -335,11 +335,11 @@ function AddOns() {
     : 'Wide-open beach breaks south of Agadir — uncrowded all day'
 
   const items = [
-    { icon: 'shopping-bag', title: 'Agadir Souk',          sub: 'Half-day trip to the spice souk',       price: `€${ADDON_PRICES.souk} / taxi` },
-    { icon: 'tree',         title: 'Paradise Valley',       sub: 'Day trip — palms, pools, picnic',       price: `€${ADDON_PRICES.paradise_valley} / person` },
-    { icon: 'mountain',     title: 'Sand Dunes Excursion',  sub: 'Sunset over the dunes south of Agadir', price: `€${ADDON_PRICES.sand_dunes} / person` },
-    { icon: 'bath',         title: 'Hammam & massage',      sub: '90 min traditional treatment',          price: `€${ADDON_PRICES.hammam} / session` },
-    { icon: 'users-group',  title: 'Group booking',         sub: 'Bring 4+ friends, get 5% off',          price: 'Save €110+' },
+    { icon: 'shopping-bag', title: 'Agadir Souk',          sub: 'Quick after-surf trip to one of the biggest souk in Africa',       price: `€${ADDON_PRICES.souk} / taxi` },
+    { icon: 'tree',         title: 'Paradise Valley',       sub: 'Day trip in the beautiful moroccan land — palms, pools, picnic',       price: `€${ADDON_PRICES.paradise_valley} / person` },
+    { icon: 'mountain',     title: 'Sand Dunes Excursion',  sub: 'Sunset and sandboarding fun in the dunes, in the north of Agadir. Fun guaranteed', price: `€${ADDON_PRICES.sand_dunes} / person` },
+    { icon: 'bath',         title: 'Hammam & massage',      sub: '90 min traditional treatment for the best relaxing moment',          price: `€${ADDON_PRICES.hammam} / session` },
+    { icon: 'users-group',  title: 'Group booking',         sub: 'Bring 6+ friends, get an extra 5% off the price of your stay',          price: 'Save 5% on your stay' },
   ]
 
   return (
