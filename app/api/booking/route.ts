@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
   }
 
   const resendKey = process.env.RESEND_API_KEY
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'booking@ohana-surf-morocco.com'
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'Ohana Surf Morocco <booking@ohana-surf-morocco.com>'
   const fromConfirm = process.env.RESEND_FROM_CONFIRM || 'Ohana Surf Morocco <hello@ohana-surf-morocco.com>'
 
   if (!resendKey) {
@@ -247,7 +247,7 @@ export async function POST(request: NextRequest) {
     from: fromEmail,
     to: OHANA_EMAIL,
     reply_to: data.email,
-    subject: `New booking request from ${safeName} (${data.arrival} → ${data.departure})`,
+    subject: `New booking inquiry from ${safeName}`,
     html: buildNotificationHtml(data),
   })
   if (notif.error) {
@@ -258,6 +258,7 @@ export async function POST(request: NextRequest) {
   const confirm = await resend.emails.send({
     from: fromConfirm,
     to: data.email,
+    reply_to: OHANA_EMAIL,
     subject: `We received your booking request, ${sanitizeForHeader(firstName)}!`,
     html: buildConfirmationHtml(data),
   })
