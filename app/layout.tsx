@@ -51,12 +51,21 @@ export const metadata: Metadata = {
     title: 'Ohana Surf Morocco — Surf & Stay with Yassin',
     description:
       'Family-run surf camp in Aourir, Morocco. Pro coaching, home-cooked meals, year-round waves.',
+    images: [
+      {
+        url: '/assets/images/hero-poster.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Ohana Surf Morocco — waves at Aourir',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ohana Surf Morocco — Surf & Stay with Yassin',
     description:
       'Family-run surf camp in Aourir, Morocco. Pro coaching, home-cooked meals, year-round waves.',
+    images: ['/assets/images/hero-poster.jpg'],
   },
   robots: allowIndexing
     ? { index: true, follow: true }

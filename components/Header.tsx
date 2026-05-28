@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Icon, Button, Logo } from './ui'
 
 const NAV_ITEMS = [
@@ -30,7 +30,6 @@ function TopBar() {
 
 export default function Header() {
   const pathname = usePathname()
-  const router = useRouter()
   const [open, setOpen] = useState(false)
 
   useEffect(() => { setOpen(false) }, [pathname])
@@ -48,26 +47,22 @@ export default function Header() {
       <TopBar />
       <header className="header">
         <div className="container header__inner">
-          <a
-            className="logo-link"
-            href="/"
-            onClick={(e) => { e.preventDefault(); router.push('/') }}
-          >
+          <a className="logo-link" href="/">
             <Logo variant="horizontal" />
           </a>
           <nav className="nav" aria-label="Main">
             {NAV_ITEMS.map((item) => (
-              <button
+              <a
                 key={item.path}
+                href={item.path}
                 className={`nav__item ${isActive(item.path) ? 'is-active' : ''}`}
-                onClick={() => router.push(item.path)}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
           </nav>
           <div className="header__cta">
-            <Button variant="primary" size="sm" iconRight="arrow-right" onClick={() => router.push('/booking')}>
+            <Button variant="primary" size="sm" iconRight="arrow-right" href="/booking">
               Book Now
             </Button>
             <button className="mobile-menu-btn" aria-label="Open menu" onClick={() => setOpen(true)}>
@@ -85,13 +80,14 @@ export default function Header() {
         </div>
         <nav className="mobile-drawer__nav" aria-label="Mobile">
           {NAV_ITEMS.map((item) => (
-            <button
+            <a
               key={item.path}
+              href={item.path}
               className={isActive(item.path) ? 'is-active' : ''}
-              onClick={() => { router.push(item.path); setOpen(false) }}
+              onClick={() => setOpen(false)}
             >
               {item.label}
-            </button>
+            </a>
           ))}
         </nav>
         <div className="mobile-drawer__cta">
@@ -100,7 +96,8 @@ export default function Header() {
             size="lg"
             fullWidth
             iconRight="arrow-right"
-            onClick={() => { router.push('/booking'); setOpen(false) }}
+            href="/booking"
+            onClick={() => setOpen(false)}
           >
             Book Your Stay
           </Button>

@@ -116,7 +116,7 @@ export function SurfOnlyCard({ pkg, onClick }: { pkg: Package; onClick: () => vo
           <span className="pkg__price__num">€{price}</span>
           <span className="pkg__price__unit">{unit}</span>
         </div>
-        <Button variant="ink" fullWidth iconRight="arrow-right" onClick={onClick} className="pkg__cta">
+        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta">
           Book this package
         </Button>
       </div>
@@ -399,7 +399,6 @@ function AddOns() {
 
 // ---- Packages page ----
 export default function PackagesPage() {
-  const router = useRouter()
   return (
     <main>
       <PageHeader
@@ -444,7 +443,7 @@ export default function PackagesPage() {
           title="Not sure which package fits?"
           description="Tell us a bit about your trip and we'll recommend the right setup. No commitment — just a friendly conversation."
           ctaLabel="Get a recommendation"
-          onCTA={() => router.push('/booking')}
+          href="/booking"
         />
       </Section>
     </main>

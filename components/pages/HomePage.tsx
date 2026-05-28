@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { ComponentType } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, A11y } from 'swiper/modules'
 import 'swiper/css'
@@ -44,7 +43,6 @@ function shouldLoadHeroVideo(): boolean {
 
 // ---- Hero ----
 function Hero() {
-  const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoOk, setVideoOk] = useState(false)
   const [videoSrc, setVideoSrc] = useState<string | null>(null)
@@ -104,10 +102,10 @@ function Hero() {
           Expert coaching, home-cooked meals, waves for every level and people you won't want to leave behind.
         </p>
         <div className="hero__cta">
-          <Button variant="primary" size="lg" iconRight="arrow-right" onClick={() => router.push('/booking')}>
+          <Button variant="primary" size="lg" iconRight="arrow-right" href="/booking">
             Book Your Stay
           </Button>
-          <Button variant="outline-light" size="lg" onClick={() => router.push('/packages')}>
+          <Button variant="outline-light" size="lg" href="/packages">
             See Packages
           </Button>
         </div>
@@ -128,7 +126,6 @@ function Hero() {
 
 // ---- Welcome ----
 function Welcome() {
-  const router = useRouter()
   return (
     <Section id="welcome">
       <div className="split">
@@ -142,8 +139,8 @@ function Welcome() {
           Stay a few nights or a full week. Book your surf camp in Morocco today — you'll arrive as a guest and leave as part of something you didn't expect.
           </p>
           <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-            <Button variant="teal" iconRight="arrow-right" onClick={() => router.push('/about')}>About the camp</Button>
-            <Button variant="primary" iconRight="arrow-right" onClick={() => router.push('/booking')}>Book with us</Button>
+            <Button variant="teal" iconRight="arrow-right" href="/about">About the camp</Button>
+            <Button variant="primary" iconRight="arrow-right" href="/booking">Book with us</Button>
           </div>
         </div>
 
@@ -206,7 +203,7 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
           <span className="pkg__price__num">€{pkg.priceFrom}</span>
           <span className="pkg__price__unit">{pkg.priceUnit}</span>
         </div>
-        <Button variant="ink" fullWidth iconRight="arrow-right" onClick={onClick} className="pkg__cta">
+        <Button variant="ink" fullWidth iconRight="arrow-right" href="/booking" className="pkg__cta">
           Book this package
         </Button>
       </div>
@@ -219,7 +216,6 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
   useSurfOnlyCard?: boolean
   SurfOnlyCard?: ComponentType<{ pkg: Package; onClick: () => void }>
 }) {
-  const router = useRouter()
   const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null)
   const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
   const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null)
@@ -253,8 +249,8 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
           {PACKAGES.map((pkg) => (
             <SwiperSlide key={pkg.id} className="pkg-carousel__slide">
               {useSurfOnlyCard && SurfOnlyCard && pkg.id === 'surf-only'
-                ? <SurfOnlyCard pkg={pkg} onClick={() => router.push('/booking')} />
-                : <PackageCard pkg={pkg} onClick={() => router.push('/booking')} />}
+                ? <SurfOnlyCard pkg={pkg} onClick={() => {}} />
+                : <PackageCard pkg={pkg} onClick={() => {}} />}
             </SwiperSlide>
           ))}
         </Swiper>
@@ -269,7 +265,6 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
 
 // ---- Packages preview ----
 function PackagesPreview() {
-  const router = useRouter()
   return (
     <Section id="packages-preview" bg="sand">
       <div className="section-head">
@@ -281,7 +276,7 @@ function PackagesPreview() {
       </div>
       <PackagesCarousel />
       <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-        <Button variant="teal" size="lg" iconRight="arrow-right" onClick={() => router.push('/packages')}>
+        <Button variant="teal" size="lg" iconRight="arrow-right" href="/packages">
           Compare all packages
         </Button>
       </div>
@@ -291,7 +286,6 @@ function PackagesPreview() {
 
 // ---- Daily life ----
 function DailyLife() {
-  const router = useRouter()
   return (
     <Section>
       <div className="split split--reverse">
@@ -304,7 +298,7 @@ function DailyLife() {
           <p>
           No rush. No crowds. Just you, the ocean, and a family that's already saving you a seat.
           </p>
-          <Button variant="teal" iconRight="arrow-right" onClick={() => router.push('/about')}>
+          <Button variant="teal" iconRight="arrow-right" href="/about">
             See a day at Ohana
           </Button>
         </div>
@@ -401,14 +395,13 @@ function Reviews() {
 
 // ---- Final CTA ----
 function FinalCTA() {
-  const router = useRouter()
   return (
     <Section>
       <CTABanner
         title="Ready to come ride with us?"
         description="Tell us when you'd like to come, who's coming with you, and what kind of waves you're chasing. We'll be in touch within 24 hours with a tailored quote."
         ctaLabel="Start your booking"
-        onCTA={() => router.push('/booking')}
+        href="/booking"
       />
     </Section>
   )

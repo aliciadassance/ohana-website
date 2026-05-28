@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ===================== HOMEPAGE ===================== -->
+  <url>
+    <loc>https://www.ohana-surf-morocco.com/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/hero-poster.jpg</image:loc>
+      <image:title>Ohana Surf Morocco — Family surf camp near Taghazout</image:title>
+      <image:caption>Surf camp near Taghazout, Morocco — expert coaching, uncrowded waves, home-cooked meals</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-welcome.jpg</image:loc>
+      <image:title>A morning at Ohana Surf Morocco</image:title>
+      <image:caption>Guests enjoying a relaxed morning at the Ohana family surf camp in Aourir, Morocco</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-daily-1.jpg</image:loc>
+      <image:title>Daily surf sessions at Ohana Morocco</image:title>
+      <image:caption>Daily life at Ohana — two surf sessions a day in uncrowded Moroccan lineups</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-daily-2.jpg</image:loc>
+      <image:title>Surfing in Morocco with Ohana</image:title>
+      <image:caption>Surfers riding waves near Taghazout, Morocco with the Ohana surf camp team</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-daily-3.jpg</image:loc>
+      <image:title>Surf coaching in Morocco</image:title>
+      <image:caption>Professional surf coaching on the Moroccan Atlantic coast near Agadir</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-daily-4.jpg</image:loc>
+      <image:title>Ohana surf camp life in Morocco</image:title>
+      <image:caption>A typical afternoon at Ohana Surf Morocco — rest, good food, great company</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/home-daily-5.jpg</image:loc>
+      <image:title>Surf camp Aourir Morocco</image:title>
+      <image:caption>Life at Ohana surf camp, Aourir — 15 km north of Agadir on Morocco's Atlantic coast</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ===================== ABOUT ===================== -->
+  <url>
+    <loc>https://www.ohana-surf-morocco.com/about</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-story.jpg</image:loc>
+      <image:title>The Ohana family — surf camp Morocco story</image:title>
+      <image:caption>Yassin and the Ohana family — the story behind Morocco's most welcoming surf camp since 2021</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-story-2.jpg</image:loc>
+      <image:title>A family that surfs together — Ohana Morocco</image:title>
+      <image:caption>Yassin built Ohana Surf Morocco in 2021 so guests could come for the waves and stay for everything else</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-house-1.jpg</image:loc>
+      <image:title>Ohana surf camp house — Banana Village, Aourir</image:title>
+      <image:caption>The Ohana house in Banana Village, Aourir — 6 rooms, rooftop terrace and Atlantic views</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-house-2.jpg</image:loc>
+      <image:title>Surf camp accommodation Morocco</image:title>
+      <image:caption>Comfortable rooms at Ohana surf camp, 15 km north of Agadir, Morocco</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-house-3.jpg</image:loc>
+      <image:title>Rooftop terrace at Ohana Morocco</image:title>
+      <image:caption>Rooftop terrace at the Ohana house — where breakfast happens and sunsets never look the same twice</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-house-4.jpg</image:loc>
+      <image:title>Family kitchen at Ohana surf camp</image:title>
+      <image:caption>Fatma's family kitchen at Ohana — three home-cooked meals a day including tagines and fresh couscous</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-house-5.jpg</image:loc>
+      <image:title>Living area at Ohana Surf Morocco</image:title>
+      <image:caption>Shared living space at Ohana surf camp — where guests become friends around a long dinner table</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-day-1.png</image:loc>
+      <image:title>Mint tea at Ohana surf camp Morocco</image:title>
+      <image:caption>Mint tea pour at the Ohana family table — a Moroccan ritual no one skips</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-day-2.jpg</image:loc>
+      <image:title>Morning surf session near Taghazout</image:title>
+      <image:caption>Morning surf session in uncrowded Taghazout lineups with Ohana's certified instructors</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-day-3.jpg</image:loc>
+      <image:title>Brunch at Ohana surf camp house</image:title>
+      <image:caption>Post-surf brunch at the Ohana house — fresh, homemade and always shared together</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-day-4.jpg</image:loc>
+      <image:title>Family dinner at Ohana Morocco</image:title>
+      <image:caption>Family dinner around the table at Ohana — tagines that run long, evenings nobody wants to end</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-team-1.jpg</image:loc>
+      <image:title>Yassin — surf instructor and founder of Ohana Morocco</image:title>
+      <image:caption>Yassin, pro surfer and founder of Ohana Surf Morocco — coaching since 2016</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-team-2.jpg</image:loc>
+      <image:title>Fatma — cook at Ohana Surf Morocco</image:title>
+      <image:caption>Fatma, the heart of the Ohana kitchen — three meals a day made with love in Aourir, Morocco</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/about-team-3.jpg</image:loc>
+      <image:title>Ohana Surf Morocco team member</image:title>
+      <image:caption>The team at Ohana Surf Morocco — a family that grew out of friendship and a love for the waves</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ===================== PACKAGES ===================== -->
+  <url>
+    <loc>https://www.ohana-surf-morocco.com/packages</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/packages-hero.jpg</image:loc>
+      <image:title>Surf packages Morocco — Ohana Surf Camp</image:title>
+      <image:caption>Four surf packages near Taghazout, Morocco — for every level and every trip</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/pkg-surf-stay.jpg</image:loc>
+      <image:title>Surf and Stay package Morocco</image:title>
+      <image:caption>Surf &amp; Stay package at Ohana — accommodation, meals, coaching and equipment included</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/pkg-surf-yoga.jpg</image:loc>
+      <image:title>Surf and Yoga package Morocco</image:title>
+      <image:caption>Surf &amp; Yoga package at Ohana — daily yoga sessions on the rooftop combined with surf coaching</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/pkg-surf-pilates.jpg</image:loc>
+      <image:title>Surf and Pilates package Morocco</image:title>
+      <image:caption>Surf &amp; Pilates package at Ohana — 4 pilates sessions per week alongside daily surf coaching</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/pkg-surf-only.jpg</image:loc>
+      <image:title>Surf only lessons Morocco — Taghazout area</image:title>
+      <image:caption>Surf Only sessions near Taghazout — half or full day, group or private, from €30 per person</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/room-double-balcony.jpg</image:loc>
+      <image:title>Double room with balcony — Ohana surf camp Morocco</image:title>
+      <image:caption>Double room with private balcony at Ohana surf camp — sea view, Aourir, Morocco</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/room-double-standard.jpg</image:loc>
+      <image:title>Double room at Ohana surf camp</image:title>
+      <image:caption>Standard double room at Ohana Surf Morocco — light, airy and close enough to hear the ocean</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/room-twin.jpg</image:loc>
+      <image:title>Twin room at Ohana surf camp Morocco</image:title>
+      <image:caption>Twin room at Ohana surf camp in Aourir — perfect for two friends on a surf holiday in Morocco</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/room-shared-4.jpg</image:loc>
+      <image:title>Shared room at Ohana surf camp Morocco</image:title>
+      <image:caption>Shared room at Ohana — where friendships start on day one</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/room-small-inside.jpg</image:loc>
+      <image:title>Cosy single room at Ohana surf camp</image:title>
+      <image:caption>Small private room at Ohana Surf Morocco — compact, quiet and close to the waves</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ===================== BOOKING ===================== -->
+  <url>
+    <loc>https://www.ohana-surf-morocco.com/booking</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.ohana-surf-morocco.com/assets/images/booking-hero.jpg</image:loc>
+      <image:title>Book your surf camp stay in Morocco</image:title>
+      <image:caption>Book your stay at Ohana Surf Morocco — no deposit required, reply within 24 hours</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

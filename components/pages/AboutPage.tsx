@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { Icon, Button, Eyebrow, Section, SkeletonImg } from '../ui'
 import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
@@ -96,7 +95,6 @@ function HouseBlock() {
 }
 
 function DayBlock() {
-  const router = useRouter()
   return (
     <Section id="day">
       <div className="day-layout">
@@ -125,7 +123,7 @@ function DayBlock() {
           </div>
 
           <div>
-            <Button variant="teal" iconRight="arrow-right" onClick={() => router.push('/booking')}>
+            <Button variant="teal" iconRight="arrow-right" href="/booking">
               Check availability
             </Button>
           </div>
@@ -213,7 +211,6 @@ function MoroccoBlock() {
 }
 
 export default function AboutPage() {
-  const router = useRouter()
   return (
     <main>
       <PageHeader
@@ -232,7 +229,7 @@ export default function AboutPage() {
           title="Come live a day at Ohana"
           description="The best way to understand what we do is to spend a morning surfing and an evening eating with us. We're saving you a seat."
           ctaLabel="Plan your trip"
-          onCTA={() => router.push('/booking')}
+          href="/booking"
         />
       </Section>
     </main>

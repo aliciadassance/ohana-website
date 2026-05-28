@@ -43,6 +43,22 @@ const nextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }]
   },
+  async redirects() {
+    return [
+      { source: '/home', destination: '/', permanent: true },
+      { source: '/our-story', destination: '/about', permanent: true },
+      { source: '/the-house', destination: '/about', permanent: true },
+      { source: '/s-projects-side-by-side', destination: '/about', permanent: true },
+      { source: '/meet-the-team', destination: '/about', permanent: true },
+      { source: '/surf-stay-packages', destination: '/packages', permanent: true },
+      { source: '/packages-prices', destination: '/packages', permanent: true },
+      { source: '/surf-coaching-guiding-only', destination: '/packages', permanent: true },
+      { source: '/book-now', destination: '/booking', permanent: true },
+      { source: '/book-online', destination: '/booking', permanent: true },
+      { source: '/contact', destination: '/', permanent: true },
+      { source: '/blog', destination: '/', permanent: true },
+    ]
+  },
 }
 
 module.exports = nextConfig
