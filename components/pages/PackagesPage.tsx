@@ -154,12 +154,13 @@ function PriceSimulator() {
       ? selectedRoom.nightlyRate * nights
       : selectedRoom.nightlyRate * people * nights
     const mealCost = MEAL_PRICE_PER_MEAL * 3 * nights * people
-    const sessions = PACKAGE_ACTIVITIES[packageId] ?? {}
-    const activityCost = Math.round(
-      Object.entries(sessions).reduce((sum, [act, count]) =>
-        sum + (ACTIVITY_PRICES[act as keyof typeof ACTIVITY_PRICES] ?? 0) * (count ?? 0), 0
-      ) * (nights / 7) * people
-    )
+    const activityCost = packageId === 'surf-pilates'
+      ? Math.round((ACTIVITY_PRICES.surf * Math.max(0, nights - 1) + ACTIVITY_PRICES.pilates * Math.max(0, nights - 3)) * people)
+      : Math.round(
+          Object.entries(PACKAGE_ACTIVITIES[packageId] ?? {}).reduce((sum, [act, count]) =>
+            sum + (ACTIVITY_PRICES[act as keyof typeof ACTIVITY_PRICES] ?? 0) * (count ?? 0), 0
+          ) * (nights / 7) * people
+        )
     const subtotal = roomCost + mealCost + activityCost
     const discount = returningGuest ? Math.round(subtotal * RETURNING_GUEST_DISCOUNT) : 0
     return subtotal - discount
