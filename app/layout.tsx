@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import Script from 'next/script'
 import { Outfit, Marcellus, Caveat } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -103,6 +102,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
         <link rel="icon" type="image/png" href="/assets/LOGO-color-block.png" />
+        {/* eslint-disable-next-line @next/next/no-before-interactive-script-component */}
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ?? '01c076b9-b125-44c6-a0bf-c1507cde2d56'}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
@@ -116,11 +121,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Footer />
           <MobileCTA />
         </div>
-        <Script
-          src="https://cloud.umami.is/script.js"
-          data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ?? '01c076b9-b125-44c6-a0bf-c1507cde2d56'}
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   )
