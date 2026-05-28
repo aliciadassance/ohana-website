@@ -116,13 +116,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Footer />
           <MobileCTA />
         </div>
-        {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
-          <Script
-            src="https://cloud.umami.is/script.js"
-            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
-            strategy="afterInteractive"
-          />
-        )}
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ?? '01c076b9-b125-44c6-a0bf-c1507cde2d56'}
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
