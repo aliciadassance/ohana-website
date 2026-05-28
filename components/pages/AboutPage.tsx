@@ -1,5 +1,9 @@
 'use client'
 
+import { useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination, A11y } from 'swiper/modules'
+import 'swiper/css'
 import { Icon, Button, Eyebrow, Section, SkeletonImg } from '../ui'
 import PageHeader from '../PageHeader'
 import CTABanner from '../CTABanner'
@@ -44,7 +48,19 @@ function StoryBlock() {
   )
 }
 
+const HOUSE_IMAGES = [
+  { src: '/assets/images/about-house-1.jpg', alt: 'The house' },
+  { src: '/assets/images/about-house-2.jpg', alt: 'The house' },
+  { src: '/assets/images/about-house-3.jpg', alt: 'The house' },
+  { src: '/assets/images/about-house-4.jpg', alt: 'The house' },
+  { src: '/assets/images/about-house-5.jpg', alt: 'The house' },
+]
+
 function HouseBlock() {
+  const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null)
+  const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
+  const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null)
+
   return (
     <Section id="house" bg="sand">
       <div className="section-head">
@@ -66,6 +82,36 @@ function HouseBlock() {
         <div><SkeletonImg src="/assets/images/about-house-3.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
         <div><SkeletonImg src="/assets/images/about-house-4.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
         <div><SkeletonImg src="/assets/images/about-house-5.jpg" alt="The house" sizes={GALLERY_SIZES} /></div>
+      </div>
+
+      <div className="gallery-carousel">
+        <button ref={setPrevEl} className="carousel__arrow carousel__arrow--light carousel__arrow--prev" aria-label="Previous photo">
+          <Icon name="chevron-left" />
+        </button>
+        <Swiper
+          modules={[Navigation, Pagination, A11y]}
+          slidesPerView={1}
+          spaceBetween={0}
+          threshold={8}
+          navigation={{ prevEl, nextEl }}
+          pagination={{
+            el: paginationEl,
+            clickable: true,
+            bulletClass: 'carousel__dot',
+            bulletActiveClass: 'is-active',
+          }}
+          a11y={{ prevSlideMessage: 'Previous photo', nextSlideMessage: 'Next photo' }}
+        >
+          {HOUSE_IMAGES.map((img) => (
+            <SwiperSlide key={img.src}>
+              <SkeletonImg src={img.src} alt={img.alt} sizes={GALLERY_SIZES} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <button ref={setNextEl} className="carousel__arrow carousel__arrow--light carousel__arrow--next" aria-label="Next photo">
+          <Icon name="chevron-right" />
+        </button>
+        <div ref={setPaginationEl} className="carousel__dots carousel__dots--light" role="tablist" aria-label="House photos" />
       </div>
 
       <div className="feature-grid">
