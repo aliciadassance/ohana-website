@@ -24,9 +24,16 @@ export async function generateMetadata({
   try {
     const post = await client.getByUID('blog_post', params.uid)
     const data = post.data as Record<string, unknown>
-    const title = Array.isArray(data.title) ? prismic.asText(data.title as RichTextField) : String(data.title ?? '')
-    const description = Array.isArray(data.excerpt) ? prismic.asText(data.excerpt as RichTextField) : String(data.excerpt ?? '')
-    const img = data.cover_image as ImageField & { dimensions?: { width: number; height: number } }
+
+    const baseTitle = Array.isArray(data.title) ? prismic.asText(data.title as RichTextField) : String(data.title ?? '')
+    const baseDescription = Array.isArray(data.excerpt) ? prismic.asText(data.excerpt as RichTextField) : String(data.excerpt ?? '')
+
+    const title = (data.seo_title as string | null) || baseTitle
+    const description = (data.seo_description as string | null) || baseDescription
+
+    const seoImg = data.seo_image as (ImageField & { dimensions?: { width: number; height: number } }) | null
+    const coverImg = data.cover_image as (ImageField & { dimensions?: { width: number; height: number } }) | null
+    const img = seoImg?.url ? seoImg : coverImg
     const ogImage = img?.url
       ? {
           url: img.url,
