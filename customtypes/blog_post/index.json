@@ -99,6 +99,9 @@
             },
             "video_embed": {
               "type": "SharedSlice"
+            },
+            "image_with_text": {
+              "type": "SharedSlice"
             }
           }
         }

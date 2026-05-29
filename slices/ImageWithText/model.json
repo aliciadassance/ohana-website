@@ -1,0 +1,55 @@
+{
+  "id": "image_with_text",
+  "name": "Image With Text",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "An image alongside a title and rich text block",
+      "primary": {
+        "image": {
+          "type": "Image",
+          "config": {
+            "label": "Image"
+          }
+        },
+        "caption": {
+          "type": "Text",
+          "config": {
+            "label": "Caption (optional)"
+          }
+        },
+        "image_position": {
+          "type": "Select",
+          "config": {
+            "label": "Image position (desktop)",
+            "options": ["left", "right"],
+            "default_value": "left"
+          }
+        },
+        "mobile_image_position": {
+          "type": "Select",
+          "config": {
+            "label": "Image position (mobile)",
+            "options": ["top", "bottom"],
+            "default_value": "top"
+          }
+        },
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title"
+          }
+        },
+        "content": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Content",
+            "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item"
+          }
+        }
+      }
+    }
+  ]
+}

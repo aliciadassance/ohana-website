@@ -23,8 +23,8 @@ export async function generateMetadata({
   try {
     const post = await client.getByUID('blog_post', params.uid)
     const data = post.data as Record<string, unknown>
-    const title = prismic.asText(data.title as RichTextField)
-    const description = prismic.asText(data.excerpt as RichTextField)
+    const title = Array.isArray(data.title) ? prismic.asText(data.title as RichTextField) : String(data.title ?? '')
+    const description = Array.isArray(data.excerpt) ? prismic.asText(data.excerpt as RichTextField) : String(data.excerpt ?? '')
     const img = data.cover_image as ImageField & { dimensions?: { width: number; height: number } }
     const ogImage = img?.url
       ? {
@@ -82,8 +82,8 @@ export default async function BlogPostPage({
   }
 
   const data = post.data as Record<string, unknown>
-  const title = prismic.asText(data.title as RichTextField)
-  const excerpt = prismic.asText(data.excerpt as RichTextField)
+  const title = Array.isArray(data.title) ? prismic.asText(data.title as RichTextField) : String(data.title ?? '')
+  const excerpt = Array.isArray(data.excerpt) ? prismic.asText(data.excerpt as RichTextField) : String(data.excerpt ?? '')
   const publishDate = (data.publish_date as string | null) ?? null
   const coverImage = data.cover_image as ImageField
 

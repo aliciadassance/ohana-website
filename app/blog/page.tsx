@@ -44,25 +44,20 @@ export default async function BlogListPage({
   const month = searchParams.month ?? ''
   const q = searchParams.q ?? ''
 
-  const filters: string[] = []
-  if (category) {
-    filters.push(prismic.filter.at('my.blog_post.category', category))
-  }
+  const apiFilters: string[] = []
   if (month) {
     const d = new Date(month + '-02')
-    filters.push(prismic.filter.dateMonth('my.blog_post.publish_date', d.getMonth() + 1))
-    filters.push(prismic.filter.dateYear('my.blog_post.publish_date', d.getFullYear()))
+    apiFilters.push(prismic.filter.dateMonth('my.blog_post.publish_date', d.getMonth() + 1))
+    apiFilters.push(prismic.filter.dateYear('my.blog_post.publish_date', d.getFullYear()))
   }
   if (q) {
-    filters.push(prismic.filter.fulltext('document', q))
+    apiFilters.push(prismic.filter.fulltext('document', q))
   }
 
-  const [response, allPosts] = await Promise.all([
-    client.getByType('blog_post', {
-      filters,
+  const [allFiltered, allPosts] = await Promise.all([
+    client.getAllByType('blog_post', {
+      filters: apiFilters,
       orderings: [{ field: 'my.blog_post.publish_date', direction: 'desc' }],
-      page,
-      pageSize: PAGE_SIZE,
       fetchLinks: ['author.name'],
     }),
     client.getAllByType('blog_post', {
@@ -71,8 +66,12 @@ export default async function BlogListPage({
     }),
   ])
 
-  const posts = response.results
-  const totalPages = response.total_pages
+  const filtered = category
+    ? allFiltered.filter((p) => p.data.category === category)
+    : allFiltered
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const posts = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   const availableMonths = Array.from(
     new Set(
@@ -121,8 +120,8 @@ export default async function BlogListPage({
                 <PostCard
                   key={post.uid}
                   uid={post.uid!}
-                  title={prismic.asText(data.title ?? [])}
-                  excerpt={prismic.asText(data.excerpt ?? [])}
+                  title={Array.isArray(data.title) ? prismic.asText(data.title) : String(data.title ?? '')}
+                  excerpt={Array.isArray(data.excerpt) ? prismic.asText(data.excerpt) : String(data.excerpt ?? '')}
                   category={data.category ?? ''}
                   publishDate={data.publish_date ?? ''}
                   coverImage={data.cover_image}
