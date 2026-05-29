@@ -15,7 +15,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
     <nav className="post-nav" aria-label="Post navigation">
       <div className="post-nav__item post-nav__item--prev">
         {prev && (
-          <Link href={`/blog/${prev.uid}`} className="post-nav__link">
+          <Link href={`/blog/${prev.uid}`} className="post-nav__link" data-umami-event="blog_nav_prev">
             <span className="post-nav__label">
               <Icon name="chevron-left" aria-hidden="true" /> Previous
             </span>
@@ -25,7 +25,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
       </div>
       <div className="post-nav__item post-nav__item--next">
         {next && (
-          <Link href={`/blog/${next.uid}`} className="post-nav__link">
+          <Link href={`/blog/${next.uid}`} className="post-nav__link" data-umami-event="blog_nav_next">
             <span className="post-nav__label">
               Next <Icon name="chevron-right" aria-hidden="true" />
             </span>

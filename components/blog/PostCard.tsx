@@ -37,7 +37,7 @@ export default function PostCard({
           )}
         </div>
         <h3 className="post-card__title">
-          <a href={`/blog/${uid}`}>{title}</a>
+          <a href={`/blog/${uid}`} data-umami-event="blog_post_open">{title}</a>
         </h3>
         {excerpt && <p className="post-card__excerpt">{excerpt}</p>}
         {authorName && <span className="post-card__author">{authorName}</span>}

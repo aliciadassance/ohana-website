@@ -24,7 +24,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
   return (
     <nav className="pagination" aria-label="Blog pagination">
       {currentPage > 1 && (
-        <a href={pageUrl(currentPage - 1)} className="pagination__prev" aria-label="Previous page">
+        <a href={pageUrl(currentPage - 1)} className="pagination__prev" aria-label="Previous page" data-umami-event="blog_pagination_prev">
           ←
         </a>
       )}
@@ -38,13 +38,14 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
             className={`pagination__page${page === currentPage ? ' is-active' : ''}`}
             aria-label={`Page ${page}`}
             aria-current={page === currentPage ? 'page' : undefined}
+            data-umami-event="blog_pagination_page"
           >
             {page}
           </a>
         )
       )}
       {currentPage < totalPages && (
-        <a href={pageUrl(currentPage + 1)} className="pagination__next" aria-label="Next page">
+        <a href={pageUrl(currentPage + 1)} className="pagination__next" aria-label="Next page" data-umami-event="blog_pagination_next">
           →
         </a>
       )}

@@ -39,7 +39,10 @@ export default function BlogFilters({
 
   const handleSearch = useCallback((value: string) => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current)
-    debounceTimer.current = setTimeout(() => updateParam('q', value), 300)
+    debounceTimer.current = setTimeout(() => {
+      updateParam('q', value)
+      if (value) window.umami?.track('blog_search', { q: value })
+    }, 300)
   }, [searchParams, pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -64,7 +67,10 @@ export default function BlogFilters({
             className={`blog-filter-btn${
               (cat === 'All' && !currentCategory) || cat === currentCategory ? ' is-active' : ''
             }`}
-            onClick={() => updateParam('category', cat)}
+            onClick={() => {
+              updateParam('category', cat)
+              window.umami?.track('blog_filter_category', { category: cat })
+            }}
           >
             {cat}
           </button>
@@ -75,7 +81,10 @@ export default function BlogFilters({
         <select
           className="select blog-filters__month"
           value={currentMonth || ''}
-          onChange={(e) => updateParam('month', e.target.value)}
+          onChange={(e) => {
+            updateParam('month', e.target.value)
+            if (e.target.value) window.umami?.track('blog_filter_month', { month: e.target.value })
+          }}
           aria-label="Filter by month"
         >
           <option value="">All months</option>

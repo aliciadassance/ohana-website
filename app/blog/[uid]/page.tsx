@@ -154,7 +154,7 @@ export default async function BlogPostPage({
           <div className="page-header__bg" style={{ backgroundImage: `url('${coverImageUrl}')` }} />
         )}
         <div className="container">
-          <Link href="/blog" className="post-back">
+          <Link href="/blog" className="post-back" data-umami-event="blog_back_to_list">
             <Icon name="chevron-left" aria-hidden="true" />
             Return to blog
           </Link>

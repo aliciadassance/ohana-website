@@ -29,7 +29,7 @@ export default function AuthorCard({ name, role, bio, photo, instagram }: Author
           </div>
         )}
         {isFilled.link(instagram) && (
-          <PrismicNextLink field={instagram} className="author-card__insta">
+          <PrismicNextLink field={instagram} className="author-card__insta" data-umami-event="blog_author_instagram">
             <Icon name="brand-instagram" aria-hidden="true" /> Instagram
           </PrismicNextLink>
         )}
