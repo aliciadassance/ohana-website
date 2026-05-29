@@ -1,0 +1,22 @@
+{
+  "id": "image",
+  "type": "SharedSlice",
+  "name": "Image",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "version": "v1",
+      "description": "Image",
+      "primary": {
+        "image": { "type": "Image", "config": { "label": "Image", "constraint": {}, "thumbnails": [] } },
+        "caption": { "type": "Text", "config": { "label": "Caption" } },
+        "size": {
+          "type": "Select",
+          "config": { "label": "Size", "options": ["full", "narrow"], "default_value": "full" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

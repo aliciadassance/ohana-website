@@ -1,0 +1,25 @@
+{
+  "id": "quote_callout",
+  "type": "SharedSlice",
+  "name": "QuoteCallout",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "version": "v1",
+      "description": "Quote or Callout",
+      "primary": {
+        "text": {
+          "type": "StructuredText",
+          "config": { "label": "Text", "multi": "paragraph,strong,em" }
+        },
+        "attribution": { "type": "Text", "config": { "label": "Attribution" } },
+        "style": {
+          "type": "Select",
+          "config": { "label": "Style", "options": ["quote", "callout"], "default_value": "quote" }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

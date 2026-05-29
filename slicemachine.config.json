@@ -1,0 +1,5 @@
+{
+  "repositoryName": "ohana-surf-morocco",
+  "adapter": "@slicemachine/adapter-next",
+  "libraries": ["./slices"]
+}
