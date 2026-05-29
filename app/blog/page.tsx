@@ -93,7 +93,6 @@ export default async function BlogListPage({
         eyebrow="The Ohana Blog"
         title={<>Stories from <em>the surf</em></>}
         intro="Surf tips, travel guides, camp life and more — straight from Aourir."
-        breadcrumb="Blog"
       />
 
       <Section>

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import * as prismic from '@prismicio/client'
 import { SliceZone } from '@prismicio/react'
-import { PrismicNextImage } from '@prismicio/next'
 import { createClient } from '@/prismicio'
 import { components as sliceComponents } from '@/slices'
 import AuthorCard from '@/components/blog/AuthorCard'
-import { Section, Badge } from '@/components/ui'
+import PostNavigation from '@/components/blog/PostNavigation'
+import { Section, Eyebrow, Icon } from '@/components/ui'
 import type { ImageField, LinkField, RichTextField } from '@prismicio/client'
 
 export const revalidate = 3600
@@ -96,6 +97,24 @@ export default async function BlogPostPage({
   const authorDoc = data.author as { data?: { name?: string; role?: string; bio?: RichTextField; photo?: ImageField; instagram?: LinkField } } | null
   const hasAuthor = Boolean(authorDoc?.data?.name)
 
+  // Fetch adjacent posts for prev/next navigation
+  const allPosts = await client.getAllByType('blog_post', {
+    orderings: [{ field: 'my.blog_post.publish_date', direction: 'desc' }],
+  })
+  const currentIndex = allPosts.findIndex((p) => p.uid === params.uid)
+  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
+  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+
+  const toNavPost = (p: typeof allPosts[number] | null) =>
+    p
+      ? {
+          uid: p.uid,
+          title: Array.isArray(p.data.title)
+            ? prismic.asText(p.data.title as RichTextField)
+            : String(p.data.title ?? ''),
+        }
+      : null
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -114,6 +133,8 @@ export default async function BlogPostPage({
     url: `${SITE_URL}/blog/${params.uid}`,
   }
 
+  const coverImageUrl = (coverImage as { url?: string })?.url
+
   return (
     <>
       <script
@@ -121,33 +142,30 @@ export default async function BlogPostPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
+      <header className="page-header post-page-header">
+        {coverImageUrl && (
+          <div className="page-header__bg" style={{ backgroundImage: `url('${coverImageUrl}')` }} />
+        )}
+        <div className="container">
+          <Link href="/blog" className="post-back">
+            <Icon name="chevron-left" aria-hidden="true" />
+            Return to blog
+          </Link>
+          <div className="post-page-header__meta">
+            {data.category != null && <Eyebrow>{String(data.category)}</Eyebrow>}
+            {formattedDate && (
+              <time className="post-page-header__date" dateTime={publishDate ?? ''}>
+                {formattedDate}
+              </time>
+            )}
+          </div>
+          <h1>{title}</h1>
+          {excerpt && <p>{excerpt}</p>}
+        </div>
+      </header>
+
       <Section>
         <div className="post-layout">
-          <header className="post-header">
-            <div className="post-header__meta">
-              {data.category != null && <Badge variant="teal">{String(data.category)}</Badge>}
-              {formattedDate && (
-                <time className="post-header__date" dateTime={publishDate ?? ''}>
-                  {formattedDate}
-                </time>
-              )}
-            </div>
-            <h1 className="post-header__title">{title}</h1>
-            {excerpt && <p className="post-header__excerpt">{excerpt}</p>}
-          </header>
-
-          {(coverImage as { url?: string })?.url && (
-            <div className="post-cover">
-              <PrismicNextImage
-                field={coverImage}
-                priority
-                fill
-                sizes="(max-width: 768px) 100vw, 760px"
-                className="post-cover__img"
-              />
-            </div>
-          )}
-
           <SliceZone slices={data.body as prismic.SliceZone} components={sliceComponents} />
 
           {hasAuthor && authorDoc?.data && (
@@ -159,6 +177,8 @@ export default async function BlogPostPage({
               instagram={authorDoc.data.instagram}
             />
           )}
+
+          <PostNavigation prev={toNavPost(prevPost)} next={toNavPost(nextPost)} />
         </div>
       </Section>
     </>
