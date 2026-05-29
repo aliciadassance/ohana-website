@@ -7,6 +7,9 @@
       "id": "default",
       "name": "Default",
       "description": "An image alongside a title and rich text block",
+      "docURL": "",
+      "imageUrl": "",
+      "version": "",
       "primary": {
         "image": {
           "type": "Image",
