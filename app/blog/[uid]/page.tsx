@@ -13,15 +13,6 @@ export const revalidate = 3600
 
 const SITE_URL = 'https://www.ohana-surf-morocco.com'
 
-export async function generateStaticParams() {
-  try {
-    const client = createClient()
-    const posts = await client.getAllByType('blog_post')
-    return posts.map((post) => ({ uid: post.uid! }))
-  } catch {
-    return []
-  }
-}
 
 export async function generateMetadata({
   params,
