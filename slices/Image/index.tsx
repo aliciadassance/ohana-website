@@ -2,7 +2,7 @@ import { PrismicNextImage } from '@prismicio/next'
 import type { SliceComponentProps } from '@prismicio/react'
 import type { ImageField } from '@prismicio/client'
 
-type ImageSliceType = {
+type ImageSlice = {
   id: string
   slice_type: string
   slice_label: null
@@ -12,7 +12,7 @@ type ImageSliceType = {
   items: Record<string, never>[]
 }
 
-export default function ImageSlice({ slice }: SliceComponentProps<ImageSliceType>) {
+const Image = ({ slice }: SliceComponentProps<ImageSlice>) => {
   const isNarrow = slice.primary.size === 'narrow'
   return (
     <figure className={`blog-slice blog-slice--image${isNarrow ? ' blog-slice--image-narrow' : ''}`}>
@@ -27,3 +27,5 @@ export default function ImageSlice({ slice }: SliceComponentProps<ImageSliceType
     </figure>
   )
 }
+
+export default Image

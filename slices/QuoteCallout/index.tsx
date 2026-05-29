@@ -2,7 +2,7 @@ import { PrismicRichText } from '@prismicio/react'
 import type { SliceComponentProps } from '@prismicio/react'
 import type { RichTextField } from '@prismicio/client'
 
-type QuoteCalloutSliceType = {
+type QuoteCalloutSlice = {
   id: string
   slice_type: string
   slice_label: null
@@ -12,7 +12,7 @@ type QuoteCalloutSliceType = {
   items: Record<string, never>[]
 }
 
-export default function QuoteCallout({ slice }: SliceComponentProps<QuoteCalloutSliceType>) {
+const QuoteCallout = ({ slice }: SliceComponentProps<QuoteCalloutSlice>) => {
   const isQuote = slice.primary.style !== 'callout'
   return (
     <aside className={`blog-slice blog-slice--${slice.primary.style ?? 'quote'}`}>
@@ -26,3 +26,5 @@ export default function QuoteCallout({ slice }: SliceComponentProps<QuoteCallout
     </aside>
   )
 }
+
+export default QuoteCallout

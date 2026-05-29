@@ -2,44 +2,129 @@
   "id": "blog_post",
   "label": "Blog Post",
   "repeatable": true,
+  "status": true,
+  "format": "custom",
   "json": {
     "Main": {
-      "uid": { "type": "UID", "config": { "label": "UID" } },
-      "title": { "type": "StructuredText", "config": { "label": "Title", "single": "heading1" } },
-      "excerpt": { "type": "StructuredText", "config": { "label": "Excerpt", "multi": "paragraph" } },
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "title": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Title",
+          "placeholder": "",
+          "single": "heading1"
+        }
+      },
+      "excerpt": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Excerpt",
+          "placeholder": "Short summary for cards and meta description",
+          "multi": "paragraph"
+        }
+      },
       "cover_image": {
         "type": "Image",
         "config": {
           "label": "Cover Image",
-          "constraint": { "width": 1200, "height": 630 },
-          "thumbnails": [{ "name": "Card", "width": 800, "height": 450 }]
+          "constraint": {
+            "width": 1200,
+            "height": 630
+          },
+          "thumbnails": [
+            {
+              "name": "Card",
+              "width": 800,
+              "height": 450
+            }
+          ]
         }
       },
-      "publish_date": { "type": "Date", "config": { "label": "Publish Date" } },
+      "publish_date": {
+        "type": "Date",
+        "config": {
+          "label": "Publish Date"
+        }
+      },
       "category": {
         "type": "Select",
         "config": {
           "label": "Category",
-          "options": ["Surf Tips", "Travel & Morocco", "Camp Life", "Wellness & News"],
+          "options": [
+            "Surf Tips",
+            "Travel & Morocco",
+            "Camp Life",
+            "Wellness & News"
+          ],
           "default_value": "Camp Life"
         }
       },
       "author": {
         "type": "Link",
-        "config": { "label": "Author", "select": "document", "customtypes": ["author"] }
-      }
-    },
-    "Body": {
+        "config": {
+          "label": "Author",
+          "select": "document",
+          "customtypes": [
+            {
+              "id": "author",
+              "fields": [
+                "name",
+                "role",
+                "bio",
+                "instagram",
+                "photo"
+              ]
+            }
+          ],
+          "repeat": false
+        }
+      },
       "body": {
         "type": "Slices",
-        "fieldset": "Slice Zone",
         "config": {
           "choices": {
-            "rich_text": { "type": "SharedSlice" },
-            "image": { "type": "SharedSlice" },
-            "quote_callout": { "type": "SharedSlice" },
-            "video_embed": { "type": "SharedSlice" }
+            "rich_text": {
+              "type": "SharedSlice"
+            },
+            "image": {
+              "type": "SharedSlice"
+            },
+            "quote_callout": {
+              "type": "SharedSlice"
+            },
+            "video_embed": {
+              "type": "SharedSlice"
+            }
           }
+        }
+      }
+    },
+    "SEO": {
+      "seo_title": {
+        "type": "Text",
+        "config": {
+          "label": "SEO Title",
+          "placeholder": ""
+        }
+      },
+      "seo_description": {
+        "type": "Text",
+        "config": {
+          "label": "SEO Description",
+          "placeholder": ""
+        }
+      },
+      "seo_image": {
+        "type": "Image",
+        "config": {
+          "label": "SEO Image",
+          "constraint": {},
+          "thumbnails": []
         }
       }
     }

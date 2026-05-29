@@ -1,7 +1,7 @@
 import * as prismic from '@prismicio/client'
 import { enableAutoPreviews } from '@prismicio/next'
 
-export const repositoryName = 'ohana-surf-morocco'
+export const repositoryName = 'ohana-website'
 
 export function createClient() {
   const client = prismic.createClient(repositoryName, {

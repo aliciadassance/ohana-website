@@ -1,0 +1,7 @@
+{
+  "repositoryName": "ohana-website",
+  "libraries": [
+    "./slices"
+  ],
+  "routes": []
+}

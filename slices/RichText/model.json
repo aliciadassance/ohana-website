@@ -1,13 +1,15 @@
 {
   "id": "rich_text",
-  "type": "SharedSlice",
   "name": "RichText",
+  "type": "SharedSlice",
   "variations": [
     {
       "id": "default",
       "name": "Default",
-      "version": "v1",
-      "description": "Rich Text",
+      "description": "A block of rich text content",
+      "docURL": "",
+      "imageUrl": "",
+      "version": "",
       "primary": {
         "content": {
           "type": "StructuredText",
@@ -17,8 +19,7 @@
             "multi": "paragraph,preformatted,heading2,heading3,heading4,strong,em,hyperlink,image,list-item,o-list-item"
           }
         }
-      },
-      "items": {}
+      }
     }
   ]
 }

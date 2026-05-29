@@ -6,8 +6,8 @@ const scriptSrc = isDev
   : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cloud.umami.is https://static.cdn.prismic.io"
 
 const connectSrc = isDev
-  ? "connect-src 'self' ws: wss: https://cloud.umami.is https://api-gateway.umami.dev https://ohana-surf-morocco.cdn.prismic.io https://ohana-surf-morocco.prismic.io"
-  : "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://ohana-surf-morocco.cdn.prismic.io https://ohana-surf-morocco.prismic.io"
+  ? "connect-src 'self' ws: wss: https://cloud.umami.is https://api-gateway.umami.dev https://ohana-website.cdn.prismic.io https://ohana-website.prismic.io"
+  : "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://ohana-website.cdn.prismic.io https://ohana-website.prismic.io"
 
 const securityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },

@@ -1,7 +1,7 @@
 import type { SliceComponentProps } from '@prismicio/react'
 import type { EmbedField } from '@prismicio/client'
 
-type VideoEmbedSliceType = {
+type VideoEmbedSlice = {
   id: string
   slice_type: string
   slice_label: null
@@ -11,7 +11,7 @@ type VideoEmbedSliceType = {
   items: Record<string, never>[]
 }
 
-export default function VideoEmbed({ slice }: SliceComponentProps<VideoEmbedSliceType>) {
+const VideoEmbed = ({ slice }: SliceComponentProps<VideoEmbedSlice>) => {
   const html = (slice.primary.embed as { html?: string })?.html
   if (!html) return null
   return (
@@ -26,3 +26,5 @@ export default function VideoEmbed({ slice }: SliceComponentProps<VideoEmbedSlic
     </figure>
   )
 }
+
+export default VideoEmbed

@@ -1,22 +1,33 @@
 {
   "id": "image",
-  "type": "SharedSlice",
   "name": "Image",
+  "type": "SharedSlice",
   "variations": [
     {
       "id": "default",
       "name": "Default",
-      "version": "v1",
-      "description": "Image",
+      "description": "A standalone image with optional caption",
+      "docURL": "",
+      "imageUrl": "",
+      "version": "",
       "primary": {
-        "image": { "type": "Image", "config": { "label": "Image", "constraint": {}, "thumbnails": [] } },
-        "caption": { "type": "Text", "config": { "label": "Caption" } },
+        "image": {
+          "type": "Image",
+          "config": { "label": "Image", "constraint": {}, "thumbnails": [] }
+        },
+        "caption": {
+          "type": "Text",
+          "config": { "label": "Caption", "placeholder": "Optional caption" }
+        },
         "size": {
           "type": "Select",
-          "config": { "label": "Size", "options": ["full", "narrow"], "default_value": "full" }
+          "config": {
+            "label": "Size",
+            "options": ["full", "narrow"],
+            "default_value": "full"
+          }
         }
-      },
-      "items": {}
+      }
     }
   ]
 }

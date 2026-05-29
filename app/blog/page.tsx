@@ -58,7 +58,7 @@ export default async function BlogListPage({
   }
 
   const [response, allPosts] = await Promise.all([
-    client.get({
+    client.getByType('blog_post', {
       filters,
       orderings: [{ field: 'my.blog_post.publish_date', direction: 'desc' }],
       page,
@@ -115,18 +115,18 @@ export default async function BlogListPage({
         ) : (
           <div className="post-grid">
             {posts.map((post) => {
-              const data = post.data as Record<string, unknown>
-              const authorDoc = data.author as { data?: { name?: string } } | null
+              const data = post.data
+              const authorField = data.author as prismic.ContentRelationshipField & { data?: { name?: string } }
               return (
                 <PostCard
                   key={post.uid}
                   uid={post.uid!}
-                  title={prismic.asText(data.title as prismic.RichTextField)}
-                  excerpt={prismic.asText(data.excerpt as prismic.RichTextField)}
-                  category={(data.category as string) ?? ''}
-                  publishDate={(data.publish_date as string) ?? ''}
-                  coverImage={data.cover_image as prismic.ImageField}
-                  authorName={authorDoc?.data?.name ?? undefined}
+                  title={prismic.asText(data.title ?? [])}
+                  excerpt={prismic.asText(data.excerpt ?? [])}
+                  category={data.category ?? ''}
+                  publishDate={data.publish_date ?? ''}
+                  coverImage={data.cover_image}
+                  authorName={authorField?.data?.name ?? undefined}
                 />
               )
             })}
