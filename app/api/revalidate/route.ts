@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 
 export async function POST(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
+  const body = await req.json()
 
-  if (secret !== process.env.PRISMIC_REVALIDATE_SECRET) {
+  if (body.secret !== process.env.PRISMIC_REVALIDATE_SECRET) {
     return NextResponse.json({ message: 'Invalid secret' }, { status: 401 })
   }
 
