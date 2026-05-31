@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About Us' },
   { path: '/packages', label: 'Surf Packages' },
+  { path: '/blog', label: 'Blog' },
   { path: '/booking', label: 'Booking Request' },
 ]
 

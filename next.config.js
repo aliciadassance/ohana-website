@@ -2,12 +2,12 @@
 const isDev = process.env.NODE_ENV !== 'production'
 
 const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is"
-  : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cloud.umami.is"
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is https://static.cdn.prismic.io"
+  : "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cloud.umami.is https://static.cdn.prismic.io"
 
 const connectSrc = isDev
-  ? "connect-src 'self' ws: wss: https://cloud.umami.is https://api-gateway.umami.dev"
-  : "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev"
+  ? "connect-src 'self' ws: wss: https://cloud.umami.is https://api-gateway.umami.dev https://ohana-website.cdn.prismic.io https://ohana-website.prismic.io"
+  : "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://ohana-website.cdn.prismic.io https://ohana-website.prismic.io"
 
 const securityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
@@ -24,6 +24,7 @@ const securityHeaders = [
       "img-src 'self' data: https:",
       "font-src 'self' data: https://cdn.jsdelivr.net",
       connectSrc,
+      "frame-src https://www.youtube.com https://player.vimeo.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -39,6 +40,10 @@ const nextConfig = {
     deviceSizes: [360, 480, 640, 768, 1024, 1280, 1536, 1920],
     imageSizes: [64, 96, 128, 200, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30,
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.prismic.io' },
+      { protocol: 'https', hostname: '*.prismic.io' },
+    ],
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }]
@@ -56,7 +61,6 @@ const nextConfig = {
       { source: '/book-now', destination: '/booking', permanent: true },
       { source: '/book-online', destination: '/booking', permanent: true },
       { source: '/contact', destination: '/', permanent: true },
-      { source: '/blog', destination: '/', permanent: true },
     ]
   },
 }

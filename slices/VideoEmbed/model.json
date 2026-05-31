@@ -1,0 +1,25 @@
+{
+  "id": "video_embed",
+  "name": "VideoEmbed",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "An embedded video (YouTube, Vimeo, etc.)",
+      "docURL": "",
+      "imageUrl": "",
+      "version": "",
+      "primary": {
+        "embed": {
+          "type": "Embed",
+          "config": { "label": "Video Embed" }
+        },
+        "caption": {
+          "type": "Text",
+          "config": { "label": "Caption", "placeholder": "Optional video caption" }
+        }
+      }
+    }
+  ]
+}

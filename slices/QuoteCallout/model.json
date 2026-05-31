@@ -1,0 +1,37 @@
+{
+  "id": "quote_callout",
+  "name": "QuoteCallout",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "A styled pull quote or callout box",
+      "docURL": "",
+      "imageUrl": "",
+      "version": "",
+      "primary": {
+        "text": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Text",
+            "multi": "paragraph,strong,em",
+            "placeholder": "Quote or callout text"
+          }
+        },
+        "attribution": {
+          "type": "Text",
+          "config": { "label": "Attribution", "placeholder": "— Author name or source" }
+        },
+        "style": {
+          "type": "Select",
+          "config": {
+            "label": "Style",
+            "options": ["quote", "callout"],
+            "default_value": "quote"
+          }
+        }
+      }
+    }
+  ]
+}

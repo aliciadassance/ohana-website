@@ -12,6 +12,9 @@
     "generate:blur": "node scripts/generate-blur.mjs"
   },
   "dependencies": {
+    "@prismicio/client": "^7.21.8",
+    "@prismicio/next": "^2.2.4",
+    "@prismicio/react": "^3.4.1",
     "next": "^14.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
