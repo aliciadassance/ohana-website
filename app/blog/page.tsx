@@ -66,9 +66,14 @@ export default async function BlogListPage({
     }),
   ])
 
-  const filtered = category
-    ? allFiltered.filter((p) => p.data.category === category)
-    : allFiltered
+  const sortByDate = <T extends { data: { publish_date?: unknown }; last_publication_date: string }>(arr: T[]) =>
+    [...arr].sort((a, b) => {
+      const da = (a.data.publish_date as string | null) ?? a.last_publication_date
+      const db = (b.data.publish_date as string | null) ?? b.last_publication_date
+      return db.localeCompare(da)
+    })
+
+  const filtered = sortByDate(category ? allFiltered.filter((p) => p.data.category === category) : allFiltered)
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const posts = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
