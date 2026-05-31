@@ -29,6 +29,9 @@ const ImageWithText = ({ slice }: SliceComponentProps<ImageWithTextSlice>) => {
     <section
       className={`blog-slice blog-slice--image-with-text desktop-${desktopPos} mobile-${mobilePos}`}
     >
+      {isFilled.keyText(slice.primary.title) && (
+        <h2 className="image-with-text__title">{slice.primary.title}</h2>
+      )}
       <div className="image-with-text__img">
         <PrismicNextImage field={slice.primary.image} className="image-with-text__img-el" />
         {isFilled.keyText(slice.primary.caption) && (
@@ -36,9 +39,6 @@ const ImageWithText = ({ slice }: SliceComponentProps<ImageWithTextSlice>) => {
         )}
       </div>
       <div className="image-with-text__text">
-        {isFilled.keyText(slice.primary.title) && (
-          <h2 className="image-with-text__title">{slice.primary.title}</h2>
-        )}
         <div className="blog-prose">
           <PrismicRichText field={slice.primary.content} />
         </div>

@@ -56,12 +56,12 @@
         "config": {
           "label": "Category",
           "options": [
-            "Surf Tips",
-            "Travel & Morocco",
-            "Camp Life",
-            "Wellness & News"
+            "Spots & Local Knowledge",
+            "Tips & Progression",
+            "Wellness & Moroccan Life",
+            "Moroccan Trip Tips"
           ],
-          "default_value": "Camp Life"
+          "default_value": "Tips & Progression"
         }
       },
       "author": {

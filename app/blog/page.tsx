@@ -91,8 +91,9 @@ export default async function BlogListPage({
     <>
       <PageHeader
         eyebrow="The Ohana Blog"
-        title={<>Stories from <em>the surf</em></>}
-        intro="Surf tips, travel guides, camp life and more — straight from Aourir."
+        title={<>Stories from <em>the shore</em></>}
+        intro="Turns out a lot of people have the same questions before they come. Instead of answering the same questions fifty times, we wrote it all down — all for you, the real stuff, not the postcard version."
+        bgImage="/assets/images/packages-hero.jpg"
       />
 
       <Section>

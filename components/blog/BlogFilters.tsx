@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useTransition, useCallback, useRef } from 'react'
 
-const CATEGORIES = ['All', 'Surf Tips', 'Travel & Morocco', 'Camp Life', 'Wellness & News']
+const CATEGORIES = ['All', 'Spots & Local Knowledge', 'Tips & Progression', 'Wellness & Moroccan Life', 'Moroccan Trip Tips']
 
 type BlogFiltersProps = {
   currentCategory: string

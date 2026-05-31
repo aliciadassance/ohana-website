@@ -205,7 +205,9 @@
 .author-card__photo { flex-shrink: 0; }
 .author-card__img {
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  object-position: center top;
 }
 .author-card__info {
   display: flex;
@@ -224,11 +226,11 @@
   font-family: var(--font-display);
   font-size: 1.35rem;
   display: block;
+  margin-block: -0.15rem;
 }
 .author-card__bio {
   color: var(--color-fg-muted, #555);
   font-size: 0.95rem;
-  margin-top: 0.25rem;
 }
 .author-card__bio p { margin: 0; }
 .author-card__insta {
@@ -264,7 +266,7 @@
 
 /* ---------- Post page hero header ---------- */
 .post-page-header .page-header__bg { opacity: 0.45; }
-.post-page-header h1 { max-width: 22ch; }
+.post-page-header h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); max-width: 30ch; }
 .post-page-header p { max-width: 60ch; }
 .post-page-header__meta {
   display: flex;
@@ -333,24 +335,24 @@
 
 /* ---------- Post detail layout ---------- */
 .post-layout {
-  max-width: 760px;
+  max-width: 860px;
   margin-inline: auto;
 }
 
 /* ---------- Blog prose (RichText slice) ---------- */
-.blog-prose { max-width: 680px; margin-inline: auto; }
+.blog-prose { max-width: 100%; }
 .blog-prose h2 {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2rem);
-  margin-block: 2rem 0.85rem;
+  margin-block: 2rem 0.4rem;
   color: var(--brand-teal-700);
 }
 .blog-prose h3 {
   font-family: var(--font-display);
   font-size: 1.35rem;
-  margin-block: 1.5rem 0.6rem;
+  margin-block: 1.5rem 0.3rem;
 }
-.blog-prose h4 { font-size: 1.1rem; font-weight: 600; margin-block: 1.25rem 0.5rem; }
+.blog-prose h4 { font-size: 1.1rem; font-weight: 600; margin-block: 1.25rem 0.25rem; }
 .blog-prose p { margin-bottom: 1.2rem; line-height: var(--lh-loose); }
 .blog-prose ul,
 .blog-prose ol {
@@ -485,11 +487,13 @@
   display: block;
 }
 .image-with-text__title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--ink, #1a1a1a);
-  margin-bottom: 0.75rem;
-  line-height: var(--lh-tight, 1.25);
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: inherit;
+  color: var(--brand-teal-700);
+  margin-bottom: 0.4rem;
+  line-height: var(--lh-snug);
 }
 @media (max-width: 768px) {
   .blog-slice--image-with-text {
