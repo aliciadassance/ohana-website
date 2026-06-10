@@ -53,7 +53,9 @@ function SectionConcept() {
             <Image src="/assets/images/SURFLAB-Image-Concept-Pillar1.jpg" alt="Surf coaching session in the water" fill sizes="(max-width: 720px) 100vw, 50vw" />
           </div>
           <div className="sl-concept-card__content">
-            <div className="sl-concept-card__pill">Pillar 01</div>
+            <a href="https://www.instagram.com/ohana_surf_morocco" target="_blank" rel="noopener noreferrer" className="sl-concept-card__pill sl-concept-card__pill--link">
+              <Icon name="brand-instagram" /> by @ohana_surf_morocco
+            </a>
             <h3 className="sl-concept-card__title">
               Read the ocean.<br />
               <em>Ride it better.</em>
@@ -79,7 +81,9 @@ function SectionConcept() {
             <Image src="/assets/images/SURFLAB-Image-Concept-pillar2.jpg" alt="Surf-specific training and mobility session" fill sizes="(max-width: 720px) 100vw, 50vw" />
           </div>
           <div className="sl-concept-card__content">
-            <div className="sl-concept-card__pill sl-concept-card__pill--teal">Pillar 02</div>
+            <a href="https://www.instagram.com/clubferlandes" target="_blank" rel="noopener noreferrer" className="sl-concept-card__pill sl-concept-card__pill--teal sl-concept-card__pill--link">
+              <Icon name="brand-instagram" /> by @clubferlandes
+            </a>
             <h3 className="sl-concept-card__title sl-concept-card__title--dark">
               Train smart.<br />
               <em style={{ color: 'var(--brand-teal-500)' }}>Surf stronger.</em>

@@ -1901,6 +1901,14 @@
   margin-bottom: 1.25rem;
 }
 .sl-concept-card__pill--teal { color: var(--brand-teal-400); }
+.sl-concept-card__pill--link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.sl-concept-card__pill--link:hover { opacity: 0.75; }
 .sl-concept-card__title {
   font-family: var(--font-display);
   font-size: clamp(1.4rem, 2.5vw, 1.9rem);
