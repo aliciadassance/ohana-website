@@ -9,6 +9,7 @@ import CTABanner from '../CTABanner'
 import { PackagesCarousel, PackageCard } from './HomePage'
 import { PACKAGES, ROOMS, FAQS, MEAL_PRICE_PER_MEAL, ACTIVITY_PRICES, PACKAGE_ACTIVITIES, RETURNING_GUEST_DISCOUNT, ACTIVITY_BLACKOUTS, ADDON_PRICES } from '@/lib/data'
 import type { Package } from '@/lib/types'
+import Image from 'next/image'
 
 // ---- Comparison table ----
 function ComparisonTable() {
@@ -402,6 +403,41 @@ function AddOns() {
   )
 }
 
+// ---- Surf Lab promo ----
+function SurfLabPromo() {
+  return (
+    <div className="sl-packages-promo">
+      <div className="sl-packages-promo__img">
+        <Image
+          src="/assets/images/about-day-3.jpg"
+          alt="Surfer working on technique with a coach"
+          fill
+          style={{ objectFit: 'cover', opacity: 0.65 }}
+          sizes="(max-width: 720px) 100vw, 50vw"
+        />
+      </div>
+      <div className="sl-packages-promo__body">
+        <Eyebrow>Surf Lab</Eyebrow>
+        <h2>Want to actually improve?</h2>
+        <p>
+          The Surf Lab is a structured coaching program for intermediate to advanced surfers.
+          Video analysis, theory sessions, and small groups — designed to break through plateaus.
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <Button
+            variant="primary"
+            iconRight="arrow-right"
+            href="/packages/surf-lab"
+            umamiEvent="cta_packages_surf_lab"
+          >
+            Discover Surf Lab
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ---- Packages page ----
 export default function PackagesPage() {
   return (
@@ -442,6 +478,10 @@ export default function PackagesPage() {
 
       <AddOns />
       <FAQSection />
+
+      <Section bg="sand">
+        <SurfLabPromo />
+      </Section>
 
       <Section>
         <CTABanner

@@ -4,10 +4,20 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Icon, Button, Logo } from './ui'
 
-const NAV_ITEMS = [
+type NavChild = { path: string; label: string; badge?: boolean }
+type NavItem  = { path: string; label: string; children?: NavChild[] }
+
+const NAV_ITEMS: NavItem[] = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About Us' },
-  { path: '/packages', label: 'Surf Packages' },
+  {
+    path: '/packages',
+    label: 'Surf Packages',
+    children: [
+      { path: '/packages', label: 'All packages' },
+      { path: '/packages/surf-lab', label: 'Surf Lab', badge: true },
+    ],
+  },
   { path: '/blog', label: 'Blog' },
   { path: '/booking', label: 'Booking Request' },
 ]
@@ -52,16 +62,43 @@ export default function Header() {
             <Logo variant="horizontal" />
           </a>
           <nav className="nav" aria-label="Main">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.path}
-                href={item.path}
-                className={`nav__item ${isActive(item.path) ? 'is-active' : ''}`}
-                data-umami-event={`nav_${item.path === '/' ? 'home' : item.path.slice(1)}`}
-              >
-                {item.label}
-              </a>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.children ? (
+                <div key={item.path} className="nav__group">
+                  <a
+                    href={item.path}
+                    className={`nav__item nav__item--parent ${isActive(item.path) ? 'is-active' : ''}`}
+                    data-umami-event={`nav_${item.path.slice(1)}`}
+                  >
+                    {item.label}
+                    <Icon name="chevron-down" className="nav__chevron" />
+                  </a>
+                  <div className="nav__dropdown" role="menu">
+                    {item.children.map((child) => (
+                      <a
+                        key={child.path}
+                        href={child.path}
+                        role="menuitem"
+                        className={`nav__dropdown__item ${isActive(child.path) && child.path !== item.path ? 'is-active' : ''}`}
+                        data-umami-event={`nav_${child.path.slice(1).replace(/\//g, '_')}`}
+                      >
+                        {child.label}
+                        {child.badge && <span className="nav__badge">New</span>}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  className={`nav__item ${isActive(item.path) ? 'is-active' : ''}`}
+                  data-umami-event={`nav_${item.path === '/' ? 'home' : item.path.slice(1)}`}
+                >
+                  {item.label}
+                </a>
+              )
+            )}
           </nav>
           <div className="header__cta">
             <Button variant="primary" size="sm" iconRight="arrow-right" href="/booking" umamiEvent="cta_book_now">
@@ -82,15 +119,29 @@ export default function Header() {
         </div>
         <nav className="mobile-drawer__nav" aria-label="Mobile">
           {NAV_ITEMS.map((item) => (
-            <a
-              key={item.path}
-              href={item.path}
-              className={isActive(item.path) ? 'is-active' : ''}
-              onClick={() => setOpen(false)}
-              data-umami-event={`nav_mobile_${item.path === '/' ? 'home' : item.path.slice(1)}`}
-            >
-              {item.label}
-            </a>
+            <div key={item.path}>
+              <a
+                href={item.path}
+                className={isActive(item.path) ? 'is-active' : ''}
+                onClick={() => setOpen(false)}
+                data-umami-event={`nav_mobile_${item.path === '/' ? 'home' : item.path.slice(1)}`}
+              >
+                {item.label}
+              </a>
+              {item.children?.filter(c => c.path !== item.path).map((child) => (
+                <a
+                  key={child.path}
+                  href={child.path}
+                  className={`mobile-drawer__sub ${isActive(child.path) ? 'is-active' : ''}`}
+                  onClick={() => setOpen(false)}
+                  data-umami-event={`nav_mobile_${child.path.slice(1).replace(/\//g, '_')}`}
+                >
+                  <Icon name="corner-down-right" />
+                  {child.label}
+                  {child.badge && <span className="nav__badge">New</span>}
+                </a>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="mobile-drawer__cta">
