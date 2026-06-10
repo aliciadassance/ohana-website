@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Image from 'next/image'
 import { Icon, Eyebrow } from './ui'
 
 type PageHeaderProps = {
@@ -16,7 +17,11 @@ type PageHeaderProps = {
 export default function PageHeader({ eyebrow, title, intro, bgImage, breadcrumb, titleNoWrap, creators, compact, headerCta }: PageHeaderProps) {
   return (
     <header className={`page-header${compact ? ' page-header--compact' : ''}`}>
-      {bgImage && <div className="page-header__bg" style={{ backgroundImage: `url('${bgImage}')` }} />}
+      {bgImage && (
+        <div className="page-header__bg">
+          <Image src={bgImage} alt="" fill style={{ objectFit: 'cover', objectPosition: 'center' }} priority sizes="100vw" />
+        </div>
+      )}
       <div className={`container${headerCta ? ' page-header__container' : ''}`}>
         <div className={headerCta ? 'page-header__content' : undefined}>
           {breadcrumb && (

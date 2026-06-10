@@ -969,8 +969,8 @@
 }
 .page-header__bg {
   position: absolute; inset: 0;
-  background-size: cover; background-position: center;
   opacity: 0.5; z-index: -1;
+  overflow: hidden;
 }
 .page-header::after {
   content: "";
