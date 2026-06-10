@@ -339,7 +339,7 @@ function SectionBehind() {
   const partners = [
     {
       name: 'Ohana Surf Morocco',
-      image: '/assets/images/SURFLAB-Image-Whoisbehind-Image1.png',
+      image: '/assets/images/SURFLAB-Image-Whoisbehind-Image1.jpg',
       desc: 'A family-run surf house in Aourir, led by Yassin — one of the most respected coaches on the Moroccan coast. Years of local knowledge, secret spots, and a gift for making real progress feel natural. You come as strangers. You leave as family.',
       tag: 'Surf coaching & guiding · Local expertise',
       instagram: 'https://www.instagram.com/ohana_surf_morocco',
@@ -347,7 +347,7 @@ function SectionBehind() {
     },
     {
       name: 'Club FER Landes',
-      image: '/assets/images/SURFLAB-Image-Whoisbehind-Image2.png',
+      image: '/assets/images/SURFLAB-Image-Whoisbehind-Image2.jpg',
       desc: 'Specialists in surf-specific physical preparation — functional training, mobility, injury prevention, and athletic performance. The missing link between the gym and the lineup.',
       tag: 'Physical preparation · Surf performance',
       instagram: 'https://www.instagram.com/clubferlandes',
