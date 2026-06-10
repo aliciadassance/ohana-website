@@ -159,6 +159,12 @@
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
+.radio-group--packages {
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 560px) {
+  .radio-group--packages { grid-template-columns: repeat(2, 1fr); }
+}
 .radio-tile {
   position: relative;
   display: flex;
@@ -187,6 +193,23 @@
   justify-content: flex-start;
   text-align: left;
   padding: 0.85rem 1rem;
+}
+
+/* Surf Lab tile — teal accent when checked */
+.radio-tile--surf-lab.is-checked {
+  border-color: var(--brand-teal-500);
+  background: var(--brand-teal-50);
+  color: var(--brand-teal-700);
+}
+
+/* Small hint text inside a radio tile (e.g. dates) */
+.radio-tile__hint {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.65;
+  letter-spacing: 0.03em;
+  margin-top: 0.1rem;
 }
 
 /* checkbox row */

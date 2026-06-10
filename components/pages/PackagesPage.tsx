@@ -458,7 +458,7 @@ export default function PackagesPage() {
       </div>
 
       <Section tight>
-        <PackagesCarousel useSurfOnlyCard SurfOnlyCard={SurfOnlyCard} />
+        <PackagesCarousel useSurfOnlyCard SurfOnlyCard={SurfOnlyCard} showSurfLabCard />
       </Section>
 
       <Section bg="sand">

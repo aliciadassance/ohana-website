@@ -177,6 +177,45 @@ function StatStrip() {
   )
 }
 
+// ---- Surf Lab card (special promo card for the carousel) ----
+export function SurfLabCard() {
+  return (
+    <article className="card card--hover pkg pkg--surf-lab">
+      <div className="pkg__media">
+        <Badge variant="teal">Intermediates &amp; Advanced</Badge>
+        <SkeletonImg src="/assets/images/SURFLAB-Image-Header.jpg" alt="Surf Lab week Morocco" loading="lazy" />
+      </div>
+      <div className="pkg__body">
+        <div>
+          <h3 className="pkg__title">Surf Lab</h3>
+          <div className="pkg__sub" style={{ marginTop: '0.25rem' }}>
+            <Icon name="calendar-week" /> &nbsp;7 nights · Dec 5–12, 2026
+          </div>
+        </div>
+        <p className="pkg__sub">One week built entirely around making you a better surfer — in the water and out.</p>
+        <ul className="pkg__features">
+          {[
+            'Surf guiding, coaching & video analysis',
+            'Functional training & mobility sessions',
+            'Max 11 participants',
+            'Full board · Ohana surf house',
+          ].map((f) => (
+            <li key={f}><Icon name="check" /><span>{f}</span></li>
+          ))}
+        </ul>
+        <div className="pkg__price">
+          <span className="pkg__price__from">From</span>
+          <span className="pkg__price__num">€580</span>
+          <span className="pkg__price__unit">/ week · per person</span>
+        </div>
+        <Button variant="ink" fullWidth iconRight="arrow-right" href="/packages/surf-lab" className="pkg__cta" umamiEvent="cta_surf_lab_carousel">
+          Learn more
+        </Button>
+      </div>
+    </article>
+  )
+}
+
 // ---- Package card (shared) ----
 export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => void }) {
   return (
@@ -212,9 +251,10 @@ export function PackageCard({ pkg, onClick }: { pkg: Package; onClick: () => voi
 }
 
 // ---- Packages carousel (shared with packages page) ----
-export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
+export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard, showSurfLabCard = false }: {
   useSurfOnlyCard?: boolean
   SurfOnlyCard?: ComponentType<{ pkg: Package; onClick: () => void }>
+  showSurfLabCard?: boolean
 }) {
   const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null)
   const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
@@ -246,6 +286,11 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard }: {
           a11y={{ prevSlideMessage: 'Previous package', nextSlideMessage: 'Next package' }}
           className="pkg-carousel__swiper"
         >
+          {showSurfLabCard && (
+            <SwiperSlide key="surf-lab" className="pkg-carousel__slide">
+              <SurfLabCard />
+            </SwiperSlide>
+          )}
           {PACKAGES.map((pkg) => (
             <SwiperSlide key={pkg.id} className="pkg-carousel__slide">
               {useSurfOnlyCard && SurfOnlyCard && pkg.id === 'surf-only'

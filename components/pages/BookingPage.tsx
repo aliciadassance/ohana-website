@@ -136,15 +136,19 @@ function BookingFormSkeleton() {
   )
 }
 
+const SURF_LAB_DATES = { arrival: '2026-12-05', departure: '2026-12-12' }
+
 // ---- Booking form ----
 function BookingForm() {
   const searchParams = useSearchParams()
-  const fromEstimate = !!searchParams.get('package')
+  const interestSurfLab = searchParams.get('interest') === 'surf-lab'
+  const initialPackage = searchParams.get('package') ?? (interestSurfLab ? 'Surf Lab' : '')
+  const fromEstimate = !!searchParams.get('package') || interestSurfLab
   const [state, setState] = useState<FormState>({
     fullName: '', email: '', phone: '', country: '',
-    package: searchParams.get('package') ?? '',
-    arrival: searchParams.get('arrival') ?? '',
-    departure: searchParams.get('departure') ?? '',
+    package: initialPackage,
+    arrival: searchParams.get('arrival') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.arrival : ''),
+    departure: searchParams.get('departure') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.departure : ''),
     guests: searchParams.get('guests') ?? '1',
     level: '',
     accommodation: searchParams.get('accommodation') ?? '',
@@ -162,6 +166,16 @@ function BookingForm() {
   const set = <K extends keyof FormState>(key: K, val: FormState[K]) => {
     setState((s) => ({ ...s, [key]: val }))
     if (errors[key as string]) setErrors((e) => ({ ...e, [key]: '' }))
+  }
+
+  function selectPackage(name: string) {
+    setState((s) => ({
+      ...s,
+      package: name,
+      ...(name === 'Surf Lab' ? SURF_LAB_DATES : {}),
+    }))
+    setErrors((e) => ({ ...e, package: '' }))
+    window.umami?.track('booking_package_selected', { package: name })
   }
 
   function validate(): boolean {
@@ -293,15 +307,37 @@ function BookingForm() {
         </div>
 
         <Field label="Choose your package" required htmlFor="package" error={errors.package}>
-          <div className="radio-group" role="radiogroup">
-            {PACKAGES.map((p) => (
+          <div className="radio-group radio-group--packages" role="radiogroup">
+            {PACKAGES.filter(p => p.id !== 'surf-only').map((p) => (
               <label key={p.id} className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}>
                 <input
                   type="radio"
                   name="package"
                   value={p.name}
                   checked={state.package === p.name}
-                  onChange={() => { set('package', p.name); window.umami?.track('booking_package_selected', { package: p.name }) }}
+                  onChange={() => selectPackage(p.name)}
+                />
+                <span>{p.name}</span>
+              </label>
+            ))}
+            <label className={`radio-tile radio-tile--surf-lab ${state.package === 'Surf Lab' ? 'is-checked' : ''}`}>
+              <input
+                type="radio"
+                name="package"
+                value="Surf Lab"
+                checked={state.package === 'Surf Lab'}
+                onChange={() => selectPackage('Surf Lab')}
+              />
+              <span>Surf Lab <span style={{ color: 'var(--brand-orange-300)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginLeft: '0.4rem' }}>New</span></span>
+            </label>
+            {PACKAGES.filter(p => p.id === 'surf-only').map((p) => (
+              <label key={p.id} className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}>
+                <input
+                  type="radio"
+                  name="package"
+                  value={p.name}
+                  checked={state.package === p.name}
+                  onChange={() => selectPackage(p.name)}
                 />
                 <span>{p.name}</span>
               </label>
