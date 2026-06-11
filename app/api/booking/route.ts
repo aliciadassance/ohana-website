@@ -18,22 +18,6 @@ const escapeHtml = (s: unknown): string =>
 
 const sanitizeForHeader = (s: string): string => s.replace(/[\r\n\0]+/g, ' ').trim().slice(0, 200)
 
-// Best-effort in-memory per-IP throttle. On Vercel serverless this only protects
-// against repeated hits on the same warm instance — not a hard limit. Documented
-// in SECURITY.md.
-const SUBMISSIONS = new Map<string, number[]>()
-const THROTTLE_WINDOW_MS = 10 * 60 * 1000
-const THROTTLE_MAX = 3
-
-function throttled(ip: string): boolean {
-  if (process.env.DISABLE_THROTTLE === 'true') return false
-  const now = Date.now()
-  const recent = (SUBMISSIONS.get(ip) ?? []).filter((t) => now - t < THROTTLE_WINDOW_MS)
-  recent.push(now)
-  SUBMISSIONS.set(ip, recent)
-  return recent.length > THROTTLE_MAX
-}
-
 function getIp(request: NextRequest): string {
   const fwd = request.headers.get('x-forwarded-for')
   if (fwd) return fwd.split(',')[0].trim()
@@ -195,13 +179,8 @@ export async function POST(request: NextRequest) {
   const ip = getIp(request)
 
   if (!originAllowed(request)) {
-    log.warn('rejected_origin', { ip, origin: request.headers.get('origin') ?? '' })
+    log.warn('rejected_origin', { origin: request.headers.get('origin') ?? '' })
     return NextResponse.json({ error: 'forbidden' }, { status: 403 })
-  }
-
-  if (throttled(ip)) {
-    log.warn('throttled', { ip })
-    return NextResponse.json({ error: 'too_many_requests' }, { status: 429 })
   }
 
   const resendKey = process.env.RESEND_API_KEY
