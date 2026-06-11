@@ -26,6 +26,7 @@ const THROTTLE_WINDOW_MS = 10 * 60 * 1000
 const THROTTLE_MAX = 3
 
 function throttled(ip: string): boolean {
+  if (process.env.DISABLE_THROTTLE === 'true') return false
   const now = Date.now()
   const recent = (SUBMISSIONS.get(ip) ?? []).filter((t) => now - t < THROTTLE_WINDOW_MS)
   recent.push(now)
