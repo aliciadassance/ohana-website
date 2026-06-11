@@ -260,6 +260,9 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard, showSu
   const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null)
   const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null)
 
+  const featuredIndex = PACKAGES.findIndex((p) => p.featured)
+  const initialSlide = showSurfLabCard ? featuredIndex + 1 : featuredIndex
+
   return (
     <div>
       <div className="pkg-carousel">
@@ -272,6 +275,7 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard, showSu
           threshold={8}
           slidesPerView={1.08}
           centeredSlides
+          initialSlide={initialSlide}
           breakpoints={{
             720: { slidesPerView: 2, spaceBetween: 20, centeredSlides: false },
             1080: { slidesPerView: 3, spaceBetween: 20, centeredSlides: false },
@@ -319,7 +323,7 @@ function PackagesPreview() {
         Four ways to surf with us — pick what fits your trip. Every package includes coaching, equipment, and the kind of welcome that's made our surf camp in Morocco one to come back to.
         </p>
       </div>
-      <PackagesCarousel />
+      <PackagesCarousel showSurfLabCard />
       <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
         <Button variant="teal" size="lg" iconRight="arrow-right" href="/packages" umamiEvent="cta_compare_packages">
           Compare all packages
