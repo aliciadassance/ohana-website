@@ -53,8 +53,8 @@ function SectionConcept() {
             <Image src="/assets/images/SURFLAB-Image-Concept-Pillar1.jpg" alt="Surf coaching session in the water" fill sizes="(max-width: 720px) 100vw, 50vw" priority />
           </div>
           <div className="sl-concept-card__content">
-            <a href="https://www.instagram.com/ohana_surf_morocco" target="_blank" rel="noopener noreferrer" className="sl-concept-card__pill sl-concept-card__pill--link">
-              <Icon name="brand-instagram" /> by @ohana_surf_morocco
+            <a href="https://www.instagram.com/ohana_surfmorocco" target="_blank" rel="noopener noreferrer" className="sl-concept-card__pill sl-concept-card__pill--link">
+              <Icon name="brand-instagram" /> by @ohana_surfmorocco
             </a>
             <h3 className="sl-concept-card__title">
               Read the ocean.<br />
@@ -346,8 +346,8 @@ function SectionBehind() {
       image: '/assets/images/SURFLAB-Image-Whoisbehind-Image1.jpg',
       desc: 'A family-run surf house in Aourir, led by Yassin — one of the most respected coaches on the Moroccan coast. Years of local knowledge, secret spots, and a gift for making real progress feel natural. You come as strangers. You leave as family.',
       tag: 'Surf coaching & guiding · Local expertise',
-      instagram: 'https://www.instagram.com/ohana_surf_morocco',
-      handle: '@ohana_surf_morocco',
+      instagram: 'https://www.instagram.com/ohana_surfmorocco',
+      handle: '@ohana_surfmorocco',
     },
     {
       name: 'Club FER Landes',
