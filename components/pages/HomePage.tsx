@@ -278,7 +278,7 @@ export function PackagesCarousel({ useSurfOnlyCard = false, SurfOnlyCard, showSu
           initialSlide={initialSlide}
           breakpoints={{
             720: { slidesPerView: 2, spaceBetween: 20, centeredSlides: false },
-            1080: { slidesPerView: 3, spaceBetween: 20, centeredSlides: false },
+            1080: { slidesPerView: 3, spaceBetween: 20, centeredSlides: true },
           }}
           navigation={{ prevEl, nextEl }}
           pagination={{
