@@ -3,7 +3,7 @@ import { PACKAGES, ROOMS } from '@/lib/data'
 
 const SURF_LEVELS = ['beginner', 'intermediate', 'advanced'] as const
 
-const PACKAGE_NAMES = PACKAGES.map((p) => p.name) as [string, ...string[]]
+const PACKAGE_NAMES = [...PACKAGES.map((p) => p.name), 'Surf Lab'] as [string, ...string[]]
 const ROOM_IDS = ['', ...ROOMS.map((r) => r.id)] as [string, ...string[]]
 
 const noControlChars = (s: string) => !/[\r\n\0]/.test(s)
