@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
 
         <div className="footer__legal">
-          <div>© {new Date().getFullYear()} Ohana Surf Morocco · All rights reserved</div>
+          <div>© {new Date().getFullYear()} Ohana Surf Morocco is a trade name of Lani Surf Morocco SARL, the legal entity responsible for all bookings and services · All rights reserved</div>
         </div>
       </div>
     </footer>

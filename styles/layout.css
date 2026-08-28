@@ -957,6 +957,9 @@
 @media (min-width: 720px) {
   .footer__legal { flex-direction: row; justify-content: space-between; align-items: center; }
 }
+@media (min-width: 1024px) {
+  .footer__legal div { white-space: nowrap; }
+}
 
 /* ---------- Page header (non-home) ---------- */
 .page-header {
