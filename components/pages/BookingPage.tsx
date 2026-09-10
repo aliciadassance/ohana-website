@@ -217,11 +217,25 @@ function BookingForm() {
 
     setSubmitting(true)
     try {
-      const res = await fetch('/api/booking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(state),
-      })
+      // Try twice: a network blip or a transient 5xx from the mail service
+      // shouldn't cost the guest their booking.
+      let res: Response | null = null
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          res = await fetch('/api/booking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state),
+          })
+        } catch {
+          res = null
+        }
+        if (res && (res.ok || res.status < 500)) break
+        if (attempt === 0) await new Promise((r) => setTimeout(r, 1200))
+      }
+
+      if (!res) throw new Error('Network error')
+
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         if (res.status === 400 && data?.fields) {
@@ -237,7 +251,7 @@ function BookingForm() {
           setSubmitError("You've submitted a few requests recently — please give us a moment, or reach us directly on WhatsApp.")
           return
         }
-        throw new Error('Network error')
+        throw new Error('Request failed')
       }
       window.umami?.track('booking_submitted', { package: state.package, guests: Number(state.guests) })
       setSubmitted(true)
@@ -290,6 +304,9 @@ function BookingForm() {
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          data-lpignore="true"
+          data-1p-ignore
+          data-form-type="other"
           value={state.website}
           onChange={(e) => set('website', e.target.value)}
         />

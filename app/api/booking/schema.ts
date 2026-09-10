@@ -58,8 +58,8 @@ export const BookingSchema = z
     message: safeOptional(5000),
     marketing: z.boolean().optional().default(false),
     returning: z.boolean().optional().default(false),
-    // Honeypot — bots fill this; real users don't see it
-    website: z.string().max(0, 'Spam detected').optional().default(''),
+    // Note: the `website` honeypot field is stripped and handled in the route
+    // (app/api/booking/route.ts) before validation — it never blocks a submit.
   })
   .refine((d) => d.departure > d.arrival, {
     message: 'Departure must be after arrival',

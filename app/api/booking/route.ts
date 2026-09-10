@@ -24,16 +24,89 @@ function getIp(request: NextRequest): string {
   return request.headers.get('x-real-ip') ?? 'unknown'
 }
 
-function originAllowed(request: NextRequest): boolean {
-  const origin = request.headers.get('origin')
-  if (!origin) return false
-  const host = request.headers.get('host')
-  if (host && origin.endsWith(`://${host}`)) return true
-  const allowed = process.env.ALLOWED_ORIGIN
-  return !!allowed && origin === allowed
+const ALLOWED_HOSTS = [
+  'ohana-surf-morocco.com',
+  'www.ohana-surf-morocco.com',
+]
+
+function hostFromUrl(value: string | null | undefined): string | null {
+  if (!value) return null
+  try {
+    return new URL(value).hostname.toLowerCase()
+  } catch {
+    return null
+  }
 }
 
-function buildNotificationHtml(s: BookingInput): string {
+function originAllowed(request: NextRequest): boolean {
+  const requestHost = (request.headers.get('host') ?? '').split(':')[0].toLowerCase()
+  const sourceHost =
+    hostFromUrl(request.headers.get('origin')) ?? hostFromUrl(request.headers.get('referer'))
+
+  // Some privacy browsers, extensions and corporate proxies strip both the
+  // Origin and Referer headers. Don't hard-block those real users — schema
+  // validation and the honeypot are the actual spam defenses.
+  if (!sourceHost) return true
+
+  if (requestHost && sourceHost === requestHost) return true
+  if (ALLOWED_HOSTS.includes(sourceHost)) return true
+  if (sourceHost === 'localhost' || sourceHost === '127.0.0.1') return true
+  if (sourceHost.endsWith('.vercel.app')) return true
+
+  const allowed = hostFromUrl(process.env.ALLOWED_ORIGIN)
+  return !!allowed && sourceHost === allowed
+}
+
+function buildNotificationText(s: BookingInput, suspicious = false): string {
+  const line = (label: string, value: unknown) =>
+    value === undefined || value === '' || value === false || value === null
+      ? ''
+      : `${label}: ${value}\n`
+  return [
+    suspicious
+      ? '⚠ This submission tripped the spam honeypot — it may be a bot. Review before replying.\n\n'
+      : '',
+    `${s.fullName} wants to book a stay (submitted via the website booking form).\n`,
+    `\nTHE TRIP\n`,
+    line('Package', s.package),
+    line('Arrival', s.arrival),
+    line('Departure', s.departure),
+    line('Guests', s.guests),
+    line('Surf level', s.level),
+    line('Room preference', s.accommodation),
+    line('Returning guest', s.returning ? 'Yes — apply 10% discount' : ''),
+    `\nCONTACT\n`,
+    line('Name', s.fullName),
+    line('Email', s.email),
+    line('Phone / WhatsApp', s.phone),
+    line('Country', s.country),
+    `\nEXTRAS & LOGISTICS\n`,
+    line('Pickup', s.pickup),
+    line('Dietary requirements', s.diet),
+    line('How they heard about us', s.referral),
+    line('Newsletter opt-in', s.marketing ? 'Yes' : ''),
+    s.message ? `\nTHEIR MESSAGE\n${s.message}\n` : '',
+    `\nReply to this email to respond directly to ${s.fullName} at ${s.email}.\n`,
+  ].join('')
+}
+
+function buildConfirmationText(s: BookingInput): string {
+  return [
+    `Salaam ${s.fullName}!\n\n`,
+    `We've received your booking request and will reply within 24 hours with availability, `,
+    `your full quote, and next steps.\n\n`,
+    `In the meantime, feel free to reach us directly on WhatsApp — we usually answer faster there: `,
+    `https://wa.me/212650613372\n\n`,
+    `YOUR REQUEST SUMMARY\n`,
+    `Package: ${s.package}\n`,
+    `Dates: ${s.arrival} -> ${s.departure}\n`,
+    `Guests: ${s.guests}\n`,
+    s.returning ? `Returning guest discount (10%) applied\n` : '',
+    `\nOhana Surf Morocco · Aourir, Agadir · ${OHANA_EMAIL}\n`,
+  ].join('')
+}
+
+function buildNotificationHtml(s: BookingInput, suspicious = false): string {
   const row = (label: string, value: string | number | boolean | undefined) =>
     value
       ? `<tr><td style="padding:8px 12px;font-family:sans-serif;font-size:14px;color:#555;border-bottom:1px solid #f0ede6;width:35%;white-space:nowrap">${escapeHtml(label)}</td><td style="padding:8px 12px;font-family:sans-serif;font-size:14px;color:#1a1a1a;border-bottom:1px solid #f0ede6;font-weight:500">${escapeHtml(value)}</td></tr>`
@@ -63,6 +136,7 @@ function buildNotificationHtml(s: BookingInput): string {
             <h1 style="margin:8px 0 0;font-family:Georgia,serif;font-size:28px;color:white;font-weight:400">Ohana Surf Morocco</h1>
           </td>
         </tr>
+        ${suspicious ? `<tr><td style="padding:12px 32px 0"><div style="background:#fde7e3;color:#9b1c0d;font-family:sans-serif;font-size:13px;padding:10px 14px;border-radius:8px">⚠ This submission tripped the spam honeypot — it may be a bot. Review before replying.</div></td></tr>` : ''}
         <tr>
           <td style="padding:28px 32px 8px">
             <p style="font-family:sans-serif;font-size:16px;color:#1a1a1a;margin:0 0 4px"><strong>${escapeHtml(s.fullName)}</strong> wants to book a stay!</p>
@@ -199,15 +273,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 })
   }
 
+  // Honeypot: real users never see this field, but password managers and
+  // browser autofill sometimes fill it in. Don't block on it — that silently
+  // loses real bookings. Instead, strip it, flag the submission, and let the
+  // team review it. Obvious bots get labelled; humans still get through.
+  const honeypotFilled =
+    !!raw &&
+    typeof raw === 'object' &&
+    typeof (raw as Record<string, unknown>).website === 'string' &&
+    (raw as Record<string, string>).website.trim().length > 0
+  if (raw && typeof raw === 'object') {
+    delete (raw as Record<string, unknown>).website
+  }
+  if (honeypotFilled) log.warn('honeypot_filled', { ip })
+
   const parsed = BookingSchema.safeParse(raw)
   if (!parsed.success) {
-    // Honeypot rejection: return generic 400 without signalling the trap
     const issues = parsed.error.issues
-    const honeypotHit = issues.some((i) => i.path[0] === 'website')
-    if (honeypotHit) {
-      log.warn('honeypot_hit', { ip })
-      return NextResponse.json({ error: 'invalid_input' }, { status: 400 })
-    }
     const fields: Record<string, string> = {}
     for (const issue of issues) {
       const key = String(issue.path[0] ?? '_')
@@ -227,8 +309,9 @@ export async function POST(request: NextRequest) {
     from: fromEmail,
     to: OHANA_EMAIL,
     reply_to: data.email,
-    subject: `New booking inquiry from ${safeName}`,
-    html: buildNotificationHtml(data),
+    subject: `${honeypotFilled ? '[possible spam] ' : ''}New booking inquiry from ${safeName}`,
+    html: buildNotificationHtml(data, honeypotFilled),
+    text: buildNotificationText(data, honeypotFilled),
   })
   if (notif.error) {
     log.error('notification_failed', { ip, errorName: notif.error.name ?? 'unknown' })
@@ -241,6 +324,7 @@ export async function POST(request: NextRequest) {
     reply_to: OHANA_EMAIL,
     subject: `We received your booking request, ${sanitizeForHeader(firstName)}!`,
     html: buildConfirmationHtml(data),
+    text: buildConfirmationText(data),
   })
   if (confirm.error) {
     log.error('confirmation_failed', { ip, errorName: confirm.error.name ?? 'unknown' })
