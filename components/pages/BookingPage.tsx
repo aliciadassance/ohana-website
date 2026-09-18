@@ -9,6 +9,8 @@ import { PACKAGES, ROOMS } from '@/lib/data'
 
 const DRAFT_KEY = 'ohana_booking_draft'
 const REQUIRED_KEYS = ['package', 'arrival', 'departure', 'guests', 'level', 'fullName', 'email', 'phone', 'country'] as const
+// guests defaults to '1', so it's excluded from progress — it never needs the visitor to act on it.
+const PROGRESS_KEYS = REQUIRED_KEYS.filter((k) => k !== 'guests')
 
 const OHANA_EMAIL = 'ohanasurfguiding@gmail.com'
 
@@ -301,8 +303,8 @@ function BookingForm() {
     return Object.keys(e).length === 0
   }
 
-  const filledCount = REQUIRED_KEYS.filter((k) => String(state[k] ?? '').trim().length > 0).length
-  const progressPct = Math.round((filledCount / REQUIRED_KEYS.length) * 100)
+  const filledCount = PROGRESS_KEYS.filter((k) => String(state[k] ?? '').trim().length > 0).length
+  const progressPct = Math.round((filledCount / PROGRESS_KEYS.length) * 100)
 
   function scrollToFirstError() {
     requestAnimationFrame(() => {
@@ -435,7 +437,7 @@ function BookingForm() {
   return (
     <form id="booking-form" onSubmit={handleSubmit} noValidate>
       <div className="booking-progress" aria-hidden="true">
-        <span>{filledCount}/{REQUIRED_KEYS.length} required fields</span>
+        <span>{filledCount}/{PROGRESS_KEYS.length} required fields</span>
         <span className="booking-progress__track">
           <span className="booking-progress__fill" style={{ width: `${progressPct}%` }} />
         </span>
