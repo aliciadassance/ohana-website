@@ -1,11 +1,14 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import type { FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Icon, Button, Eyebrow, Section, Field, Input, Textarea, Select, RadioGroup, Checkbox, Skeleton } from '../ui'
 import PageHeader from '../PageHeader'
 import { PACKAGES, ROOMS } from '@/lib/data'
+
+const DRAFT_KEY = 'ohana_booking_draft'
+const REQUIRED_KEYS = ['package', 'arrival', 'departure', 'guests', 'level', 'fullName', 'email', 'phone', 'country'] as const
 
 const OHANA_EMAIL = 'ohanasurfguiding@gmail.com'
 
@@ -144,24 +147,92 @@ function BookingForm() {
   const interestSurfLab = searchParams.get('interest') === 'surf-lab'
   const initialPackage = searchParams.get('package') ?? (interestSurfLab ? 'Surf Lab' : '')
   const fromEstimate = !!searchParams.get('package') || interestSurfLab
-  const [state, setState] = useState<FormState>({
-    fullName: '', email: '', phone: '', country: '',
-    package: initialPackage,
-    arrival: searchParams.get('arrival') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.arrival : ''),
-    departure: searchParams.get('departure') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.departure : ''),
-    guests: searchParams.get('guests') ?? '1',
-    level: '',
-    accommodation: searchParams.get('accommodation') ?? '',
-    pickup: PICKUPS[0],
-    diet: '', referral: '', message: '',
-    marketing: false,
-    returning: searchParams.get('returning') === 'true',
-    website: '',
+
+  const [state, setState] = useState<FormState>(() => {
+    const base: FormState = {
+      fullName: '', email: '', phone: '', country: '',
+      package: initialPackage,
+      arrival: searchParams.get('arrival') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.arrival : ''),
+      departure: searchParams.get('departure') ?? (initialPackage === 'Surf Lab' ? SURF_LAB_DATES.departure : ''),
+      guests: searchParams.get('guests') ?? '1',
+      level: '',
+      accommodation: searchParams.get('accommodation') ?? '',
+      pickup: PICKUPS[0],
+      diet: '', referral: '', message: '',
+      marketing: false,
+      returning: searchParams.get('returning') === 'true',
+      website: '',
+    }
+    // Don't clobber an explicit estimate/deep-link prefill with a stale draft.
+    if (fromEstimate) return base
+    if (typeof window === 'undefined') return base
+    try {
+      const saved = window.sessionStorage.getItem(DRAFT_KEY)
+      if (!saved) return base
+      const parsed = JSON.parse(saved)
+      if (parsed && typeof parsed === 'object') return { ...base, ...parsed, website: '' }
+    } catch {
+      // ignore corrupt/unavailable storage
+    }
+    return base
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [previewPackage, setPreviewPackage] = useState<string | null>(null)
+  const errorBannerRef = useRef<HTMLDivElement>(null)
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([])
+  const seenSections = useRef<Set<number>>(new Set())
+  const bottomCtaRef = useRef<HTMLDivElement>(null)
+  const [bottomCtaVisible, setBottomCtaVisible] = useState(false)
+
+  useEffect(() => {
+    if (submitted) return
+    try {
+      window.sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ ...state, website: undefined }))
+    } catch {
+      // storage unavailable (private mode, quota) — draft persistence is a nice-to-have
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, submitted])
+
+  useEffect(() => {
+    if (submitError) errorBannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [submitError])
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined' || !bottomCtaRef.current) return
+    const observer = new IntersectionObserver(
+      (entries) => setBottomCtaVisible(entries[0]?.isIntersecting ?? false),
+      // Extend the observed area below the real viewport bottom so the sticky
+      // bar hides *before* the real CTAs are physically on-screen, not exactly
+      // when they cross the edge — IntersectionObserver callbacks fire a frame
+      // or two async, and without this lead time a fast scroll shows both CTAs
+      // for a frame right as they cross.
+      { threshold: 0, rootMargin: '0px 0px 150px 0px' }
+    )
+    observer.observe(bottomCtaRef.current)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          const idx = sectionRefs.current.findIndex((el) => el === entry.target)
+          if (idx === -1 || seenSections.current.has(idx)) continue
+          seenSections.current.add(idx)
+          window.umami?.track('booking_section_reached', { section: idx + 1 })
+        }
+      },
+      { threshold: 0.5 }
+    )
+    sectionRefs.current.forEach((el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   const set = <K extends keyof FormState>(key: K, val: FormState[K]) => {
     setState((s) => ({ ...s, [key]: val }))
@@ -178,40 +249,110 @@ function BookingForm() {
     window.umami?.track('booking_package_selected', { package: name })
   }
 
+  const hasControlChars = (s: string) => /[\r\n\0]/.test(s)
+
+  function validateField(key: keyof FormState, s: FormState = state): string {
+    switch (key) {
+      case 'fullName':
+        if (!s.fullName.trim()) return 'Please tell us your name'
+        if (s.fullName.length > MAX_LENGTHS.fullName) return 'Name is too long'
+        if (hasControlChars(s.fullName)) return 'Name contains forbidden characters'
+        return ''
+      case 'email':
+        if (!s.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email) || hasControlChars(s.email)) {
+          return 'We need a valid email'
+        }
+        return ''
+      case 'phone':
+        if (!s.phone.trim()) return 'Add your WhatsApp number so we can reach you'
+        if (s.phone.length > MAX_LENGTHS.phone) return 'Phone number is too long'
+        return ''
+      case 'country':
+        return s.country ? '' : 'Pick your country'
+      case 'package':
+        return s.package ? '' : 'Choose a package'
+      case 'arrival':
+        return s.arrival ? '' : 'Pick an arrival date'
+      case 'departure':
+        if (!s.departure) return 'Pick a departure date'
+        if (s.arrival && s.arrival >= s.departure) return 'Departure must be after arrival'
+        return ''
+      case 'level':
+        return s.level ? '' : 'Pick your surf level'
+      case 'message':
+        return s.message.length > MAX_LENGTHS.message ? `Message must be ${MAX_LENGTHS.message} characters or fewer` : ''
+      default:
+        return ''
+    }
+  }
+
+  function onFieldBlur(key: keyof FormState) {
+    const msg = validateField(key)
+    setErrors((e) => ({ ...e, [key]: msg }))
+  }
+
   function validate(): boolean {
     const e: Record<string, string> = {}
-    const hasControlChars = (s: string) => /[\r\n\0]/.test(s)
-    if (!state.fullName.trim()) e.fullName = 'Please tell us your name'
-    else if (state.fullName.length > MAX_LENGTHS.fullName) e.fullName = 'Name is too long'
-    else if (hasControlChars(state.fullName)) e.fullName = 'Name contains forbidden characters'
-    if (!state.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email) || hasControlChars(state.email)) {
-      e.email = 'We need a valid email'
+    for (const key of [...REQUIRED_KEYS, 'message'] as (keyof FormState)[]) {
+      const msg = validateField(key)
+      if (msg) e[key as string] = msg
     }
-    if (!state.phone.trim()) e.phone = 'Add your WhatsApp number so we can reach you'
-    else if (state.phone.length > MAX_LENGTHS.phone) e.phone = 'Phone number is too long'
-    if (!state.country) e.country = 'Pick your country'
-    if (!state.package) e.package = 'Choose a package'
-    if (!state.arrival) e.arrival = 'Pick an arrival date'
-    if (!state.departure) e.departure = 'Pick a departure date'
-    if (state.arrival && state.departure && state.arrival >= state.departure) {
-      e.departure = 'Departure must be after arrival'
-    }
-    if (!state.level) e.level = 'Pick your surf level'
-    if (state.message.length > MAX_LENGTHS.message) e.message = `Message must be ${MAX_LENGTHS.message} characters or fewer`
     setErrors(e)
     return Object.keys(e).length === 0
+  }
+
+  const filledCount = REQUIRED_KEYS.filter((k) => String(state[k] ?? '').trim().length > 0).length
+  const progressPct = Math.round((filledCount / REQUIRED_KEYS.length) * 100)
+
+  function scrollToFirstError() {
+    requestAnimationFrame(() => {
+      const el = document.querySelector('.field--error') as HTMLElement | null
+      if (el) {
+        window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 120, behavior: 'smooth' })
+      }
+    })
+  }
+
+  function buildWhatsAppMessage(s: FormState): string {
+    const levelLabel = LEVELS.find((l) => l.value === s.level)?.label ?? s.level
+    const roomLabel = s.accommodation ? ROOMS.find((r) => r.id === s.accommodation)?.name ?? s.accommodation : ''
+    const lines = [
+      "Hi Ohana! I'd like to request a booking.",
+      '',
+      `Package: ${s.package}`,
+      `Dates: ${s.arrival} → ${s.departure}`,
+      `Guests: ${s.guests}`,
+      levelLabel ? `Surf level: ${levelLabel}` : '',
+      roomLabel ? `Room preference: ${roomLabel}` : '',
+      s.returning ? 'Returning guest — 10% discount' : '',
+      '',
+      `Name: ${s.fullName}`,
+      `Email: ${s.email}`,
+      `Phone: ${s.phone}`,
+      `Country: ${s.country}`,
+      s.pickup && s.pickup !== PICKUPS[0] ? `Pickup: ${s.pickup}` : '',
+      s.diet ? `Dietary requirements: ${s.diet}` : '',
+      s.message ? `Message: ${s.message}` : '',
+    ].filter(Boolean)
+    return lines.join('\n')
+  }
+
+  function handleWhatsAppClick() {
+    setSubmitError(null)
+    if (!validate()) {
+      scrollToFirstError()
+      return
+    }
+    window.umami?.track('booking_whatsapp_click', { package: state.package })
+    const text = encodeURIComponent(buildWhatsAppMessage(state))
+    window.open(`https://wa.me/212650613372?text=${text}`, '_blank', 'noopener')
   }
 
   async function handleSubmit(ev: FormEvent) {
     ev.preventDefault()
     setSubmitError(null)
     if (!validate()) {
-      requestAnimationFrame(() => {
-        const el = document.querySelector('.field--error') as HTMLElement | null
-        if (el) {
-          window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 120, behavior: 'smooth' })
-        }
-      })
+      scrollToFirstError()
       return
     }
 
@@ -240,10 +381,7 @@ function BookingForm() {
       if (!res.ok) {
         if (res.status === 400 && data?.fields) {
           setErrors(data.fields as Record<string, string>)
-          requestAnimationFrame(() => {
-            const el = document.querySelector('.field--error') as HTMLElement | null
-            if (el) window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - 120, behavior: 'smooth' })
-          })
+          scrollToFirstError()
           return
         }
         if (res.status === 429) {
@@ -254,6 +392,7 @@ function BookingForm() {
         throw new Error('Request failed')
       }
       window.umami?.track('booking_submitted', { package: state.package, guests: Number(state.guests) })
+      try { window.sessionStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
       setSubmitted(true)
       requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -294,7 +433,13 @@ function BookingForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form id="booking-form" onSubmit={handleSubmit} noValidate>
+      <div className="booking-progress" aria-hidden="true">
+        <span>{filledCount}/{REQUIRED_KEYS.length} required fields</span>
+        <span className="booking-progress__track">
+          <span className="booking-progress__fill" style={{ width: `${progressPct}%` }} />
+        </span>
+      </div>
       {/* Honeypot — visually hidden, off-screen, autocomplete off. Bots fill this; humans don't. */}
       <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}>
         <label htmlFor="website">Website (leave blank)</label>
@@ -317,7 +462,7 @@ function BookingForm() {
         </p>
       )}
       {/* SECTION 1 — Trip */}
-      <div className="form-section">
+      <div className="form-section" ref={(el) => { sectionRefs.current[0] = el }}>
         <div className="form-section__head">
           <span className="form-section__head__num">1</span>
           <h3>Your trip</h3>
@@ -326,7 +471,14 @@ function BookingForm() {
         <Field label="Choose your package" required htmlFor="package" error={errors.package}>
           <div className="radio-group radio-group--packages" role="radiogroup">
             {PACKAGES.filter(p => p.id !== 'surf-only').map((p) => (
-              <label key={p.id} className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}>
+              <label
+                key={p.id}
+                className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}
+                onMouseEnter={() => setPreviewPackage(p.name)}
+                onMouseLeave={() => setPreviewPackage(null)}
+                onFocus={() => setPreviewPackage(p.name)}
+                onBlur={() => setPreviewPackage(null)}
+              >
                 <input
                   type="radio"
                   name="package"
@@ -337,7 +489,13 @@ function BookingForm() {
                 <span>{p.name}</span>
               </label>
             ))}
-            <label className={`radio-tile radio-tile--surf-lab ${state.package === 'Surf Lab' ? 'is-checked' : ''}`}>
+            <label
+              className={`radio-tile radio-tile--surf-lab ${state.package === 'Surf Lab' ? 'is-checked' : ''}`}
+              onMouseEnter={() => setPreviewPackage('Surf Lab')}
+              onMouseLeave={() => setPreviewPackage(null)}
+              onFocus={() => setPreviewPackage('Surf Lab')}
+              onBlur={() => setPreviewPackage(null)}
+            >
               <input
                 type="radio"
                 name="package"
@@ -348,7 +506,14 @@ function BookingForm() {
               <span>Surf Lab <span style={{ color: 'var(--brand-orange-300)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginLeft: '0.4rem' }}>New</span></span>
             </label>
             {PACKAGES.filter(p => p.id === 'surf-only').map((p) => (
-              <label key={p.id} className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}>
+              <label
+                key={p.id}
+                className={`radio-tile ${state.package === p.name ? 'is-checked' : ''}`}
+                onMouseEnter={() => setPreviewPackage(p.name)}
+                onMouseLeave={() => setPreviewPackage(null)}
+                onFocus={() => setPreviewPackage(p.name)}
+                onBlur={() => setPreviewPackage(null)}
+              >
                 <input
                   type="radio"
                   name="package"
@@ -360,20 +525,25 @@ function BookingForm() {
               </label>
             ))}
           </div>
+          <p className="package-preview">
+            {(previewPackage && PACKAGES.find((p) => p.name === previewPackage)?.sub)
+              || (state.package && PACKAGES.find((p) => p.name === state.package)?.sub)
+              || ' '}
+          </p>
         </Field>
 
         <div className="form-grid form-grid--2">
           <Field label="Arrival date" required htmlFor="arrival" error={errors.arrival}>
-            <Input id="arrival" name="arrival" type="date" value={state.arrival} onChange={(e) => set('arrival', e.target.value)} required />
+            <Input id="arrival" name="arrival" type="date" value={state.arrival} onChange={(e) => set('arrival', e.target.value)} onBlur={() => onFieldBlur('arrival')} required />
           </Field>
           <Field label="Departure date" required htmlFor="departure" error={errors.departure}>
-            <Input id="departure" name="departure" type="date" value={state.departure} onChange={(e) => set('departure', e.target.value)} required />
+            <Input id="departure" name="departure" type="date" value={state.departure} onChange={(e) => set('departure', e.target.value)} onBlur={() => onFieldBlur('departure')} required />
           </Field>
         </div>
 
         <div className="form-grid form-grid--2">
-          <Field label="Number of guests" required htmlFor="guests">
-            <Input id="guests" name="guests" type="number" min={1} max={8} value={state.guests} onChange={(e) => set('guests', e.target.value)} required />
+          <Field label="Number of guests" required htmlFor="guests" hint="More than 8? WhatsApp us directly">
+            <Input id="guests" name="guests" type="number" inputMode="numeric" min={1} max={8} value={state.guests} onChange={(e) => set('guests', e.target.value)} required />
           </Field>
           <Field label="Room preference" htmlFor="accommodation" hint="Optional — subject to availability">
             <Select
@@ -393,7 +563,7 @@ function BookingForm() {
       </div>
 
       {/* SECTION 2 — Contact */}
-      <div className="form-section">
+      <div className="form-section" ref={(el) => { sectionRefs.current[1] = el }}>
         <div className="form-section__head">
           <span className="form-section__head__num">2</span>
           <h3>Your details</h3>
@@ -401,21 +571,22 @@ function BookingForm() {
 
         <div className="form-grid form-grid--2">
           <Field label="Full name" required htmlFor="fullName" error={errors.fullName}>
-            <Input id="fullName" name="fullName" value={state.fullName} onChange={(e) => set('fullName', e.target.value)} placeholder="Yassin Bouchareb" required />
+            <Input id="fullName" name="fullName" autoComplete="name" value={state.fullName} onChange={(e) => set('fullName', e.target.value)} onBlur={() => onFieldBlur('fullName')} placeholder="Yassin Bouchareb" required />
           </Field>
           <Field label="Email" required htmlFor="email" error={errors.email}>
-            <Input id="email" name="email" type="email" value={state.email} onChange={(e) => set('email', e.target.value)} placeholder="you@email.com" required />
+            <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" value={state.email} onChange={(e) => set('email', e.target.value)} onBlur={() => onFieldBlur('email')} placeholder="you@email.com" required />
           </Field>
         </div>
 
         <div className="form-grid form-grid--2">
           <Field label="Phone / WhatsApp" required htmlFor="phone" error={errors.phone}>
-            <Input id="phone" name="phone" type="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} placeholder="+33 6 12 34 56 78" required />
+            <Input id="phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" value={state.phone} onChange={(e) => set('phone', e.target.value)} onBlur={() => onFieldBlur('phone')} placeholder="+33 6 12 34 56 78" required />
           </Field>
           <Field label="Country" required htmlFor="country" error={errors.country}>
             <Select
               id="country"
               name="country"
+              autoComplete="country-name"
               placeholder="Select your country"
               options={COUNTRIES.map((c) => ({ value: c, label: c }))}
               value={state.country}
@@ -435,7 +606,7 @@ function BookingForm() {
       </div>
 
       {/* SECTION 3 — Pickup & extras */}
-      <div className="form-section">
+      <div className="form-section form-section--optional" ref={(el) => { sectionRefs.current[2] = el }}>
         <div className="form-section__head">
           <span className="form-section__head__num">3</span>
           <h3>Transports &amp; Additional infos <span style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', fontFamily: 'var(--font-body)', marginLeft: '0.4rem' }}>(optional)</span></h3>
@@ -477,7 +648,7 @@ function BookingForm() {
       </div>
 
       {/* SECTION 4 — Free text */}
-      <div className="form-section">
+      <div className="form-section form-section--optional" ref={(el) => { sectionRefs.current[3] = el }}>
         <div className="form-section__head">
           <span className="form-section__head__num">4</span>
           <h3>Anything else? <span style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', fontFamily: 'var(--font-body)', marginLeft: '0.4rem' }}>(optional)</span></h3>
@@ -504,19 +675,31 @@ function BookingForm() {
       </div>
 
       {submitError && (
-        <div style={{ padding: '1rem', background: '#fde7e3', color: '#9b1c0d', borderRadius: 'var(--radius-md)', marginTop: '1.25rem' }}>
+        <div ref={errorBannerRef} tabIndex={-1} style={{ padding: '1rem', background: '#fde7e3', color: '#9b1c0d', borderRadius: 'var(--radius-md)', marginTop: '1.25rem' }}>
           {submitError}
         </div>
       )}
 
-      <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div ref={bottomCtaRef} style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <Button type="submit" variant="primary" size="lg" iconRight="arrow-right" disabled={submitting} fullWidth>
-          {submitting ? 'Sending your request…' : 'Send my booking request'}
+          {submitting ? 'Sending your request…' : 'Send request by email'}
         </Button>
-        <p style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', textAlign: 'center' }}>
-          By submitting, you agree to be contacted by Ohana Surf Morocco. We never share your details.
-          We reply within 24h.
-        </p>
+        <Button type="button" variant="whatsapp" size="lg" iconLeft="brand-whatsapp" onClick={handleWhatsAppClick} fullWidth>
+          Send via WhatsApp instead
+        </Button>
+      </div>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', textAlign: 'center', marginTop: '1rem' }}>
+        By submitting, you agree to be contacted by Ohana Surf Morocco. We never share your details.
+        We reply within 24h.
+      </p>
+
+      <div className={`booking-sticky-cta ${bottomCtaVisible ? 'is-hidden' : ''}`}>
+        <Button type="submit" form="booking-form" variant="primary" size="lg" disabled={submitting} className="booking-sticky-cta__primary">
+          {submitting ? 'Sending…' : `Send by email (${progressPct}%)`}
+        </Button>
+        <Button type="button" variant="whatsapp" size="lg" iconLeft="brand-whatsapp" onClick={handleWhatsAppClick} ariaLabel="Send via WhatsApp instead" className="booking-sticky-cta__whatsapp">
+          WhatsApp
+        </Button>
       </div>
     </form>
   )

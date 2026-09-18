@@ -28,7 +28,7 @@ export function Icon({ name, size, className = '', style, ariaLabel }: IconProps
 }
 
 // ---- Button ----
-type ButtonVariant = 'primary' | 'teal' | 'ink' | 'outline' | 'outline-light' | 'outline-teal' | 'ghost' | 'link'
+type ButtonVariant = 'primary' | 'teal' | 'ink' | 'outline' | 'outline-light' | 'outline-teal' | 'whatsapp' | 'ghost' | 'link'
 type ButtonSize = 'sm' | 'md' | 'lg'
 type ButtonProps = {
   variant?: ButtonVariant
@@ -44,6 +44,7 @@ type ButtonProps = {
   fullWidth?: boolean
   ariaLabel?: string
   umamiEvent?: string
+  form?: string
 }
 export function Button({
   variant = 'primary',
@@ -59,6 +60,7 @@ export function Button({
   fullWidth,
   ariaLabel,
   umamiEvent,
+  form,
 }: ButtonProps) {
   const cls = [
     'btn',
@@ -83,7 +85,7 @@ export function Button({
     )
   }
   return (
-    <button type={type} className={cls} onClick={onClick} disabled={disabled} style={style} aria-label={ariaLabel} data-umami-event={umamiEvent}>
+    <button type={type} form={form} className={cls} onClick={onClick} disabled={disabled} style={style} aria-label={ariaLabel} data-umami-event={umamiEvent}>
       {inner}
     </button>
   )
@@ -182,8 +184,11 @@ type InputProps = {
   value?: string
   required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   min?: string | number
   max?: string | number
+  autoComplete?: string
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
 }
 export function Input(props: InputProps) {
   return <input className="input" {...props} />
@@ -197,9 +202,10 @@ type TextareaProps = {
   value?: string
   required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  className?: string
 }
-export function Textarea(props: TextareaProps) {
-  return <textarea className="textarea" {...props} />
+export function Textarea({ className = '', ...props }: TextareaProps) {
+  return <textarea className={`textarea ${className}`} {...props} />
 }
 
 type SelectOption = { value: string; label: string }
@@ -212,6 +218,7 @@ type SelectProps = {
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
   placeholder?: string
   disabled?: boolean
+  autoComplete?: string
 }
 export function Select({ options, placeholder, ...rest }: SelectProps) {
   return (

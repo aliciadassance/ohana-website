@@ -78,6 +78,8 @@
 }
 .btn--outline-teal:hover { --btn-bg: rgba(45,122,140,0.12); --btn-fg: var(--brand-teal-700); --btn-border: var(--brand-teal-700); }
 
+.btn--whatsapp { --btn-bg: #25D366; --btn-fg: white; --btn-bg-hover: #1DA851; }
+
 .btn--ghost {
   --btn-bg: transparent;
   --btn-fg: var(--brand-ink);
@@ -188,6 +190,10 @@
   color: var(--brand-teal-700);
   font-weight: 600;
 }
+.radio-tile:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45, 122, 140, 0.25);
+}
 
 .radio-tile--row {
   justify-content: flex-start;
@@ -224,6 +230,7 @@
 .checkbox input { appearance: none; width: 20px; height: 20px; flex-shrink: 0; border: 1.5px solid var(--color-border-strong); border-radius: 5px; cursor: pointer; position: relative; margin-top: 1px; transition: all var(--dur-fast) var(--ease-out); background: white; }
 .checkbox input:checked { background: var(--color-primary); border-color: var(--color-primary); }
 .checkbox input:checked::after { content: ""; position: absolute; left: 5px; top: 1px; width: 6px; height: 12px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.checkbox input:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
 /* ---------- Card ---------- */
 .card {
