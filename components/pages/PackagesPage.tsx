@@ -346,7 +346,7 @@ function AddOns() {
     { icon: 'tree',         title: 'Paradise Valley',       sub: 'Day trip in the beautiful moroccan land — palms, pools, picnic',       price: `€${ADDON_PRICES.paradise_valley} / person` },
     { icon: 'mountain',     title: 'Sand Dunes Excursion',  sub: 'Sunset and sandboarding fun in the dunes, in the north of Agadir. Fun guaranteed', price: `€${ADDON_PRICES.sand_dunes} / person` },
     { icon: 'bath',         title: 'Hammam & massage',      sub: '90 min traditional treatment for the best relaxing moment',          price: `€${ADDON_PRICES.hammam} / session` },
-    { icon: 'users-group',  title: 'Group booking',         sub: 'Bring 6+ friends, get an extra 5% off the price of your stay',          price: 'Save 5% on your stay' },
+    { icon: 'users-group',  title: 'Group booking',         sub: 'Bring 4+ friends, get an extra 10% off the price of your stay',          price: 'Save 10% on your stay' },
   ]
 
   return (
@@ -450,10 +450,14 @@ export default function PackagesPage() {
         titleNoWrap
       />
 
-      <div className="container" style={{ marginTop: '2rem' }}>
+      <div className="container" style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <div style={{ background: 'var(--brand-teal-50)', borderRadius: 'var(--radius-md)', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.85rem', fontSize: '0.95rem', color: 'var(--brand-teal-700)', border: '1px solid var(--brand-teal-100)' }}>
           <Icon name="heart" style={{ color: 'var(--color-accent)', fontSize: '1.2rem' }} />
           <span><strong>Returning guest?</strong> Enjoy 10% off any package. Just mention your last visit in the booking form.</span>
+        </div>
+        <div style={{ background: 'var(--brand-orange-50)', borderRadius: 'var(--radius-md)', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.85rem', fontSize: '0.95rem', color: 'var(--brand-orange-700)', border: '1px solid var(--brand-orange-100)' }}>
+          <Icon name="users-group" style={{ color: 'var(--color-accent)', fontSize: '1.2rem' }} />
+          <span><strong>Traveling as a group or staying longer?</strong> Get 10% off if you're 4+ people, or if you book 10+ nights. Just mention it in the booking form.</span>
         </div>
       </div>
 
