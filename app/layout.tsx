@@ -6,7 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import MobileCTA from '@/components/MobileCTA'
 import ScrollRevealInit from '@/components/ScrollRevealInit'
-import SummerPromoModal from '@/components/SummerPromoModal'
+import LastMinuteDealModal from '@/components/LastMinuteDealModal'
 import '@/styles/tokens.css'
 import '@/styles/base.css'
 import '@/styles/components.css'
@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
           <Footer />
           <MobileCTA />
-          <SummerPromoModal />
+          <LastMinuteDealModal />
         </div>
       </body>
     </html>
