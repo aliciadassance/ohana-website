@@ -111,7 +111,29 @@ function Hero() {
         </div>
       </div>
 
-      <div className="hero__info" aria-hidden="false">
+      <div className="hero__corner" aria-hidden="false">
+        <div className="hero__social">
+          <a
+            className="hero__social-link"
+            href="https://maps.app.goo.gl/xrAbZNEVXHVC1Sr5A"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Read our reviews on Google Maps"
+            data-umami-event="social_google_reviews"
+          >
+            <Icon name="brand-google" />
+          </a>
+          <a
+            className="hero__social-link"
+            href="https://www.instagram.com/ohana_surfmorocco/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Follow us on Instagram"
+            data-umami-event="social_instagram"
+          >
+            <Icon name="brand-instagram" />
+          </a>
+        </div>
         <div className="hero__info-row"><Icon name="map-pin" /><span>Aourir · Agadir</span></div>
         <div className="hero__info-row"><Icon name="calendar" /><span>Open year-round</span></div>
         <div className="hero__info-row"><Icon name="star-filled" /><span>5.0 on Google</span></div>

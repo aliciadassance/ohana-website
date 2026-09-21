@@ -265,7 +265,7 @@
 }
 
 /* ---------- Post page hero header ---------- */
-.post-page-header .page-header__bg { opacity: 0.45; }
+.post-page-header .page-header__bg { opacity: 0.65; }
 .post-page-header h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); max-width: 30ch; }
 .post-page-header p { max-width: 60ch; }
 .post-page-header__meta {
